@@ -1,0 +1,11 @@
+.env
+.env.local
+__pycache__/
+*.pyc
+.venv/
+.python-version
+data/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
