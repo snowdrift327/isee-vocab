@@ -233,6 +233,95 @@ def render_index_html(questions, timestamp):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ISEE Lower Level — Vocabulary Practice</title>
 <style>
+/* Start 遮罩 */
+.start-overlay {{
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}}
+.start-card {{
+    background: white;
+    max-width: 480px;
+    width: 90%;
+    padding: 40px 32px;
+    border: 3px double #1a4d8f;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    font-family: "Times New Roman", Georgia, serif;
+}}
+.start-card h2 {{
+    font-size: 26px;
+    color: #1a4d8f;
+    margin: 0 0 8px;
+    letter-spacing: 1px;
+}}
+.start-card .start-subtitle {{
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
+    margin-bottom: 24px;
+}}
+.start-card .instructions {{
+    text-align: left;
+    background: #f5f5f0;
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin: 20px 0 28px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #333;
+}}
+.start-card .instructions strong {{
+    color: #1a4d8f;
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}}
+.start-card .instructions ul {{
+    margin: 0;
+    padding-left: 20px;
+}}
+.start-card .instructions li {{
+    margin: 4px 0;
+}}
+.start-btn {{
+    background: #1a4d8f;
+    color: white;
+    border: none;
+    padding: 16px 56px;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: 2px;
+    transition: background 0.2s;
+}}
+.start-btn:hover {{
+    background: #143a6b;
+}}
+.start-card .meta-info {{
+    margin-top: 20px;
+    font-size: 12px;
+    color: #888;
+    font-family: Arial, sans-serif;
+}}
+.hidden-until-start {{
+    visibility: hidden;
+}}
+.start-overlay.hidden {{
+    display: none;
+}}
 * {{ box-sizing: border-box; }}
 body {{
     font-family: "Times New Roman", Georgia, serif;
@@ -485,7 +574,27 @@ footer {{
 </style>
 </head>
 <body>
+<div id="start-overlay" class="start-overlay">
+    <div class="start-card">
+        <h2>ISEE LOWER LEVEL</h2>
+        <div class="start-subtitle">Vocabulary Practice Test</div>
 
+        <div class="instructions">
+            <strong>Instructions</strong>
+            <ul>
+                <li><strong>{len(questions)} questions</strong> ({NUM_SYNONYM} synonym + {NUM_SENTENCE} sentence completion)</li>
+                <li>Timer starts when you click <strong>START</strong></li>
+                <li>Select one answer for each question</li>
+                <li>Click <strong>SUBMIT TEST</strong> when finished</li>
+                <li>Wrong answers will be saved to your Mistakes Book</li>
+            </ul>
+        </div>
+
+        <button class="start-btn" onclick="startTest()">START</button>
+
+        <div class="meta-info">Generated: {timestamp}</div>
+    </div>
+</div>
 <div class="test-header">
     <h1>ISEE LOWER LEVEL</h1>
     <div class="subtitle">Vocabulary Practice — Synonyms &amp; Sentence Completion</div>
@@ -514,8 +623,14 @@ footer {{
 
 <script>
 // 检查是否处于"重做错题"模式
-const isRetakeMode = sessionStorage.getItem('retake_mode') === '1';
+// === 变量声明（必须放在最前面） ===
+let startTime = null;
+let submitted = false;
+let testStarted = false;
 let QUESTIONS_DATA;
+
+// === 检查是否处于"重做错题"模式 ===
+const isRetakeMode = sessionStorage.getItem('retake_mode') === '1';
 
 if (isRetakeMode) {{
     QUESTIONS_DATA = JSON.parse(sessionStorage.getItem('retake_questions') || '[]');
@@ -525,15 +640,22 @@ if (isRetakeMode) {{
     if (QUESTIONS_DATA.length === 0) {{
         document.body.innerHTML = '<div style="padding:60px;text-align:center;font-family:Arial;"><h2>No wrong questions to retake.</h2><a href="index.html">← Back to start</a></div>';
     }} else {{
-        // 重新渲染题目（重做模式）
+        // 重做模式：自动开始，跳过 Start 遮罩
+        document.getElementById('start-overlay').classList.add('hidden');
+        testStarted = true;
+        startTime = Date.now();
+        // 重新渲染题目
         rerenderQuestions(QUESTIONS_DATA);
     }}
 }} else {{
     QUESTIONS_DATA = {questions_json};
 }}
 
-let startTime = Date.now();
-let submitted = false;
+function startTest() {{
+    testStarted = true;
+    startTime = Date.now();
+    document.getElementById('start-overlay').classList.add('hidden');
+}}
 
 function rerenderQuestions(questions) {{
     // 更新计数
@@ -596,7 +718,7 @@ function updateProgress() {{
 
 // 计时器
 function updateTimer() {{
-    if (submitted) return;
+    if (!testStarted || submitted) return;
     const elapsed = Math.floor((Date.now() - startTime) / 1000);
     const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
     const ss = String(elapsed % 60).padStart(2, '0');
@@ -631,7 +753,7 @@ function submitQuiz() {{
     }}
 
     submitted = true;
-    const totalTime = Math.floor((Date.now() - startTime) / 1000);
+    const totalTime = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0;
 
     let correctCount = 0;
     const mistakes = [];
