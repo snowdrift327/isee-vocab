@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISEE Vocabulary — Mistakes Review</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    font-family: "Times New Roman", Georgia, serif;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+    background: #ffffff;
+    color: #1a1a1a;
+    line-height: 1.6;
+    font-size: 16px;
+}
+.start-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+}
+.start-overlay.hidden { display: none; }
+.start-card {
+    background: white;
+    max-width: 480px;
+    width: 90%;
+    padding: 40px 32px;
+    border: 3px double #c62828;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.start-card h2 {
+    font-size: 26px;
+    color: #c62828;
+    margin: 0 0 8px;
+    letter-spacing: 1px;
+}
+.start-card .start-subtitle {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
+    margin-bottom: 24px;
+}
+.instructions {
+    text-align: left;
+    background: #fdf6f6;
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin: 20px 0 28px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #333;
+}
+.instructions strong {
+    color: #c62828;
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.instructions ul { margin: 0; padding-left: 20px; }
+.instructions li { margin: 4px 0; }
+.start-btn {
+    background: #c62828;
+    color: white;
+    border: none;
+    padding: 16px 56px;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: 2px;
+    transition: background 0.2s;
+}
+.start-btn:hover { background: #9e1f1f; }
+.start-btn:disabled { background: #aaa; cursor: not-allowed; }
+.empty-info {
+    padding: 30px 20px;
+    text-align: center;
+}
+.meta-info {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #888;
+    font-family: Arial, sans-serif;
+}
+
+.test-header {
+    border-bottom: 3px double #c62828;
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+}
+h1 { font-size: 24px; margin: 0 0 6px; color: #c62828; font-weight: bold; }
+.page-subtitle { font-size: 13px; color: #555; font-style: italic; }
+.meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding: 10px 16px;
+    background: #fdf6f6;
+    border: 1px solid #f0d6d6;
+    border-radius: 4px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+}
+.timer {
+    font-family: "Courier New", monospace;
+    font-size: 17px;
+    font-weight: bold;
+    color: #c62828;
+}
+
+.question {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #eee;
+}
+.question:last-child { border-bottom: none; }
+.q-header { margin-bottom: 8px; }
+.q-number { font-size: 18px; font-weight: bold; margin-right: 10px; }
+.q-type {
+    font-size: 12px;
+    color: #888;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.q-stem { font-size: 16px; margin-bottom: 14px; line-height: 1.6; }
+.target-word {
+    font-variant: small-caps;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+.blank { color: #c62828; font-weight: bold; letter-spacing: 2px; }
+.q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-left: 20px;
+}
+.option {
+    display: flex;
+    align-items: flex-start;
+    padding: 8px 14px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.option:hover { background: #fdf6f6; }
+.option input[type="radio"] { margin-right: 10px; margin-top: 4px; }
+.letter { font-weight: bold; color: #555; margin-right: 8px; min-width: 18px; }
+.option.user-correct { background: #e8f5e9; border-color: #4caf50; }
+.option.user-wrong { background: #ffebee; border-color: #f44336; }
+.option.show-correct { background: #e8f5e9; border-color: #4caf50; border-style: dashed; }
+
+.submit-section {
+    margin-top: 40px;
+    text-align: center;
+    padding-top: 24px;
+    border-top: 3px double #c62828;
+}
+#submit-btn {
+    background: #c62828;
+    color: white;
+    border: none;
+    padding: 12px 48px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: 1px;
+}
+#submit-btn:hover { background: #9e1f1f; }
+#submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+#results {
+    display: none;
+    margin-top: 30px;
+    padding: 24px;
+    background: #fdf6f6;
+    border: 2px solid #c62828;
+    border-radius: 6px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+}
+#results.show { display: block; }
+.score-summary {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+.score-item { flex: 1; min-width: 120px; }
+.score-value { font-size: 32px; font-weight: bold; color: #c62828; display: block; }
+.score-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+.mastered-list, .still-wrong-list { margin-top: 20px; }
+.mastered-list h3, .still-wrong-list h3 {
+    font-size: 16px;
+    margin: 0 0 12px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+.mastered-list h3 { color: #2e7d32; }
+.still-wrong-list h3 { color: #c62828; }
+.mastered-item {
+    background: #e8f5e9;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    border-left: 4px solid #4caf50;
+    border-radius: 0 4px 4px 0;
+    font-size: 14px;
+}
+.mistake-item {
+    background: white;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-left: 4px solid #f44336;
+    border-radius: 0 4px 4px 0;
+}
+.mistake-word { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+.mistake-def { color: #666; font-size: 13px; font-style: italic; }
+
+.action-links {
+    margin: 20px 0;
+    padding: 16px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.action-links a {
+    display: block;
+    text-align: center;
+    padding: 12px 16px;
+    background: #c62828;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.action-links a:hover { background: #9e1f1f; }
+
+@media (max-width: 480px) {
+    .action-links { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 16px 14px 60px; font-size: 15px; }
+    h1 { font-size: 20px; }
+    .meta-bar { flex-direction: column; gap: 6px; align-items: flex-start; }
+    .q-options { margin-left: 8px; }
+    .option { padding: 8px 10px; font-size: 14px; }
+    .score-value { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<div id="start-overlay" class="start-overlay">
+    <div class="start-card">
+        <h2>🔁 MISTAKES REVIEW</h2>
+        <div class="start-subtitle">Practice your previously wrong words</div>
+        <div id="review-info"></div>
+        <button id="start-btn" class="start-btn" onclick="startReview()" disabled>START REVIEW</button>
+        <div class="meta-info">
+            <a href="index.html" style="color:#888;">← Back to home</a>
+        </div>
+    </div>
+</div>
+
+<div class="test-header" id="test-header" style="display:none;">
+    <h1>🔁 MISTAKES REVIEW</h1>
+    <div class="page-subtitle">Review words you've previously gotten wrong</div>
+    <div class="meta-bar">
+        <span class="timer">Time: <span id="timer-display">00:00</span></span>
+        <span>Questions: <span id="progress-count">0</span> / <span id="total-count">0</span></span>
+    </div>
+</div>
+
+<form id="quiz-form" onsubmit="return false;"></form>
+
+<div class="submit-section" id="submit-section" style="display:none;">
+    <button id="submit-btn" onclick="submitReview()">SUBMIT REVIEW</button>
+</div>
+
+<div id="results"></div>
+
+<script>
+let allMistakes = JSON.parse(localStorage.getItem('isee_mistakes') || '[]');
+let reviewQuestions = [];
+let startTime = null;
+let submitted = false;
+let testStarted = false;
+let timerInterval = null;
+
+function init() {
+    const info = document.getElementById('review-info');
+    const btn = document.getElementById('start-btn');
+
+    if (allMistakes.length === 0) {
+        info.innerHTML = '<div class="empty-info">' +
+            '<p style="font-size:20px;margin:24px 0;color:#2e7d32;">🎉 No mistakes to review!</p>' +
+            '<p style="color:#666;">Take a practice test first and your mistakes will appear here.</p>' +
+            '</div>';
+        btn.style.display = 'none';
+    } else {
+        const reviewCount = Math.min(10, allMistakes.length);
+        info.innerHTML = '<div class="instructions">' +
+            '<strong>Review Session</strong>' +
+            '<ul>' +
+            '<li><strong>' + allMistakes.length + ' word(s)</strong> currently in your Mistakes Book</li>' +
+            '<li>This session: practice <strong>' + reviewCount + ' random question(s)</strong></li>' +
+            '<li>Words you get RIGHT will be REMOVED from Mistakes Book ✓</li>' +
+            '<li>Words you get WRONG will stay for future review</li>' +
+            '</ul>' +
+            '</div>';
+        btn.disabled = false;
+    }
+}
+
+function startReview() {
+    const shuffled = allMistakes.slice().sort(() => Math.random() - 0.5);
+    reviewQuestions = shuffled.slice(0, Math.min(10, shuffled.length));
+
+    renderQuestions();
+    document.getElementById('start-overlay').classList.add('hidden');
+    document.getElementById('test-header').style.display = 'block';
+    document.getElementById('submit-section').style.display = 'block';
+
+    testStarted = true;
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000);
+}
+
+function renderQuestions() {
+    const form = document.getElementById('quiz-form');
+    let html = '';
+    reviewQuestions.forEach((q, i) => {
+        const typeLabel = q.type === 'synonym' ? 'Synonym' : 'Sentence Completion';
+        let stemDisplay;
+        if (q.type === 'synonym') {
+            stemDisplay = q.stem.replace(q.word, '<strong class="target-word">' + q.word + '</strong>');
+        } else {
+            stemDisplay = q.stem.replace(/______/g, '<span class="blank">______</span>');
+        }
+        let optionsHtml = '';
+        const letters = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, j) => {
+            optionsHtml += '<label class="option" data-q="' + i + '" data-opt="' + j + '">' +
+                '<input type="radio" name="q' + i + '" value="' + j + '">' +
+                '<span class="letter">' + letters[j] + '</span>' +
+                '<span class="opt-text">' + opt + '</span></label>';
+        });
+        html += '<div class="question" data-q-index="' + i + '">' +
+            '<div class="q-header"><span class="q-number">' + (i+1) + '.</span>' +
+            '<span class="q-type">' + typeLabel + '</span></div>' +
+            '<div class="q-stem">' + stemDisplay + '</div>' +
+            '<div class="q-options">' + optionsHtml + '</div>' +
+            '</div>';
+    });
+    form.innerHTML = html;
+
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener('change', updateProgress);
+    });
+    document.getElementById('total-count').textContent = reviewQuestions.length;
+}
+
+function updateProgress() {
+    const answered = new Set();
+    document.querySelectorAll('input[type="radio"]:checked').forEach(r => answered.add(r.name));
+    document.getElementById('progress-count').textContent = answered.size;
+}
+
+function updateTimer() {
+    if (!testStarted || submitted) return;
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const ss = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('timer-display').textContent = mm + ':' + ss;
+}
+
+function submitReview() {
+    if (submitted) return;
+
+    const userAnswers = {};
+    let answeredCount = 0;
+    reviewQuestions.forEach((q, i) => {
+        const selected = document.querySelector('input[name="q' + i + '"]:checked');
+        if (selected) {
+            userAnswers[i] = parseInt(selected.value);
+            answeredCount++;
+        } else {
+            userAnswers[i] = -1;
+        }
+    });
+
+    if (answeredCount < reviewQuestions.length) {
+        if (!confirm('You have ' + (reviewQuestions.length - answeredCount) + ' unanswered question(s). Submit anyway?')) {
+            return;
+        }
+    }
+
+    submitted = true;
+    clearInterval(timerInterval);
+    const totalTime = Math.floor((Date.now() - startTime) / 1000);
+
+    let correctCount = 0;
+    const wordsToRemove = [];
+    const stillWrong = [];
+
+    reviewQuestions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const correctAns = q.correct_index;
+
+        const allOpts = document.querySelectorAll('label.option[data-q="' + i + '"]');
+        allOpts.forEach(opt => {
+            const optIdx = parseInt(opt.dataset.opt);
+            opt.style.pointerEvents = 'none';
+            const radio = opt.querySelector('input');
+            radio.disabled = true;
+            if (optIdx === correctAns) {
+                if (userAns === correctAns) opt.classList.add('user-correct');
+                else opt.classList.add('show-correct');
+            } else if (optIdx === userAns) {
+                opt.classList.add('user-wrong');
+            }
+        });
+
+        if (userAns === correctAns) {
+            correctCount++;
+            wordsToRemove.push(q);
+        } else {
+            stillWrong.push(q);
+        }
+    });
+
+    // 从错题本移除答对的词
+    const newMistakes = allMistakes.filter(m =>
+        !wordsToRemove.some(r => r.word === m.word && r.stem === m.stem)
+    );
+    localStorage.setItem('isee_mistakes', JSON.stringify(newMistakes));
+
+    // 保存到历史成绩
+    const accuracy = Math.round((correctCount / reviewQuestions.length) * 100);
+    const sessionRecord = {
+        date: new Date().toISOString().split('T')[0],
+        timestamp: new Date().toISOString(),
+        type: 'wrong-review',
+        total: reviewQuestions.length,
+        correct: correctCount,
+        accuracy: accuracy,
+        duration_sec: totalTime
+    };
+    const sessionsList = JSON.parse(localStorage.getItem('isee_sessions') || '[]');
+    sessionsList.push(sessionRecord);
+    localStorage.setItem('isee_sessions', JSON.stringify(sessionsList));
+
+    // 渲染结果
+    const mm = String(Math.floor(totalTime / 60)).padStart(2, '0');
+    const ss = String(totalTime % 60).padStart(2, '0');
+
+    let resultsHtml =
+        '<div class="score-summary">' +
+        '<div class="score-item"><span class="score-value">' + correctCount + '/' + reviewQuestions.length + '</span><span class="score-label">Score</span></div>' +
+        '<div class="score-item"><span class="score-value">' + accuracy + '%</span><span class="score-label">Accuracy</span></div>' +
+        '<div class="score-item"><span class="score-value">' + mm + ':' + ss + '</span><span class="score-label">Time</span></div>' +
+        '</div>';
+
+    if (wordsToRemove.length > 0) {
+        resultsHtml += '<div class="mastered-list"><h3>✅ Mastered & Removed (' + wordsToRemove.length + ')</h3>';
+        wordsToRemove.forEach(w => {
+            resultsHtml += '<div class="mastered-item"><strong>' + w.word + '</strong> — ' + w.definition + '</div>';
+        });
+        resultsHtml += '</div>';
+    }
+    if (stillWrong.length > 0) {
+        resultsHtml += '<div class="still-wrong-list"><h3>🔁 Still Need Review (' + stillWrong.length + ')</h3>';
+        stillWrong.forEach(w => {
+            resultsHtml += '<div class="mistake-item">' +
+                '<div class="mistake-word">' + w.word + '</div>' +
+                '<div class="mistake-def">' + w.definition + '</div>' +
+                '</div>';
+        });
+        resultsHtml += '</div>';
+    }
+
+    resultsHtml += '<div class="action-links">' +
+        '<a href="wrong-review.html">🔁 Review Again</a>' +
+        '<a href="mistakes.html">📖 Mistakes Book</a>' +
+        '<a href="history.html">📊 Progress</a>' +
+        '<a href="index.html">🏠 Home</a>' +
+        '</div>';
+
+    document.getElementById('results').innerHTML = resultsHtml;
+    document.getElementById('results').classList.add('show');
+    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-btn').textContent = 'SUBMITTED';
+    document.getElementById('results').scrollIntoView({behavior: 'smooth'});
+}
+
+init();
+</script>
+
+</body>
+</html>

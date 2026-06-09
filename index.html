@@ -243,6 +243,29 @@ h1 {
     cursor: not-allowed;
 }
 
+.new-test-section {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #ddd;
+}
+.start-new-btn {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: 1px;
+    transition: background 0.2s;
+}
+.start-new-btn:hover {
+    background: #1b5e20;
+}
+
 /* 结果区 */
 #results {
     display: none;
@@ -310,22 +333,29 @@ h1 {
     line-height: 1.5;
 }
 .action-links {
-    margin-top: 20px;
-    text-align: center;
-    padding-top: 16px;
+    margin: 20px 0;
+    padding: 16px 0;
     border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 .action-links a {
-    display: inline-block;
-    margin: 0 10px;
-    padding: 8px 18px;
+    display: block;
+    text-align: center;
+    padding: 12px 16px;
     background: #1a4d8f;
     color: white;
     text-decoration: none;
     border-radius: 4px;
     font-size: 14px;
+    font-weight: 500;
 }
 .action-links a:hover { background: #143a6b; }
+@media (max-width: 480px) {
+    .action-links { grid-template-columns: 1fr; }
+}
 
 footer {
     text-align: center;
@@ -364,7 +394,7 @@ footer {
 
         <button class="start-btn" onclick="startTest()">START</button>
 
-        <div class="meta-info">Generated: 2026-06-08_172406</div>
+        <div class="meta-info">Generated: 2026-06-09_183315</div>
     </div>
 </div>
 <div class="test-header">
@@ -373,7 +403,7 @@ footer {
     <div class="meta-bar">
         <span class="timer">Time: <span id="timer-display">00:00</span></span>
         <span class="progress">Questions: <span id="progress-count">0</span> / 20</span>
-        <span style="color:#888;font-size:12px;">2026-06-08_172406</span>
+        <span style="color:#888;font-size:12px;">2026-06-09_183315</span>
     </div>
 </div>
 
@@ -384,27 +414,27 @@ footer {
                 <span class="q-number">1.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">ETHICAL</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">ESOTERIC</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="0" data-opt="0">
                 <input type="radio" name="q0" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">honorable</span>
+                <span class="opt-text">obscure</span>
             </label>
             <label class="option" data-q="0" data-opt="1">
                 <input type="radio" name="q0" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">legal</span>
+                <span class="opt-text">ancient</span>
             </label>
             <label class="option" data-q="0" data-opt="2">
                 <input type="radio" name="q0" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">compassionate</span>
+                <span class="opt-text">exotic</span>
             </label>
             <label class="option" data-q="0" data-opt="3">
                 <input type="radio" name="q0" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">righteous</span>
+                <span class="opt-text">mysterious</span>
             </label></div>
         </div>
         <div class="question" data-q-index="1">
@@ -412,27 +442,27 @@ footer {
                 <span class="q-number">2.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">ASSERT</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">SOMBER</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="1" data-opt="0">
                 <input type="radio" name="q1" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">argue</span>
+                <span class="opt-text">serious</span>
             </label>
             <label class="option" data-q="1" data-opt="1">
                 <input type="radio" name="q1" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">declare</span>
+                <span class="opt-text">gloomy</span>
             </label>
             <label class="option" data-q="1" data-opt="2">
                 <input type="radio" name="q1" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">convince</span>
+                <span class="opt-text">quiet</span>
             </label>
             <label class="option" data-q="1" data-opt="3">
                 <input type="radio" name="q1" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">demand</span>
+                <span class="opt-text">peaceful</span>
             </label></div>
         </div>
         <div class="question" data-q-index="2">
@@ -440,27 +470,27 @@ footer {
                 <span class="q-number">3.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">ORNATE</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">OBSTINATE</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="2" data-opt="0">
                 <input type="radio" name="q2" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">elegant</span>
+                <span class="opt-text">defiant</span>
             </label>
             <label class="option" data-q="2" data-opt="1">
                 <input type="radio" name="q2" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">elaborate</span>
+                <span class="opt-text">persistent</span>
             </label>
             <label class="option" data-q="2" data-opt="2">
                 <input type="radio" name="q2" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">expensive</span>
+                <span class="opt-text">stubborn</span>
             </label>
             <label class="option" data-q="2" data-opt="3">
                 <input type="radio" name="q2" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">beautiful</span>
+                <span class="opt-text">determined</span>
             </label></div>
         </div>
         <div class="question" data-q-index="3">
@@ -468,27 +498,27 @@ footer {
                 <span class="q-number">4.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">DEMEANOR</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">DICHOTOMY</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="3" data-opt="0">
                 <input type="radio" name="q3" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">attitude</span>
+                <span class="opt-text">paradox</span>
             </label>
             <label class="option" data-q="3" data-opt="1">
                 <input type="radio" name="q3" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">bearing</span>
+                <span class="opt-text">controversy</span>
             </label>
             <label class="option" data-q="3" data-opt="2">
                 <input type="radio" name="q3" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">personality</span>
+                <span class="opt-text">disagreement</span>
             </label>
             <label class="option" data-q="3" data-opt="3">
                 <input type="radio" name="q3" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">temperament</span>
+                <span class="opt-text">division</span>
             </label></div>
         </div>
         <div class="question" data-q-index="4">
@@ -496,27 +526,27 @@ footer {
                 <span class="q-number">5.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">ARTICULATE</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">COMPACT</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="4" data-opt="0">
                 <input type="radio" name="q4" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">eloquent</span>
+                <span class="opt-text">dense</span>
             </label>
             <label class="option" data-q="4" data-opt="1">
                 <input type="radio" name="q4" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">intelligent</span>
+                <span class="opt-text">sturdy</span>
             </label>
             <label class="option" data-q="4" data-opt="2">
                 <input type="radio" name="q4" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">persuasive</span>
+                <span class="opt-text">portable</span>
             </label>
             <label class="option" data-q="4" data-opt="3">
                 <input type="radio" name="q4" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">verbose</span>
+                <span class="opt-text">efficient</span>
             </label></div>
         </div>
         <div class="question" data-q-index="5">
@@ -524,27 +554,27 @@ footer {
                 <span class="q-number">6.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">IMPROVISE</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">COMPOSED</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="5" data-opt="0">
                 <input type="radio" name="q5" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">devise</span>
+                <span class="opt-text">confident</span>
             </label>
             <label class="option" data-q="5" data-opt="1">
                 <input type="radio" name="q5" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">extemporize</span>
+                <span class="opt-text">calm</span>
             </label>
             <label class="option" data-q="5" data-opt="2">
                 <input type="radio" name="q5" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">create</span>
+                <span class="opt-text">mature</span>
             </label>
             <label class="option" data-q="5" data-opt="3">
                 <input type="radio" name="q5" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">adapt</span>
+                <span class="opt-text">reserved</span>
             </label></div>
         </div>
         <div class="question" data-q-index="6">
@@ -552,27 +582,27 @@ footer {
                 <span class="q-number">7.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">DILAPIDATED</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">SUSTAIN</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="6" data-opt="0">
                 <input type="radio" name="q6" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">neglected</span>
+                <span class="opt-text">nourish</span>
             </label>
             <label class="option" data-q="6" data-opt="1">
                 <input type="radio" name="q6" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">decrepit</span>
+                <span class="opt-text">strengthen</span>
             </label>
             <label class="option" data-q="6" data-opt="2">
                 <input type="radio" name="q6" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">abandoned</span>
+                <span class="opt-text">maintain</span>
             </label>
             <label class="option" data-q="6" data-opt="3">
                 <input type="radio" name="q6" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">damaged</span>
+                <span class="opt-text">endure</span>
             </label></div>
         </div>
         <div class="question" data-q-index="7">
@@ -580,27 +610,27 @@ footer {
                 <span class="q-number">8.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">PROCRASTINATE</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">LOYAL</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="7" data-opt="0">
                 <input type="radio" name="q7" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">hesitate</span>
+                <span class="opt-text">devoted</span>
             </label>
             <label class="option" data-q="7" data-opt="1">
                 <input type="radio" name="q7" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">defer</span>
+                <span class="opt-text">reliable</span>
             </label>
             <label class="option" data-q="7" data-opt="2">
                 <input type="radio" name="q7" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">avoid</span>
+                <span class="opt-text">honorable</span>
             </label>
             <label class="option" data-q="7" data-opt="3">
                 <input type="radio" name="q7" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">neglect</span>
+                <span class="opt-text">faithful</span>
             </label></div>
         </div>
         <div class="question" data-q-index="8">
@@ -608,27 +638,27 @@ footer {
                 <span class="q-number">9.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">CONCISE</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">VARIABLE</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="8" data-opt="0">
                 <input type="radio" name="q8" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">brief</span>
+                <span class="opt-text">changeable</span>
             </label>
             <label class="option" data-q="8" data-opt="1">
                 <input type="radio" name="q8" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">succinct</span>
+                <span class="opt-text">unpredictable</span>
             </label>
             <label class="option" data-q="8" data-opt="2">
                 <input type="radio" name="q8" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">simple</span>
+                <span class="opt-text">flexible</span>
             </label>
             <label class="option" data-q="8" data-opt="3">
                 <input type="radio" name="q8" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">clear</span>
+                <span class="opt-text">diverse</span>
             </label></div>
         </div>
         <div class="question" data-q-index="9">
@@ -636,27 +666,27 @@ footer {
                 <span class="q-number">10.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">TURBULENT</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">RETALIATE</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="9" data-opt="0">
                 <input type="radio" name="q9" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">chaotic</span>
+                <span class="opt-text">respond</span>
             </label>
             <label class="option" data-q="9" data-opt="1">
                 <input type="radio" name="q9" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">violent</span>
+                <span class="opt-text">avenge</span>
             </label>
             <label class="option" data-q="9" data-opt="2">
                 <input type="radio" name="q9" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">tumultuous</span>
+                <span class="opt-text">resist</span>
             </label>
             <label class="option" data-q="9" data-opt="3">
                 <input type="radio" name="q9" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">unstable</span>
+                <span class="opt-text">confront</span>
             </label></div>
         </div>
         <div class="question" data-q-index="10">
@@ -664,27 +694,27 @@ footer {
                 <span class="q-number">11.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">NAÏVE</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">IMPLICIT</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="10" data-opt="0">
                 <input type="radio" name="q10" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">innocent</span>
+                <span class="opt-text">vague</span>
             </label>
             <label class="option" data-q="10" data-opt="1">
                 <input type="radio" name="q10" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">gullible</span>
+                <span class="opt-text">implied</span>
             </label>
             <label class="option" data-q="10" data-opt="2">
                 <input type="radio" name="q10" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">foolish</span>
+                <span class="opt-text">inherent</span>
             </label>
             <label class="option" data-q="10" data-opt="3">
                 <input type="radio" name="q10" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">childish</span>
+                <span class="opt-text">subtle</span>
             </label></div>
         </div>
         <div class="question" data-q-index="11">
@@ -692,27 +722,27 @@ footer {
                 <span class="q-number">12.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">PERILOUS</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">AUTHORITATIVE</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="11" data-opt="0">
                 <input type="radio" name="q11" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">dangerous</span>
+                <span class="opt-text">commanding</span>
             </label>
             <label class="option" data-q="11" data-opt="1">
                 <input type="radio" name="q11" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">hazardous</span>
+                <span class="opt-text">credible</span>
             </label>
             <label class="option" data-q="11" data-opt="2">
                 <input type="radio" name="q11" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">threatening</span>
+                <span class="opt-text">official</span>
             </label>
             <label class="option" data-q="11" data-opt="3">
                 <input type="radio" name="q11" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">reckless</span>
+                <span class="opt-text">decisive</span>
             </label></div>
         </div>
         <div class="question" data-q-index="12">
@@ -720,27 +750,27 @@ footer {
                 <span class="q-number">13.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">STAGNANT</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">AXIOM</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="12" data-opt="0">
                 <input type="radio" name="q12" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">idle</span>
+                <span class="opt-text">principle</span>
             </label>
             <label class="option" data-q="12" data-opt="1">
                 <input type="radio" name="q12" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">static</span>
+                <span class="opt-text">theorem</span>
             </label>
             <label class="option" data-q="12" data-opt="2">
                 <input type="radio" name="q12" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">sluggish</span>
+                <span class="opt-text">doctrine</span>
             </label>
             <label class="option" data-q="12" data-opt="3">
                 <input type="radio" name="q12" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">dormant</span>
+                <span class="opt-text">hypothesis</span>
             </label></div>
         </div>
         <div class="question" data-q-index="13">
@@ -748,27 +778,27 @@ footer {
                 <span class="q-number">14.</span>
                 <span class="q-type">Synonym</span>
             </div>
-            <div class="q-stem"><strong class="target-word">IRONY</strong> most nearly means</div>
+            <div class="q-stem"><strong class="target-word">PROCUREMENT</strong> most nearly means</div>
             <div class="q-options">
             <label class="option" data-q="13" data-opt="0">
                 <input type="radio" name="q13" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">satire</span>
+                <span class="opt-text">purchase</span>
             </label>
             <label class="option" data-q="13" data-opt="1">
                 <input type="radio" name="q13" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">paradox</span>
+                <span class="opt-text">acquisition</span>
             </label>
             <label class="option" data-q="13" data-opt="2">
                 <input type="radio" name="q13" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">sarcasm</span>
+                <span class="opt-text">distribution</span>
             </label>
             <label class="option" data-q="13" data-opt="3">
                 <input type="radio" name="q13" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">humor</span>
+                <span class="opt-text">allocation</span>
             </label></div>
         </div>
         <div class="question" data-q-index="14">
@@ -776,27 +806,27 @@ footer {
                 <span class="q-number">15.</span>
                 <span class="q-type">Sentence Completion</span>
             </div>
-            <div class="q-stem">Although the committee shared decision-making authority, the chairperson remained <span class="blank">______</span> for the final outcomes of all policy initiatives.</div>
+            <div class="q-stem">Although the startup required significant initial investment, the founders believed their innovative technology would eventually prove <span class="blank">______</span> enough to justify the risk.</div>
             <div class="q-options">
             <label class="option" data-q="14" data-opt="0">
                 <input type="radio" name="q14" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">responsible</span>
+                <span class="opt-text">profitable</span>
             </label>
             <label class="option" data-q="14" data-opt="1">
                 <input type="radio" name="q14" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">accountable</span>
+                <span class="opt-text">lucrative</span>
             </label>
             <label class="option" data-q="14" data-opt="2">
                 <input type="radio" name="q14" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">concerned</span>
+                <span class="opt-text">sustainable</span>
             </label>
             <label class="option" data-q="14" data-opt="3">
                 <input type="radio" name="q14" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">aware</span>
+                <span class="opt-text">viable</span>
             </label></div>
         </div>
         <div class="question" data-q-index="15">
@@ -804,27 +834,27 @@ footer {
                 <span class="q-number">16.</span>
                 <span class="q-type">Sentence Completion</span>
             </div>
-            <div class="q-stem">The new technology was designed to <span class="blank">______</span> communication between departments, which had previously been hindered by incompatible systems.</div>
+            <div class="q-stem">When the scholarship committee announced her name as the recipient, Maria felt <span class="blank">______</span> by the recognition of years of academic dedication.</div>
             <div class="q-options">
             <label class="option" data-q="15" data-opt="0">
                 <input type="radio" name="q15" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">improve</span>
+                <span class="opt-text">surprised</span>
             </label>
             <label class="option" data-q="15" data-opt="1">
                 <input type="radio" name="q15" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">regulate</span>
+                <span class="opt-text">honored</span>
             </label>
             <label class="option" data-q="15" data-opt="2">
                 <input type="radio" name="q15" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">facilitate</span>
+                <span class="opt-text">elated</span>
             </label>
             <label class="option" data-q="15" data-opt="3">
                 <input type="radio" name="q15" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">encourage</span>
+                <span class="opt-text">grateful</span>
             </label></div>
         </div>
         <div class="question" data-q-index="16">
@@ -832,27 +862,27 @@ footer {
                 <span class="q-number">17.</span>
                 <span class="q-type">Sentence Completion</span>
             </div>
-            <div class="q-stem">Despite her modest circumstances, Elena remained <span class="blank">______</span> with her life, valuing relationships more than material possessions.</div>
+            <div class="q-stem">Despite the economic challenges facing the industry, the CEO remained <span class="blank">______</span> that strategic innovation would restore the company's market position.</div>
             <div class="q-options">
             <label class="option" data-q="16" data-opt="0">
                 <input type="radio" name="q16" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">satisfied</span>
+                <span class="opt-text">hopeful</span>
             </label>
             <label class="option" data-q="16" data-opt="1">
                 <input type="radio" name="q16" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">pleased</span>
+                <span class="opt-text">confident</span>
             </label>
             <label class="option" data-q="16" data-opt="2">
                 <input type="radio" name="q16" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">content</span>
+                <span class="opt-text">determined</span>
             </label>
             <label class="option" data-q="16" data-opt="3">
                 <input type="radio" name="q16" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">comfortable</span>
+                <span class="opt-text">optimistic</span>
             </label></div>
         </div>
         <div class="question" data-q-index="17">
@@ -860,27 +890,27 @@ footer {
                 <span class="q-number">18.</span>
                 <span class="q-type">Sentence Completion</span>
             </div>
-            <div class="q-stem">The coach warned that becoming <span class="blank">______</span> after their early victories could lead to careless mistakes in later competitions.</div>
+            <div class="q-stem">Because the ancient manuscript was partially damaged, historians could offer only <span class="blank">______</span> about the civilization's religious practices rather than definitive conclusions.</div>
             <div class="q-options">
             <label class="option" data-q="17" data-opt="0">
                 <input type="radio" name="q17" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">overconfident</span>
+                <span class="opt-text">speculation</span>
             </label>
             <label class="option" data-q="17" data-opt="1">
                 <input type="radio" name="q17" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">complacent</span>
+                <span class="opt-text">conjecture</span>
             </label>
             <label class="option" data-q="17" data-opt="2">
                 <input type="radio" name="q17" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">arrogant</span>
+                <span class="opt-text">theories</span>
             </label>
             <label class="option" data-q="17" data-opt="3">
                 <input type="radio" name="q17" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">relaxed</span>
+                <span class="opt-text">interpretation</span>
             </label></div>
         </div>
         <div class="question" data-q-index="18">
@@ -888,27 +918,27 @@ footer {
                 <span class="q-number">19.</span>
                 <span class="q-type">Sentence Completion</span>
             </div>
-            <div class="q-stem">Because the theoretical concepts were abstract and unfamiliar, most students struggled to <span class="blank">______</span> the principles their professor presented.</div>
+            <div class="q-stem">The patient's recovery was complicated by <span class="blank">______</span> symptoms that appeared unpredictably, making it difficult for doctors to establish a consistent treatment protocol.</div>
             <div class="q-options">
             <label class="option" data-q="18" data-opt="0">
                 <input type="radio" name="q18" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">understand</span>
+                <span class="opt-text">sporadic</span>
             </label>
             <label class="option" data-q="18" data-opt="1">
                 <input type="radio" name="q18" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">grasp</span>
+                <span class="opt-text">intermittent</span>
             </label>
             <label class="option" data-q="18" data-opt="2">
                 <input type="radio" name="q18" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">remember</span>
+                <span class="opt-text">persistent</span>
             </label>
             <label class="option" data-q="18" data-opt="3">
                 <input type="radio" name="q18" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">appreciate</span>
+                <span class="opt-text">recurring</span>
             </label></div>
         </div>
         <div class="question" data-q-index="19">
@@ -916,27 +946,27 @@ footer {
                 <span class="q-number">20.</span>
                 <span class="q-type">Sentence Completion</span>
             </div>
-            <div class="q-stem">As the investigation revealed more evidence supporting her claims, the criticism against her began to <span class="blank">______</span> significantly.</div>
+            <div class="q-stem">When the laboratory equipment malfunctioned during the critical experiment, the <span class="blank">______</span> scientist improvised alternative methods to collect the necessary data.</div>
             <div class="q-options">
             <label class="option" data-q="19" data-opt="0">
                 <input type="radio" name="q19" value="0">
                 <span class="letter">A</span>
-                <span class="opt-text">weaken</span>
+                <span class="opt-text">creative</span>
             </label>
             <label class="option" data-q="19" data-opt="1">
                 <input type="radio" name="q19" value="1">
                 <span class="letter">B</span>
-                <span class="opt-text">decline</span>
+                <span class="opt-text">adaptable</span>
             </label>
             <label class="option" data-q="19" data-opt="2">
                 <input type="radio" name="q19" value="2">
                 <span class="letter">C</span>
-                <span class="opt-text">diminish</span>
+                <span class="opt-text">ingenious</span>
             </label>
             <label class="option" data-q="19" data-opt="3">
                 <input type="radio" name="q19" value="3">
                 <span class="letter">D</span>
-                <span class="opt-text">disappear</span>
+                <span class="opt-text">resourceful</span>
             </label></div>
         </div>
 </form>
@@ -950,6 +980,8 @@ footer {
 <footer>
     <a href="mistakes.html" style="color:#888;">📖 View Mistakes Book</a>
     &nbsp;|&nbsp;
+    <a href="history.html" style="color:#888;">📊 View History</a>
+    &nbsp;|&nbsp;
     Generated by Claude
 </footer>
 
@@ -961,10 +993,26 @@ let submitted = false;
 let testStarted = false;
 let QUESTIONS_DATA;
 
+// === 优先级 1：检查是否有上次提交的状态需要恢复 ===
+const savedFormHTML = sessionStorage.getItem('submitted_form_html');
+
 // === 检查是否处于"重做错题"模式 ===
 const isRetakeMode = sessionStorage.getItem('retake_mode') === '1';
 
-if (isRetakeMode) {
+if (savedFormHTML) {
+    // 恢复上次提交后的完整结果页
+    QUESTIONS_DATA = [{"type": "synonym", "word": "ESOTERIC", "definition": "Intended for or understood by only a small number of people with specialized knowledge.", "stem": "ESOTERIC most nearly means", "options": ["obscure", "ancient", "exotic", "mysterious"], "correct_index": 0}, {"type": "synonym", "word": "SOMBER", "definition": "Dark or dull in color or tone; gloomy.", "stem": "SOMBER most nearly means", "options": ["serious", "gloomy", "quiet", "peaceful"], "correct_index": 1}, {"type": "synonym", "word": "OBSTINATE", "definition": "Stubbornly refusing to change one's opinion or chosen course of action.", "stem": "OBSTINATE most nearly means", "options": ["defiant", "persistent", "stubborn", "determined"], "correct_index": 2}, {"type": "synonym", "word": "DICHOTOMY", "definition": "A division or contrast between two things that are represented as being opposed or entirely different.", "stem": "DICHOTOMY most nearly means", "options": ["paradox", "controversy", "disagreement", "division"], "correct_index": 3}, {"type": "synonym", "word": "COMPACT", "definition": "Closely and neatly packed together; dense.", "stem": "COMPACT most nearly means", "options": ["dense", "sturdy", "portable", "efficient"], "correct_index": 0}, {"type": "synonym", "word": "COMPOSED", "definition": "Having one's feelings and expression under control; calm.", "stem": "COMPOSED most nearly means", "options": ["confident", "calm", "mature", "reserved"], "correct_index": 1}, {"type": "synonym", "word": "SUSTAIN", "definition": "To cause or allow something to continue for a period of time; to support or maintain.", "stem": "SUSTAIN most nearly means", "options": ["nourish", "strengthen", "maintain", "endure"], "correct_index": 2}, {"type": "synonym", "word": "LOYAL", "definition": "Giving or showing firm and constant support or allegiance to a person or institution.", "stem": "LOYAL most nearly means", "options": ["devoted", "reliable", "honorable", "faithful"], "correct_index": 3}, {"type": "synonym", "word": "VARIABLE", "definition": "Not consistent or having a fixed pattern; liable to change.", "stem": "VARIABLE most nearly means", "options": ["changeable", "unpredictable", "flexible", "diverse"], "correct_index": 0}, {"type": "synonym", "word": "RETALIATE", "definition": "To make an attack or assault in return for a similar attack.", "stem": "RETALIATE most nearly means", "options": ["respond", "avenge", "resist", "confront"], "correct_index": 1}, {"type": "synonym", "word": "IMPLICIT", "definition": "Suggested though not directly expressed; implied.", "stem": "IMPLICIT most nearly means", "options": ["vague", "implied", "inherent", "subtle"], "correct_index": 1}, {"type": "synonym", "word": "AUTHORITATIVE", "definition": "Commanding and self-confident; able to be trusted as being accurate or true.", "stem": "AUTHORITATIVE most nearly means", "options": ["commanding", "credible", "official", "decisive"], "correct_index": 3}, {"type": "synonym", "word": "AXIOM", "definition": "A statement or proposition that is regarded as being self-evidently true.", "stem": "AXIOM most nearly means", "options": ["principle", "theorem", "doctrine", "hypothesis"], "correct_index": 0}, {"type": "synonym", "word": "PROCUREMENT", "definition": "The action of obtaining or acquiring something.", "stem": "PROCUREMENT most nearly means", "options": ["purchase", "acquisition", "distribution", "allocation"], "correct_index": 1}, {"type": "sentence", "word": "lucrative", "definition": "Producing a great deal of profit.", "stem": "Although the startup required significant initial investment, the founders believed their innovative technology would eventually prove ______ enough to justify the risk.", "options": ["profitable", "lucrative", "sustainable", "viable"], "correct_index": 1}, {"type": "sentence", "word": "elated", "definition": "Making someone ecstatically happy.", "stem": "When the scholarship committee announced her name as the recipient, Maria felt ______ by the recognition of years of academic dedication.", "options": ["surprised", "honored", "elated", "grateful"], "correct_index": 2}, {"type": "sentence", "word": "optimistic", "definition": "Hopeful and confident about the future.", "stem": "Despite the economic challenges facing the industry, the CEO remained ______ that strategic innovation would restore the company's market position.", "options": ["hopeful", "confident", "determined", "optimistic"], "correct_index": 3}, {"type": "sentence", "word": "conjecture", "definition": "An opinion or conclusion formed on the basis of incomplete information.", "stem": "Because the ancient manuscript was partially damaged, historians could offer only ______ about the civilization's religious practices rather than definitive conclusions.", "options": ["speculation", "conjecture", "theories", "interpretation"], "correct_index": 1}, {"type": "sentence", "word": "intermittent", "definition": "Occurring at irregular intervals; not continuous or steady.", "stem": "The patient's recovery was complicated by ______ symptoms that appeared unpredictably, making it difficult for doctors to establish a consistent treatment protocol.", "options": ["sporadic", "intermittent", "persistent", "recurring"], "correct_index": 1}, {"type": "sentence", "word": "resourceful", "definition": "Having the ability to find quick and clever ways to overcome difficulties.", "stem": "When the laboratory equipment malfunctioned during the critical experiment, the ______ scientist improvised alternative methods to collect the necessary data.", "options": ["creative", "adaptable", "ingenious", "resourceful"], "correct_index": 3}];
+    submitted = true;
+
+    document.getElementById('start-overlay').classList.add('hidden');
+    document.getElementById('quiz-form').innerHTML = savedFormHTML;
+    document.getElementById('results').innerHTML = sessionStorage.getItem('submitted_results_html');
+    document.getElementById('results').classList.add('show');
+    document.getElementById('timer-display').textContent = sessionStorage.getItem('submitted_timer');
+    document.getElementById('progress-count').textContent = sessionStorage.getItem('submitted_progress');
+    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-btn').textContent = 'SUBMITTED';
+} else if (isRetakeMode) {
     QUESTIONS_DATA = JSON.parse(sessionStorage.getItem('retake_questions') || '[]');
     sessionStorage.removeItem('retake_mode');
     sessionStorage.removeItem('retake_questions');
@@ -980,7 +1028,7 @@ if (isRetakeMode) {
         rerenderQuestions(QUESTIONS_DATA);
     }
 } else {
-    QUESTIONS_DATA = [{"type": "synonym", "word": "ETHICAL", "definition": "Morally right and principled; relating to moral principles.", "stem": "ETHICAL most nearly means", "options": ["honorable", "legal", "compassionate", "righteous"], "correct_index": 3}, {"type": "synonym", "word": "ASSERT", "definition": "To state or declare confidently and forcefully.", "stem": "ASSERT most nearly means", "options": ["argue", "declare", "convince", "demand"], "correct_index": 1}, {"type": "synonym", "word": "ORNATE", "definition": "Elaborately or highly decorated.", "stem": "ORNATE most nearly means", "options": ["elegant", "elaborate", "expensive", "beautiful"], "correct_index": 1}, {"type": "synonym", "word": "DEMEANOR", "definition": "Outward behavior or bearing; manner of conducting oneself.", "stem": "DEMEANOR most nearly means", "options": ["attitude", "bearing", "personality", "temperament"], "correct_index": 1}, {"type": "synonym", "word": "ARTICULATE", "definition": "Able to express thoughts and ideas clearly and effectively.", "stem": "ARTICULATE most nearly means", "options": ["eloquent", "intelligent", "persuasive", "verbose"], "correct_index": 0}, {"type": "synonym", "word": "IMPROVISE", "definition": "To create or perform without preparation; to make do with available materials.", "stem": "IMPROVISE most nearly means", "options": ["devise", "extemporize", "create", "adapt"], "correct_index": 1}, {"type": "synonym", "word": "DILAPIDATED", "definition": "In a state of disrepair or ruin, especially from age or neglect.", "stem": "DILAPIDATED most nearly means", "options": ["neglected", "decrepit", "abandoned", "damaged"], "correct_index": 1}, {"type": "synonym", "word": "PROCRASTINATE", "definition": "To delay or postpone action; to put off doing something.", "stem": "PROCRASTINATE most nearly means", "options": ["hesitate", "defer", "avoid", "neglect"], "correct_index": 1}, {"type": "synonym", "word": "CONCISE", "definition": "Giving much information clearly and in few words; brief but comprehensive.", "stem": "CONCISE most nearly means", "options": ["brief", "succinct", "simple", "clear"], "correct_index": 1}, {"type": "synonym", "word": "TURBULENT", "definition": "Characterized by conflict, disorder, or confusion; not stable or calm.", "stem": "TURBULENT most nearly means", "options": ["chaotic", "violent", "tumultuous", "unstable"], "correct_index": 2}, {"type": "synonym", "word": "NAÏVE", "definition": "Showing a lack of experience, wisdom, or judgment; innocent.", "stem": "NAÏVE most nearly means", "options": ["innocent", "gullible", "foolish", "childish"], "correct_index": 1}, {"type": "synonym", "word": "PERILOUS", "definition": "Full of danger or risk.", "stem": "PERILOUS most nearly means", "options": ["dangerous", "hazardous", "threatening", "reckless"], "correct_index": 1}, {"type": "synonym", "word": "STAGNANT", "definition": "Showing no activity, growth, or development; not flowing or moving.", "stem": "STAGNANT most nearly means", "options": ["idle", "static", "sluggish", "dormant"], "correct_index": 1}, {"type": "synonym", "word": "IRONY", "definition": "A situation or expression where the reality is opposite to what appears or is expected.", "stem": "IRONY most nearly means", "options": ["satire", "paradox", "sarcasm", "humor"], "correct_index": 1}, {"type": "sentence", "word": "accountable", "definition": "Required or expected to justify actions or decisions; responsible.", "stem": "Although the committee shared decision-making authority, the chairperson remained ______ for the final outcomes of all policy initiatives.", "options": ["responsible", "accountable", "concerned", "aware"], "correct_index": 1}, {"type": "sentence", "word": "facilitate", "definition": "To make an action or process easier or smoother.", "stem": "The new technology was designed to ______ communication between departments, which had previously been hindered by incompatible systems.", "options": ["improve", "regulate", "facilitate", "encourage"], "correct_index": 2}, {"type": "sentence", "word": "content", "definition": "In a state of peaceful happiness and satisfaction.", "stem": "Despite her modest circumstances, Elena remained ______ with her life, valuing relationships more than material possessions.", "options": ["satisfied", "pleased", "content", "comfortable"], "correct_index": 2}, {"type": "sentence", "word": "complacent", "definition": "Showing smug or uncritical satisfaction with oneself or one's achievements.", "stem": "The coach warned that becoming ______ after their early victories could lead to careless mistakes in later competitions.", "options": ["overconfident", "complacent", "arrogant", "relaxed"], "correct_index": 1}, {"type": "sentence", "word": "grasp", "definition": "To comprehend or understand something, especially something complex.", "stem": "Because the theoretical concepts were abstract and unfamiliar, most students struggled to ______ the principles their professor presented.", "options": ["understand", "grasp", "remember", "appreciate"], "correct_index": 1}, {"type": "sentence", "word": "diminish", "definition": "To make or become less; to reduce in size, importance, or intensity.", "stem": "As the investigation revealed more evidence supporting her claims, the criticism against her began to ______ significantly.", "options": ["weaken", "decline", "diminish", "disappear"], "correct_index": 2}];
+    QUESTIONS_DATA = [{"type": "synonym", "word": "ESOTERIC", "definition": "Intended for or understood by only a small number of people with specialized knowledge.", "stem": "ESOTERIC most nearly means", "options": ["obscure", "ancient", "exotic", "mysterious"], "correct_index": 0}, {"type": "synonym", "word": "SOMBER", "definition": "Dark or dull in color or tone; gloomy.", "stem": "SOMBER most nearly means", "options": ["serious", "gloomy", "quiet", "peaceful"], "correct_index": 1}, {"type": "synonym", "word": "OBSTINATE", "definition": "Stubbornly refusing to change one's opinion or chosen course of action.", "stem": "OBSTINATE most nearly means", "options": ["defiant", "persistent", "stubborn", "determined"], "correct_index": 2}, {"type": "synonym", "word": "DICHOTOMY", "definition": "A division or contrast between two things that are represented as being opposed or entirely different.", "stem": "DICHOTOMY most nearly means", "options": ["paradox", "controversy", "disagreement", "division"], "correct_index": 3}, {"type": "synonym", "word": "COMPACT", "definition": "Closely and neatly packed together; dense.", "stem": "COMPACT most nearly means", "options": ["dense", "sturdy", "portable", "efficient"], "correct_index": 0}, {"type": "synonym", "word": "COMPOSED", "definition": "Having one's feelings and expression under control; calm.", "stem": "COMPOSED most nearly means", "options": ["confident", "calm", "mature", "reserved"], "correct_index": 1}, {"type": "synonym", "word": "SUSTAIN", "definition": "To cause or allow something to continue for a period of time; to support or maintain.", "stem": "SUSTAIN most nearly means", "options": ["nourish", "strengthen", "maintain", "endure"], "correct_index": 2}, {"type": "synonym", "word": "LOYAL", "definition": "Giving or showing firm and constant support or allegiance to a person or institution.", "stem": "LOYAL most nearly means", "options": ["devoted", "reliable", "honorable", "faithful"], "correct_index": 3}, {"type": "synonym", "word": "VARIABLE", "definition": "Not consistent or having a fixed pattern; liable to change.", "stem": "VARIABLE most nearly means", "options": ["changeable", "unpredictable", "flexible", "diverse"], "correct_index": 0}, {"type": "synonym", "word": "RETALIATE", "definition": "To make an attack or assault in return for a similar attack.", "stem": "RETALIATE most nearly means", "options": ["respond", "avenge", "resist", "confront"], "correct_index": 1}, {"type": "synonym", "word": "IMPLICIT", "definition": "Suggested though not directly expressed; implied.", "stem": "IMPLICIT most nearly means", "options": ["vague", "implied", "inherent", "subtle"], "correct_index": 1}, {"type": "synonym", "word": "AUTHORITATIVE", "definition": "Commanding and self-confident; able to be trusted as being accurate or true.", "stem": "AUTHORITATIVE most nearly means", "options": ["commanding", "credible", "official", "decisive"], "correct_index": 3}, {"type": "synonym", "word": "AXIOM", "definition": "A statement or proposition that is regarded as being self-evidently true.", "stem": "AXIOM most nearly means", "options": ["principle", "theorem", "doctrine", "hypothesis"], "correct_index": 0}, {"type": "synonym", "word": "PROCUREMENT", "definition": "The action of obtaining or acquiring something.", "stem": "PROCUREMENT most nearly means", "options": ["purchase", "acquisition", "distribution", "allocation"], "correct_index": 1}, {"type": "sentence", "word": "lucrative", "definition": "Producing a great deal of profit.", "stem": "Although the startup required significant initial investment, the founders believed their innovative technology would eventually prove ______ enough to justify the risk.", "options": ["profitable", "lucrative", "sustainable", "viable"], "correct_index": 1}, {"type": "sentence", "word": "elated", "definition": "Making someone ecstatically happy.", "stem": "When the scholarship committee announced her name as the recipient, Maria felt ______ by the recognition of years of academic dedication.", "options": ["surprised", "honored", "elated", "grateful"], "correct_index": 2}, {"type": "sentence", "word": "optimistic", "definition": "Hopeful and confident about the future.", "stem": "Despite the economic challenges facing the industry, the CEO remained ______ that strategic innovation would restore the company's market position.", "options": ["hopeful", "confident", "determined", "optimistic"], "correct_index": 3}, {"type": "sentence", "word": "conjecture", "definition": "An opinion or conclusion formed on the basis of incomplete information.", "stem": "Because the ancient manuscript was partially damaged, historians could offer only ______ about the civilization's religious practices rather than definitive conclusions.", "options": ["speculation", "conjecture", "theories", "interpretation"], "correct_index": 1}, {"type": "sentence", "word": "intermittent", "definition": "Occurring at irregular intervals; not continuous or steady.", "stem": "The patient's recovery was complicated by ______ symptoms that appeared unpredictably, making it difficult for doctors to establish a consistent treatment protocol.", "options": ["sporadic", "intermittent", "persistent", "recurring"], "correct_index": 1}, {"type": "sentence", "word": "resourceful", "definition": "Having the ability to find quick and clever ways to overcome difficulties.", "stem": "When the laboratory equipment malfunctioned during the critical experiment, the ______ scientist improvised alternative methods to collect the necessary data.", "options": ["creative", "adaptable", "ingenious", "resourceful"], "correct_index": 3}];
 }
 
 function startTest() {
@@ -1142,6 +1190,19 @@ function submitQuiz() {
     sessionStorage.setItem('last_wrong_questions', JSON.stringify(wrongQuestions));
 
     // 渲染结果
+    // 保存本次会话到历史记录
+    const sessionRecord = {
+        date: new Date().toISOString().split('T')[0],
+        timestamp: new Date().toISOString(),
+        type: 'new',
+        total: QUESTIONS_DATA.length,
+        correct: correctCount,
+        accuracy: Math.round((correctCount / QUESTIONS_DATA.length) * 100),
+        duration_sec: totalTime
+    };
+    const sessionsList = JSON.parse(localStorage.getItem('isee_sessions') || '[]');
+    sessionsList.push(sessionRecord);
+    localStorage.setItem('isee_sessions', JSON.stringify(sessionsList));
     const accuracy = Math.round((correctCount / QUESTIONS_DATA.length) * 100);
     const mm = String(Math.floor(totalTime / 60)).padStart(2, '0');
     const ss = String(totalTime % 60).padStart(2, '0');
@@ -1171,22 +1232,47 @@ function submitQuiz() {
         : '';
 
     document.getElementById('results').innerHTML =
+        '<div class="new-test-section">' +
+        '<button class="start-new-btn" onclick="startNewTest()">🔄 Start New Test</button>' +
+        '</div>' +
         '<div class="score-summary">' +
         '<div class="score-item"><span class="score-value">' + correctCount + '/' + QUESTIONS_DATA.length + '</span><span class="score-label">Score</span></div>' +
         '<div class="score-item"><span class="score-value">' + accuracy + '%</span><span class="score-label">Accuracy</span></div>' +
         '<div class="score-item"><span class="score-value">' + mm + ':' + ss + '</span><span class="score-label">Time</span></div>' +
         '</div>' +
-        mistakesHtml +
+       
         '<div class="action-links">' +
         retakeBtn +
         '<a href="mistakes.html">📖 View All Mistakes</a>' +
-        '</div>';
+        '<a href="wrong-review.html">🔁 Review Mistakes</a>' +
+                '<a href="history.html">📊 View Progress</a>' +
+        '</div>' +
+        mistakesHtml;
+        
 
     document.getElementById('results').classList.add('show');
     document.getElementById('submit-btn').disabled = true;
     document.getElementById('submit-btn').textContent = 'SUBMITTED';
 
     document.getElementById('results').scrollIntoView({behavior: 'smooth'});
+
+    // 保存完整状态到 sessionStorage（用于跨页面返回时恢复）
+    sessionStorage.setItem('submitted_form_html', document.getElementById('quiz-form').innerHTML);
+    sessionStorage.setItem('submitted_results_html', document.getElementById('results').innerHTML);
+    sessionStorage.setItem('submitted_timer', document.getElementById('timer-display').textContent);
+    sessionStorage.setItem('submitted_progress', document.getElementById('progress-count').textContent);
+}
+
+function clearSubmittedState() {
+    sessionStorage.removeItem('submitted_form_html');
+    sessionStorage.removeItem('submitted_results_html');
+    sessionStorage.removeItem('submitted_timer');
+    sessionStorage.removeItem('submitted_progress');
+}
+
+function startNewTest() {
+    clearSubmittedState();
+    location.reload();
 }
 
 function retakeWrong() {
@@ -1195,10 +1281,12 @@ function retakeWrong() {
         alert('No wrong questions to retake.');
         return;
     }
+    clearSubmittedState();
     sessionStorage.setItem('retake_mode', '1');
     sessionStorage.setItem('retake_questions', wrongQuestions);
     location.reload();
 }
+
 </script>
 
 </body>
