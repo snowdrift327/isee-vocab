@@ -1,1493 +1,778 @@
+"""
+ISEE Vocabulary — Batch Generator
+Generates N quiz sets at once, saves to quiz-sets.json, supports resume on interruption.
+
+Usage:
+  uv run main.py            → generate 30 quiz sets (default)
+  uv run main.py 20         → generate 20 quiz sets
+  uv run main.py reset      → clear quiz-sets.json and start over
+"""
+
 import os
 import json
 import random
+import sys
 from datetime import datetime
 from pathlib import Path
 
-import pandas as pd
+import openpyxl
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
-# ============ 配置 ============
+# ============ Configuration ============
 load_dotenv()
 client = Anthropic()
 
-EXCEL_FILE = Path("isee_lower_level_words.xlsx")
-DATA_DIR = Path("data")
-DATA_DIR.mkdir(exist_ok=True)
-
+WORDS_FILE = Path("isee_lower_level_words.xlsx")
+QUIZ_SETS_FILE = Path("quiz-sets.json")
 INDEX_FILE = Path("index.html")
+HISTORY_PAGE = Path("history.html")
 MISTAKES_FILE = Path("mistakes.html")
-HISTORY_FILE = Path("history.html")
-WRONG_REVIEW_FILE = Path("wrong-review.html")
 
-NUM_SYNONYM = 14
-NUM_SENTENCE = 6
-TOTAL_QUESTIONS = NUM_SYNONYM + NUM_SENTENCE
+DEFAULT_BATCH_SIZE = 30
+QUESTIONS_PER_SET = 20
+SYNONYM_COUNT = 14  # 14 synonym questions
+SENTENCE_COUNT = 6  # 6 sentence completion questions
 
-# ============ 读取 Excel 词库 ============
-def load_word_pool():
-    """从 Excel 读取所有单词，扁平化去重"""
-    df = pd.read_excel(EXCEL_FILE)
-    word_set = set()
-    # 列头本身是主题词，也加入
-    for col in df.columns:
-        word_set.add(str(col).strip())
-        for word in df[col].dropna():
-            cleaned = str(word).strip()
-            if cleaned:
-                word_set.add(cleaned)
-    return sorted(word_set)
 
-word_pool = load_word_pool()
-print(f"📚 词库加载完成，共 {len(word_pool)} 个独特单词\n")
+# ============ Load Words ============
+def load_all_words():
+    """Read ALL words from ALL sheets and ALL columns (skip empty cells)."""
+    wb = openpyxl.load_workbook(WORDS_FILE)
+    words = []
+    for sheet_name in wb.sheetnames:
+        ws = wb[sheet_name]
+        for row in ws.iter_rows(values_only=True):
+            for cell in row:
+                if cell is None:
+                    continue
+                word = str(cell).strip()
+                # Filter: must be a real word (alpha only, 2+ chars)
+                # Skip headers, numbers, and non-word content
+                if word and word.isalpha() and len(word) >= 3:
+                    words.append(word.lower())  # normalize to lowercase for dedup
+    # Dedup and restore case (first-seen wins)
+    seen = set()
+    unique = []
+    for w in words:
+        if w not in seen:
+            seen.add(w)
+            # Capitalize first letter to match your Excel format
+            unique.append(w.capitalize())
+    return unique
 
-# ============ 随机选词 ============
-selected = random.sample(word_pool, TOTAL_QUESTIONS)
-synonym_words = selected[:NUM_SYNONYM]
-sentence_words = selected[NUM_SYNONYM:]
 
-print(f"🎲 本次抽取 20 个词：")
-print(f"   同义词题（{NUM_SYNONYM} 个）：{', '.join(synonym_words)}")
-print(f"   句子完成题（{NUM_SENTENCE} 个）：{', '.join(sentence_words)}\n")
+# ============ AI Generation ============
+def parse_ai_json(prompt, max_tokens=4096, max_retries=3, label=""):
+    """Call Claude and parse JSON, retry on failure."""
+    last_error = None
+    for attempt in range(max_retries):
+        try:
+            response = client.messages.create(
+                model="claude-sonnet-4-5",
+                max_tokens=max_tokens,
+                messages=[{"role": "user", "content": prompt}]
+            )
+            text = response.content[0].text.strip()
+            if text.startswith("```"):
+                text = text.split("```")[1]
+                if text.startswith("json"):
+                    text = text[4:]
+                text = text.strip()
+            return json.loads(text)
+        except json.JSONDecodeError as e:
+            last_error = e
+            print(f"   ⚠️  {label} attempt {attempt+1}/{max_retries}: JSON parse failed (line {e.lineno}, col {e.colno})")
+            if attempt < max_retries - 1:
+                print(f"   🔄 Retrying...")
+            continue
+    raise RuntimeError(f"{label} failed after {max_retries} attempts. Last error: {last_error}")
 
-# ============ 构建 Prompt ============
-prompt = f"""You are an experienced ISEE Lower Level test question writer with deep knowledge of the actual exam format and difficulty calibration. Your task is to create questions that match the EXACT difficulty of the real ISEE Lower Level vocabulary section.
 
-【CRITICAL DIFFICULTY CALIBRATION - READ CAREFULLY】
+def generate_synonym_questions(words_batch):
+    """Generate synonym questions for a batch of words."""
+    words_str = ", ".join(words_batch)
+    prompt = f"""You are a test question writer for the ISEE Lower Level exam (grades 5-6 admission). Create {len(words_batch)} synonym multiple-choice questions.
 
-ISEE Lower Level is for students applying to Grades 5-7. The vocabulary section is HARDER than school vocabulary tests because:
-- Target words are at advanced middle-school to high-school prep level
-- Distractors are chosen to test PRECISE word knowledge, not gross errors
-- Sentence completion sentences use complex grammatical structures (subordinate clauses, contrasts, abstract concepts)
-- Sentence contexts require INFERENCE, not just word matching
+WORDS TO USE (one question per word): {words_str}
 
-【REAL ISEE LOWER LEVEL EXAMPLE - SYNONYM】
+FORMAT for each question:
+- Stem: "[WORD] most nearly means"
+- 4 options: 1 correct synonym + 3 plausible distractors
+- Distractors MUST be from the SAME PART OF SPEECH as the correct answer
+- Distractors should be words the student might confuse (similar sound, related meaning, common wrong answer)
+- Difficulty must match ISEE Lower Level — challenging but fair for advanced 5-6th graders
+- Include a 1-sentence explanation
 
-PRUDENT most nearly means
-(A) wealthy
-(B) cautious
-(C) friendly
-(D) intelligent
+DISTRACTOR QUALITY RULES:
+- Distractor 1: Similar meaning but wrong nuance (partially right)
+- Distractor 2: Related concept but different meaning
+- Distractor 3: Common wrong answer students give
 
-Note: All 4 options are common positive-trait adjectives. The student must know the PRECISE meaning of "prudent" — not just guess based on positive connotation. "Intelligent" is a tempting wrong answer because prudent people are often intelligent, but that's not the definition.
-
-【REAL ISEE LOWER LEVEL EXAMPLE - SENTENCE COMPLETION】
-
-Despite the team's initial enthusiasm, their progress became increasingly ______ as the project's complexity overwhelmed their resources.
-(A) rapid
-(B) sporadic
-(C) systematic
-(D) deliberate
-
-Note: Uses "Despite" + "increasingly" structure. Context is ABSTRACT (project management, complexity, resources), not concrete (detective, kitchen, etc.). Distractors are all adverbs of work-pace, requiring precise contextual understanding.
-
-【SYNONYM QUESTIONS - generate {NUM_SYNONYM} questions for these words】
-{json.dumps(synonym_words)}
-
-REQUIREMENTS for synonym questions:
-1. Stem format EXACTLY: "[WORD] most nearly means" (WORD in caps)
-2. Correct answer: a precise single-word synonym (not a paraphrase)
-3. Three distractors MUST follow these rules:
-   - Same part of speech as target (adjective→adjectives only)
-   - Same general semantic field (e.g., if target is a positive trait, at least 2 distractors should also be positive traits)
-   - At least ONE distractor must be semantically TEMPTING (commonly confused with the target, related but not synonymous)
-   - NO obviously wrong choices like "tall" for "meticulous"
-4. Difficulty of options: Use vocabulary at the same level as the target word, NOT simple Grade 3 words
-5. Vary correct answer position (don't cluster at B or C)
-
-【SENTENCE COMPLETION QUESTIONS - generate {NUM_SENTENCE} questions for these words】
-{json.dumps(sentence_words)}
-
-REQUIREMENTS for sentence completion:
-1. Sentences MUST use at least ONE of these complex structures:
-   - Contrast/concession: "Although...", "Despite...", "Whereas...", "However..."
-   - Causation: "Because...", "Since...", "Given that..."
-   - Subordinate clause: "..., which...", "When..., the..."
-   - Comparison: "more...than...", "as...as..."
-2. Sentences MUST involve ABSTRACT concepts when possible (ideas, relationships, qualities, processes) — NOT concrete simple scenarios like "kitchen", "playground", "puppy"
-3. Sentence length: 15-25 words (longer than elementary school sentences)
-4. The blank should require READING THE WHOLE SENTENCE to fill correctly — not guessable from one nearby word
-5. Distractors must be:
-   - Grammatically correct in the blank
-   - Plausibly fitting the surface meaning, WRONG on deeper inference
-   - Same part of speech and similar register as target
-6. Use exactly ______ (6 underscores) for the blank
-
-【ANTI-SIMPLIFICATION CHECKLIST】
-
-Before finalizing each question, verify:
-□ Synonym: Are distractors at the same difficulty level as the target word? (If target is "meticulous", distractors should NOT be "tall/happy/fast")
-□ Sentence: Does the sentence use a complex structure with at least one subordinating word?
-□ Sentence: Could a student get the answer right WITHOUT reading the whole sentence? (If yes, rewrite)
-□ Sentence: Is the context abstract (idea, relationship, quality) rather than concrete (object, place)?
-
-【OUTPUT FORMAT - STRICT JSON, no markdown, no commentary】
-
+Output STRICT JSON only:
 {{
   "questions": [
     {{
       "type": "synonym",
-      "word": "METICULOUS",
-      "definition": "Showing great attention to detail; very careful and precise.",
-      "stem": "METICULOUS most nearly means",
-      "options": ["thorough", "rigorous", "scrupulous", "diligent"],
-      "correct_index": 2
+      "word": "WORD",
+      "stem": "WORD most nearly means",
+      "options": ["option1", "option2", "option3", "option4"],
+      "correct_index": 0,
+      "explanation": "..."
     }},
-    {{
-      "type": "sentence",
-      "word": "meticulous",
-      "definition": "Showing great attention to detail; very careful and precise.",
-      "stem": "Although her colleagues worked quickly, Maria's ______ approach to research often uncovered errors that others had overlooked.",
-      "options": ["careless", "meticulous", "hesitant", "ambitious"],
-      "correct_index": 1
-    }}
+    ...
   ]
 }}
 
-FINAL REQUIREMENTS:
-- Output exactly {TOTAL_QUESTIONS} questions
-- First {NUM_SYNONYM} are synonym, last {NUM_SENTENCE} are sentence completion
-- Word field: UPPERCASE for synonyms, lowercase for sentence completion
-- correct_index: 0/1/2/3, vary the distribution
-- Output ONLY the JSON, no markdown code blocks
-"""
+Generate exactly {len(words_batch)} questions."""
 
-# ============ 调用 Claude ============
-print("⏳ 正在调用 Claude 生成题目...\n")
+    result = parse_ai_json(prompt, max_tokens=6144, label=f"Synonym batch ({len(words_batch)})")
+    return result["questions"]
 
-message = client.messages.create(
-    model="claude-sonnet-4-5",
-    max_tokens=8192,
-    messages=[{"role": "user", "content": prompt}]
-)
 
-response_text = message.content[0].text.strip()
-if response_text.startswith("```"):
-    response_text = response_text.split("```")[1]
-    if response_text.startswith("json"):
-        response_text = response_text[4:]
-    response_text = response_text.strip()
+def generate_sentence_questions(words_batch):
+    """Generate sentence completion questions for a batch of words."""
+    words_str = ", ".join(words_batch)
+    prompt = f"""You are a test question writer for the ISEE Lower Level exam. Create {len(words_batch)} sentence completion questions.
 
-data = json.loads(response_text)
-questions = data["questions"]
+WORDS TO USE (one question per word): {words_str}
 
-if len(questions) != TOTAL_QUESTIONS:
-    print(f"⚠️  警告：AI 返回了 {len(questions)} 道题，期望 {TOTAL_QUESTIONS} 道")
+FORMAT for each question:
+- A single sentence with ONE blank ______
+- The sentence context clearly points to the target word
+- 4 options: 1 correct + 3 plausible distractors
+- All 4 options must be the SAME PART OF SPEECH
+- Distractors must fit grammatically but not semantically
+- Include a 1-sentence explanation
 
-print(f"✅ 成功生成 {len(questions)} 道题\n")
+QUALITY RULES:
+- Sentence should be 12-25 words long
+- Context clues should be specific (a cause, a contrast, an example)
+- Avoid trivial fillings — the correct word should be clearly best but require thinking
+- Difficulty matches ISEE Lower Level
 
-# ============ 保存本次会话数据 ============
-timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-session_file = DATA_DIR / f"{timestamp}.json"
-with open(session_file, "w", encoding="utf-8") as f:
-    json.dump({
-        "timestamp": timestamp,
-        "words": selected,
-        "questions": questions
-    }, f, ensure_ascii=False, indent=2)
-print(f"💾 会话数据已保存：{session_file}\n")
+Output STRICT JSON only:
+{{
+  "questions": [
+    {{
+      "type": "sentence",
+      "word": "WORD",
+      "stem": "The sentence with a ______ blank in it.",
+      "options": ["option1", "option2", "option3", "option4"],
+      "correct_index": 0,
+      "explanation": "..."
+    }},
+    ...
+  ]
+}}
 
-# ============ 生成 index.html ============
-def render_index_html(questions, timestamp):
-    """生成 ISEE 风格的做题页面"""
+Generate exactly {len(words_batch)} questions."""
 
-    # 把题目数据嵌入到 JS 中（用 json.dumps 保证安全）
-    questions_json = json.dumps(questions, ensure_ascii=False)
+    result = parse_ai_json(prompt, max_tokens=6144, label=f"Sentence batch ({len(words_batch)})")
+    return result["questions"]
 
-    # 生成题目 HTML
-    questions_html = ""
-    for i, q in enumerate(questions):
-        # 题号 + 题目类型标记
-        q_type_label = "Synonym" if q["type"] == "synonym" else "Sentence Completion"
 
-        # 题干：同义词题需要把单词显示成 SMALL CAPS 样式
-        if q["type"] == "synonym":
-            stem_display = q["stem"].replace(q["word"], f'<strong class="target-word">{q["word"]}</strong>')
-        else:
-            stem_display = q["stem"].replace("______", '<span class="blank">______</span>')
+def generate_one_quiz_set(set_number, chosen_words):
+    """Generate one complete quiz set (20 questions)."""
+    synonym_words = chosen_words[:SYNONYM_COUNT]
+    sentence_words = chosen_words[SYNONYM_COUNT:SYNONYM_COUNT + SENTENCE_COUNT]
 
-        # 4 个选项
-        options_html = ""
-        letters = ['A', 'B', 'C', 'D']
-        for j, opt in enumerate(q["options"]):
-            options_html += f'''
-            <label class="option" data-q="{i}" data-opt="{j}">
-                <input type="radio" name="q{i}" value="{j}">
-                <span class="letter">{letters[j]}</span>
-                <span class="opt-text">{opt}</span>
-            </label>'''
+    print(f"   Generating {SYNONYM_COUNT} synonym questions...")
+    synonym_qs = generate_synonym_questions(synonym_words)
 
-        questions_html += f'''
-        <div class="question" data-q-index="{i}">
-            <div class="q-header">
-                <span class="q-number">{i+1}.</span>
-                <span class="q-type">{q_type_label}</span>
-            </div>
-            <div class="q-stem">{stem_display}</div>
-            <div class="q-options">{options_html}</div>
-        </div>'''
+    print(f"   Generating {SENTENCE_COUNT} sentence completion questions...")
+    sentence_qs = generate_sentence_questions(sentence_words)
 
-    return f'''<!DOCTYPE html>
+    # Interleave: alternate synonym/sentence for variety, but keep majority synonym
+    all_questions = synonym_qs + sentence_qs
+    random.shuffle(all_questions)
+
+    return {
+        "id": f"set_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}",
+        "set_number": set_number,
+        "created_at": datetime.now().isoformat(),
+        "words_used": chosen_words,
+        "questions": all_questions
+    }
+
+
+# ============ Load/Save Quiz Sets Database ============
+def load_quiz_sets():
+    if QUIZ_SETS_FILE.exists():
+        with open(QUIZ_SETS_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    return {"generated_at": None, "total": 0, "sets": []}
+
+
+def save_quiz_sets(data):
+    data["total"] = len(data["sets"])
+    data["last_updated"] = datetime.now().isoformat()
+    with open(QUIZ_SETS_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+# ============ Main Batch Generation ============
+def run_batch(target_count):
+    all_words = load_all_words()
+    print(f"📚 Loaded {len(all_words)} unique words from {WORDS_FILE}")
+
+    db = load_quiz_sets()
+    existing_sets = db.get("sets", [])
+    already_have = len(existing_sets)
+
+    to_generate = target_count - already_have
+    if to_generate <= 0:
+        print(f"✅ Already have {already_have} quiz sets. To start over, run: uv run main.py reset")
+        return existing_sets
+
+    # Track used words across all existing sets to avoid overlap
+    used_words = set()
+    for s in existing_sets:
+        used_words.update(w.lower() for w in s.get("words_used", []))
+
+    words_per_set = QUESTIONS_PER_SET
+    available_words = [w for w in all_words if w.lower() not in used_words]
+
+    if len(available_words) < to_generate * words_per_set:
+        max_possible_sets = already_have + len(available_words) // words_per_set
+        print(f"⚠️  Only {len(available_words)} unused words left; can generate max {max_possible_sets - already_have} more sets.")
+        to_generate = max_possible_sets - already_have
+        if to_generate <= 0:
+            print("Cannot generate more sets — no unused words. Consider reset.")
+            return existing_sets
+
+    print(f"\n📝 Generating {to_generate} new quiz sets (currently have {already_have})")
+    print(f"⏱  Estimated time: {to_generate * 15 // 60}-{to_generate * 30 // 60} minutes")
+    print(f"💰 Estimated cost: ${to_generate * 0.06:.2f}-${to_generate * 0.10:.2f}\n")
+
+    if db.get("generated_at") is None:
+        db["generated_at"] = datetime.now().isoformat()
+
+    random.shuffle(available_words)
+    failed = []
+
+    for i in range(to_generate):
+        set_number = already_have + i + 1
+        chosen_words = available_words[:words_per_set]
+        available_words = available_words[words_per_set:]
+
+        print(f"[{set_number}/{target_count}] Quiz Set #{set_number}")
+
+        try:
+            quiz_set = generate_one_quiz_set(set_number, chosen_words)
+            existing_sets.append(quiz_set)
+            db["sets"] = existing_sets
+            save_quiz_sets(db)
+            print(f"    ✓ Generated {len(quiz_set['questions'])} questions\n")
+        except Exception as e:
+            failed.append((set_number, str(e)))
+            print(f"    ❌ Failed: {e}\n")
+            # Put words back if failed
+            available_words = chosen_words + available_words
+            continue
+
+    print(f"\n{'=' * 60}")
+    print(f"✅ Batch complete!")
+    print(f"   Total quiz sets: {len(existing_sets)}")
+    if failed:
+        print(f"   Failed: {len(failed)}")
+    print(f"{'=' * 60}\n")
+
+    return existing_sets
+
+
+# ============ HTML Generators ============
+def render_index_html():
+    return '''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISEE Lower Level — Vocabulary Practice</title>
+<title>ISEE Vocabulary Practice</title>
 <style>
-/* Start 遮罩 */
-.start-overlay {{
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-}}
-.start-card {{
-    background: white;
-    max-width: 480px;
-    width: 90%;
-    padding: 40px 32px;
-    border: 3px double #1a4d8f;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    font-family: "Times New Roman", Georgia, serif;
-}}
-.start-card h2 {{
-    font-size: 26px;
-    color: #1a4d8f;
-    margin: 0 0 8px;
-    letter-spacing: 1px;
-}}
-.start-card .start-subtitle {{
-    color: #666;
-    font-size: 14px;
-    font-style: italic;
-    margin-bottom: 24px;
-}}
-.start-card .instructions {{
-    text-align: left;
-    background: #f5f5f0;
-    padding: 16px 20px;
-    border-radius: 6px;
-    margin: 20px 0 28px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.7;
-    color: #333;
-}}
-.start-card .instructions strong {{
-    color: #1a4d8f;
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}}
-.start-card .instructions ul {{
-    margin: 0;
-    padding-left: 20px;
-}}
-.start-card .instructions li {{
-    margin: 4px 0;
-}}
-.start-btn {{
-    background: #1a4d8f;
-    color: white;
-    border: none;
-    padding: 16px 56px;
-    font-size: 17px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    letter-spacing: 2px;
-    transition: background 0.2s;
-}}
-.start-btn:hover {{
-    background: #143a6b;
-}}
-.start-card .meta-info {{
-    margin-top: 20px;
-    font-size: 12px;
-    color: #888;
-    font-family: Arial, sans-serif;
-}}
-.hidden-until-start {{
-    visibility: hidden;
-}}
-.start-overlay.hidden {{
-    display: none;
-}}
-* {{ box-sizing: border-box; }}
-body {{
-    font-family: "Times New Roman", Georgia, serif;
+* { box-sizing: border-box; }
+body {
+    font-family: "Georgia", "Times New Roman", serif;
     max-width: 760px;
     margin: 0 auto;
-    padding: 24px 20px 80px;
-    background: #ffffff;
+    padding: 24px 22px 80px;
+    background: #fafaf7;
     color: #1a1a1a;
-    line-height: 1.6;
-    font-size: 16px;
-}}
-.test-header {{
-    border-bottom: 3px double #333;
-    padding-bottom: 16px;
-    margin-bottom: 28px;
-}}
-h1 {{
-    font-size: 24px;
-    margin: 0 0 6px;
-    color: #1a1a1a;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}}
-.subtitle {{ font-size: 13px; color: #555; font-style: italic; }}
-.meta-bar {{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 14px;
-    padding: 10px 16px;
-    background: #f5f5f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-}}
-.timer {{
-    font-family: "Courier New", monospace;
+    line-height: 1.7;
     font-size: 17px;
-    font-weight: bold;
-    color: #1a4d8f;
-}}
-.progress {{ color: #555; }}
-
-.question {{
-    margin-bottom: 28px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #eee;
-}}
-.question:last-child {{ border-bottom: none; }}
-.q-header {{ margin-bottom: 8px; }}
-.q-number {{
-    font-size: 18px;
-    font-weight: bold;
-    color: #1a1a1a;
-    margin-right: 10px;
-}}
-.q-type {{
-    font-size: 12px;
-    color: #888;
-    font-style: italic;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}}
-.q-stem {{
-    font-size: 16px;
-    margin-bottom: 14px;
-    line-height: 1.6;
-}}
-.target-word {{
-    font-variant: small-caps;
-    letter-spacing: 1px;
-    font-weight: bold;
-}}
-.blank {{
-    color: #1a4d8f;
-    font-weight: bold;
+}
+.start-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(250, 250, 247, 0.98); z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
+}
+.start-overlay.hidden { display: none; }
+.start-card {
+    background: white; max-width: 500px; width: 90%;
+    padding: 40px 32px; border: 3px double #1a4d8f;
+    border-radius: 8px; text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.start-card h2 { font-size: 26px; color: #1a4d8f; margin: 0 0 8px; }
+.start-card .subtitle { color: #666; font-size: 15px; font-style: italic; margin: 8px 0 20px; }
+.start-card .instructions {
+    text-align: left; background: #f5f5f0; padding: 16px 20px;
+    border-radius: 6px; margin: 20px 0 28px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px; line-height: 1.7;
+}
+.start-card .instructions strong {
+    color: #1a4d8f; display: block; margin-bottom: 6px;
+    font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
+}
+.start-card .instructions ul { margin: 0; padding-left: 20px; }
+.start-btn {
+    background: #1a4d8f; color: white; border: none;
+    padding: 16px 56px; font-size: 17px; font-weight: bold;
+    border-radius: 4px; cursor: pointer;
+    font-family: "Helvetica Neue", Arial, sans-serif;
     letter-spacing: 2px;
-}}
-.q-options {{
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-left: 20px;
-}}
-.option {{
-    display: flex;
-    align-items: flex-start;
-    padding: 8px 14px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.15s;
-    font-size: 15px;
-}}
-.option:hover {{ background: #f5f5f0; }}
-.option input[type="radio"] {{
-    margin-right: 10px;
-    margin-top: 4px;
-    cursor: pointer;
-}}
-.letter {{
-    font-weight: bold;
-    color: #555;
-    margin-right: 8px;
-    min-width: 18px;
-}}
-.opt-text {{ flex: 1; }}
-
-/* 提交后的状态样式 */
-.option.user-correct {{
-    background: #e8f5e9;
-    border-color: #4caf50;
-}}
-.option.user-wrong {{
-    background: #ffebee;
-    border-color: #f44336;
-}}
-.option.show-correct {{
-    background: #e8f5e9;
-    border-color: #4caf50;
-    border-style: dashed;
-}}
-
-.submit-section {{
-    margin-top: 40px;
-    text-align: center;
-    padding-top: 24px;
-    border-top: 3px double #333;
-}}
-#submit-btn {{
-    background: #1a4d8f;
-    color: white;
-    border: none;
-    padding: 12px 48px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    letter-spacing: 1px;
-    transition: background 0.2s;
-}}
-#submit-btn:hover {{ background: #143a6b; }}
-#submit-btn:disabled {{
-    background: #aaa;
-    cursor: not-allowed;
-}}
-
-.new-test-section {{
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #ddd;
-}}
-.start-new-btn {{
-    background: #2e7d32;
-    color: white;
-    border: none;
-    padding: 12px 40px;
-    font-size: 15px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    letter-spacing: 1px;
-    transition: background 0.2s;
-}}
-.start-new-btn:hover {{
-    background: #1b5e20;
-}}
-
-/* 结果区 */
-#results {{
-    display: none;
-    margin-top: 30px;
-    padding: 24px;
-    background: #f9f9f7;
-    border: 2px solid #1a4d8f;
-    border-radius: 6px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-}}
-#results.show {{ display: block; }}
-.score-summary {{
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 14px;
-}}
-.score-item {{ flex: 1; min-width: 120px; }}
-.score-value {{
-    font-size: 32px;
-    font-weight: bold;
-    color: #1a4d8f;
-    display: block;
-}}
-.score-label {{
-    font-size: 12px;
-    color: #666;
+}
+.start-btn:hover { background: #143a6b; }
+header { border-bottom: 3px double #333; padding-bottom: 20px; margin-bottom: 28px; }
+h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: 1px; }
+.subtitle { font-size: 14px; color: #555; font-style: italic; }
+.meta-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 14px; padding: 10px 16px; background: white;
+    border: 1px solid #ddd; border-radius: 4px;
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 14px;
+}
+.timer { font-family: "Courier New", monospace; font-size: 17px; font-weight: bold; color: #1a4d8f; }
+.progress-pill { background: white; padding: 6px 12px; border-radius: 12px; font-size: 12px; color: #555; border: 1px solid #ddd; font-family: Arial, sans-serif; }
+.question {
+    background: white; padding: 22px 28px; border-radius: 8px;
+    margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.q-header { margin-bottom: 12px; font-family: "Helvetica Neue", Arial, sans-serif; }
+.q-number { font-size: 18px; font-weight: bold; margin-right: 12px; }
+.q-type {
+    font-size: 11px; color: #666;
+    font-style: italic; letter-spacing: 1px;
     text-transform: uppercase;
+}
+.q-stem { font-size: 17px; margin-bottom: 14px; line-height: 1.6; }
+.q-stem .highlight { font-weight: bold; letter-spacing: 0.5px; }
+.q-options { display: flex; flex-direction: column; gap: 6px; margin-left: 28px; font-family: "Georgia", serif; }
+.option {
+    display: flex; align-items: center; padding: 10px 14px;
+    border: 1.5px solid #e0e0e0; border-radius: 5px;
+    cursor: pointer; font-size: 15px;
+}
+.option:hover { border-color: #1a4d8f; background: #f0f5fb; }
+.option input { margin-right: 10px; }
+.letter { font-weight: bold; color: #555; margin-right: 12px; min-width: 20px; font-style: italic; }
+.option.user-correct { background: #e8f5e9; border-color: #4caf50; }
+.option.user-wrong { background: #ffebee; border-color: #f44336; }
+.option.show-correct { background: #e8f5e9; border-color: #4caf50; border-style: dashed; }
+.submit-section { margin-top: 32px; text-align: center; padding-top: 20px; border-top: 3px double #333; }
+#submit-btn {
+    background: #1a4d8f; color: white; border: none;
+    padding: 14px 52px; font-size: 16px; font-weight: bold;
+    border-radius: 4px; cursor: pointer;
+    font-family: "Helvetica Neue", Arial, sans-serif;
     letter-spacing: 1px;
-    margin-top: 4px;
-}}
-
-.mistakes-list {{ margin-top: 20px; }}
-.mistakes-list h3 {{
-    font-size: 16px;
-    color: #c62828;
-    margin: 0 0 12px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 8px;
-}}
-.mistake-item {{
-    background: white;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    border-left: 4px solid #f44336;
-    border-radius: 0 4px 4px 0;
-}}
-.mistake-word {{
-    font-weight: bold;
-    font-size: 16px;
-    color: #1a1a1a;
-    margin-bottom: 4px;
-}}
-.mistake-def {{
-    color: #444;
-    font-size: 14px;
-    font-style: italic;
-    margin-bottom: 6px;
-}}
-.mistake-detail {{
-    font-size: 13px;
-    color: #666;
-    line-height: 1.5;
-}}
-.action-links {{
-    margin: 20px 0;
-    padding: 16px 0;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}}
-.action-links a {{
-    display: block;
-    text-align: center;
-    padding: 12px 16px;
-    background: #1a4d8f;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-}}
-.action-links a:hover {{ background: #143a6b; }}
-@media (max-width: 480px) {{
-    .action-links {{ grid-template-columns: 1fr; }}
-}}
-
-footer {{
-    text-align: center;
-    margin-top: 50px;
-    color: #999;
-    font-size: 12px;
-    font-family: Arial, sans-serif;
-}}
-
-@media (max-width: 600px) {{
-    body {{ padding: 16px 14px 60px; font-size: 15px; }}
-    h1 {{ font-size: 20px; }}
-    .meta-bar {{ flex-direction: column; gap: 6px; align-items: flex-start; }}
-    .q-options {{ margin-left: 8px; }}
-    .option {{ padding: 8px 10px; font-size: 14px; }}
-    .score-value {{ font-size: 26px; }}
-}}
+}
+#submit-btn:hover { background: #143a6b; }
+#submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+#results {
+    display: none; margin-top: 30px; padding: 28px;
+    background: #f9f9f7; border: 2px solid #1a4d8f;
+    border-radius: 8px; font-family: "Helvetica Neue", Arial, sans-serif;
+}
+#results.show { display: block; }
+.new-test-section { text-align: center; margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid #ddd; }
+.start-new-btn {
+    background: #2e7d32; color: white; border: none;
+    padding: 12px 40px; font-size: 15px; font-weight: bold;
+    border-radius: 6px; cursor: pointer; letter-spacing: 1px;
+}
+.start-new-btn:hover { background: #1b5e20; }
+.score-summary { display: flex; justify-content: space-around; text-align: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px; }
+.score-item { flex: 1; min-width: 120px; }
+.score-value { font-size: 32px; font-weight: bold; color: #1a4d8f; display: block; }
+.score-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+.action-links {
+    margin: 20px 0; padding: 16px 0;
+    border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.action-links a {
+    display: block; text-align: center; padding: 12px 16px;
+    background: #1a4d8f; color: white; text-decoration: none;
+    border-radius: 4px; font-size: 14px; font-weight: 500;
+}
+.action-links a:hover { background: #143a6b; }
+.explanation-block { background: white; padding: 14px 18px; margin-bottom: 12px; border-radius: 6px; border-left: 4px solid #4caf50; }
+.explanation-block.wrong { border-left-color: #f44336; }
+.exp-q { font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+.exp-result { font-size: 13px; color: #555; margin-bottom: 8px; }
+.exp-text { font-size: 14px; color: #333; line-height: 1.6; }
+footer { text-align: center; margin-top: 50px; color: #999; font-size: 13px; font-family: "Helvetica Neue", Arial, sans-serif; }
+footer a { color: #888; text-decoration: none; }
+.all-done { text-align: center; padding: 60px 20px; }
+.all-done h1 { color: #1a4d8f; font-size: 32px; border: none; }
+.all-done .actions { margin-top: 32px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.all-done button { background: #1a4d8f; color: white; border: none; padding: 14px 28px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; font-family: "Helvetica Neue", Arial, sans-serif; }
+.all-done button.secondary { background: #6c757d; }
+@media (max-width: 600px) {
+    body { padding: 18px 14px 60px; font-size: 16px; }
+    h1 { font-size: 22px; }
+    .question { padding: 18px 16px; }
+    .q-options { margin-left: 8px; }
+    .meta-bar { flex-direction: column; gap: 6px; align-items: flex-start; }
+    .action-links { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+
 <div id="start-overlay" class="start-overlay">
-    <div class="start-card">
-        <h2>ISEE LOWER LEVEL</h2>
-        <div class="start-subtitle">Vocabulary Practice Test</div>
-
-        <div class="instructions">
-            <strong>Instructions</strong>
-            <ul>
-                <li><strong>{len(questions)} questions</strong> ({NUM_SYNONYM} synonym + {NUM_SENTENCE} sentence completion)</li>
-                <li>Timer starts when you click <strong>START</strong></li>
-                <li>Select one answer for each question</li>
-                <li>Click <strong>SUBMIT TEST</strong> when finished</li>
-                <li>Wrong answers will be saved to your Mistakes Book</li>
-            </ul>
-        </div>
-
-        <button class="start-btn" onclick="startTest()">START</button>
-
-        <div class="meta-info">Generated: {timestamp}</div>
+    <div class="start-card" id="start-card">
+        <div style="text-align:center;color:#999;font-size:14px;">Loading quiz library...</div>
     </div>
 </div>
-<div class="test-header">
+
+<header id="main-header" style="display:none;">
     <h1>ISEE LOWER LEVEL</h1>
     <div class="subtitle">Vocabulary Practice — Synonyms &amp; Sentence Completion</div>
     <div class="meta-bar">
         <span class="timer">Time: <span id="timer-display">00:00</span></span>
-        <span class="progress">Questions: <span id="progress-count">0</span> / {len(questions)}</span>
-        <span style="color:#888;font-size:12px;">{timestamp}</span>
+        <span>Questions: <span id="progress-count">0</span> / 20</span>
+        <span class="progress-pill" id="library-progress">Loading...</span>
     </div>
-</div>
+</header>
 
-<form id="quiz-form" onsubmit="return false;">
-{questions_html}
-</form>
+<form id="quiz-form" onsubmit="return false;"></form>
 
-<div class="submit-section">
-    <button id="submit-btn" onclick="submitQuiz()">SUBMIT TEST</button>
+<div class="submit-section" id="submit-section" style="display:none;">
+    <button id="submit-btn" onclick="submitQuiz()">SUBMIT</button>
 </div>
 
 <div id="results"></div>
 
-<footer>
-    <a href="mistakes.html" style="color:#888;">📖 View Mistakes Book</a>
+<footer style="display:none;" id="footer">
+    <a href="history.html">📊 View History</a>
     &nbsp;|&nbsp;
-    <a href="history.html" style="color:#888;">📊 View History</a>
+    <a href="mistakes.html">📖 Mistakes Book</a>
     &nbsp;|&nbsp;
-    Generated by Claude
+    <span id="library-count-footer"></span>
 </footer>
 
 <script>
-// 检查是否处于"重做错题"模式
-// === 变量声明（必须放在最前面） ===
+let ALL_SETS = [];
+let CURRENT = null;
+let CURRENT_ID = null;
 let startTime = null;
 let submitted = false;
 let testStarted = false;
-let QUESTIONS_DATA;
 
-// === 优先级 1：检查是否有上次提交的状态需要恢复 ===
-const savedFormHTML = sessionStorage.getItem('submitted_form_html');
+async function init() {
+    try {
+        const res = await fetch('quiz-sets.json?v=' + Date.now());
+        const data = await res.json();
+        ALL_SETS = data.sets || [];
 
-// === 检查是否处于"重做错题"模式 ===
-const isRetakeMode = sessionStorage.getItem('retake_mode') === '1';
+        if (ALL_SETS.length === 0) {
+            showError("No quiz sets in library. Run 'uv run main.py' on your computer.");
+            return;
+        }
 
-if (savedFormHTML) {{
-    // 恢复上次提交后的完整结果页
-    QUESTIONS_DATA = {questions_json};
-    submitted = true;
+        const savedId = sessionStorage.getItem('current_set_id');
+        if (savedId) {
+            CURRENT = ALL_SETS.find(s => s.id === savedId);
+            CURRENT_ID = savedId;
+        }
 
-    document.getElementById('start-overlay').classList.add('hidden');
-    document.getElementById('quiz-form').innerHTML = savedFormHTML;
-    document.getElementById('results').innerHTML = sessionStorage.getItem('submitted_results_html');
-    document.getElementById('results').classList.add('show');
-    document.getElementById('timer-display').textContent = sessionStorage.getItem('submitted_timer');
-    document.getElementById('progress-count').textContent = sessionStorage.getItem('submitted_progress');
-    document.getElementById('submit-btn').disabled = true;
-    document.getElementById('submit-btn').textContent = 'SUBMITTED';
-}} else if (isRetakeMode) {{
-    QUESTIONS_DATA = JSON.parse(sessionStorage.getItem('retake_questions') || '[]');
-    sessionStorage.removeItem('retake_mode');
-    sessionStorage.removeItem('retake_questions');
+        if (!CURRENT) {
+            const done = JSON.parse(localStorage.getItem('done_set_ids') || '[]');
+            const available = ALL_SETS.filter(s => !done.includes(s.id));
 
-    if (QUESTIONS_DATA.length === 0) {{
-        document.body.innerHTML = '<div style="padding:60px;text-align:center;font-family:Arial;"><h2>No wrong questions to retake.</h2><a href="index.html">← Back to start</a></div>';
-    }} else {{
-        // 重做模式：自动开始，跳过 Start 遮罩
-        document.getElementById('start-overlay').classList.add('hidden');
-        testStarted = true;
-        startTime = Date.now();
-        // 重新渲染题目
-        rerenderQuestions(QUESTIONS_DATA);
-    }}
-}} else {{
-    QUESTIONS_DATA = {questions_json};
-}}
+            if (available.length === 0) {
+                showAllDone();
+                return;
+            }
 
-function startTest() {{
+            CURRENT = available[Math.floor(Math.random() * available.length)];
+            CURRENT_ID = CURRENT.id;
+            sessionStorage.setItem('current_set_id', CURRENT_ID);
+        }
+
+        renderSet();
+
+        const savedState = sessionStorage.getItem('vocab_submitted_state_' + CURRENT_ID);
+        if (savedState) {
+            const state = JSON.parse(savedState);
+            document.getElementById('start-overlay').classList.add('hidden');
+            document.getElementById('quiz-form').innerHTML = state.formHTML;
+            document.getElementById('results').innerHTML = state.resultsHTML;
+            document.getElementById('results').classList.add('show');
+            document.getElementById('timer-display').textContent = state.timer;
+            document.getElementById('progress-count').textContent = state.progress;
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').textContent = 'SUBMITTED';
+            submitted = true;
+        }
+    } catch (err) {
+        showError("Failed to load quiz sets: " + err.message);
+    }
+}
+
+function renderSet() {
+    const done = JSON.parse(localStorage.getItem('done_set_ids') || '[]');
+    const remaining = ALL_SETS.length - done.length;
+
+    document.getElementById('start-card').innerHTML = `
+        <h2>ISEE VOCABULARY</h2>
+        <div class="subtitle">Quiz Set #${CURRENT.set_number || '?'}</div>
+        <div class="instructions">
+            <strong>Instructions</strong>
+            <ul>
+                <li>20 questions: 14 synonyms + 6 sentence completions</li>
+                <li>Read each question carefully</li>
+                <li>Select the best answer</li>
+                <li>Timer starts when you click START</li>
+            </ul>
+        </div>
+        <button class="start-btn" onclick="startTest()">START</button>
+        <div style="margin-top:16px;font-size:12px;color:#888;font-family:Arial;">
+            📚 ${ALL_SETS.length - remaining}/${ALL_SETS.length} sets completed
+        </div>
+    `;
+
+    document.getElementById('library-progress').textContent = `${ALL_SETS.length - remaining}/${ALL_SETS.length} done`;
+    document.getElementById('library-count-footer').textContent = `Library: ${ALL_SETS.length} sets`;
+
+    let questionsHTML = "";
+    CURRENT.questions.forEach((q, i) => {
+        const typeLabel = q.type === "synonym" ? "SYNONYM" : "SENTENCE COMPLETION";
+        let stemHTML = q.stem;
+        if (q.type === "synonym" && q.word) {
+            stemHTML = `<span class="highlight">${q.word}</span> most nearly means`;
+        }
+
+        let optionsHTML = "";
+        const letters = ["A", "B", "C", "D"];
+        q.options.forEach((opt, j) => {
+            optionsHTML += `
+                <label class="option" data-q="${i}" data-opt="${j}">
+                    <input type="radio" name="q${i}" value="${j}">
+                    <span class="letter">${letters[j]}</span>
+                    <span>${opt}</span>
+                </label>`;
+        });
+        questionsHTML += `
+            <div class="question" data-q-index="${i}">
+                <div class="q-header">
+                    <span class="q-number">${i+1}.</span>
+                    <span class="q-type">${typeLabel}</span>
+                </div>
+                <div class="q-stem">${stemHTML}</div>
+                <div class="q-options">${optionsHTML}</div>
+            </div>`;
+    });
+    document.getElementById('quiz-form').innerHTML = questionsHTML;
+
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener('change', () => {
+            const answered = new Set();
+            document.querySelectorAll('input[type="radio"]:checked').forEach(r => answered.add(r.name));
+            document.getElementById('progress-count').textContent = answered.size;
+        });
+    });
+
+    document.getElementById('main-header').style.display = 'block';
+    document.getElementById('submit-section').style.display = 'block';
+    document.getElementById('footer').style.display = 'block';
+}
+
+function startTest() {
     testStarted = true;
     startTime = Date.now();
     document.getElementById('start-overlay').classList.add('hidden');
-}}
+}
 
-function rerenderQuestions(questions) {{
-    // 更新计数
-    document.querySelector('.progress').innerHTML = 'Questions: <span id="progress-count">0</span> / ' + questions.length;
-
-    // 添加重做模式标记
-    const headerSubtitle = document.querySelector('.subtitle');
-    headerSubtitle.innerHTML = '🔁 RETAKING WRONG QUESTIONS — ' + questions.length + ' question(s)';
-    headerSubtitle.style.color = '#c62828';
-    headerSubtitle.style.fontWeight = 'bold';
-
-    // 清空原题目，重新渲染
-    const form = document.getElementById('quiz-form');
-    form.innerHTML = '';
-
-    questions.forEach((q, i) => {{
-        const qDiv = document.createElement('div');
-        qDiv.className = 'question';
-        qDiv.dataset.qIndex = i;
-
-        let stemDisplay;
-        if (q.type === 'synonym') {{
-            stemDisplay = q.stem.replace(q.word, '<strong class="target-word">' + q.word + '</strong>');
-        }} else {{
-            stemDisplay = q.stem.replace(/______/g, '<span class="blank">______</span>');
-        }}
-
-        const typeLabel = q.type === 'synonym' ? 'Synonym' : 'Sentence Completion';
-
-        let optionsHtml = '';
-        const letters = ['A', 'B', 'C', 'D'];
-        q.options.forEach((opt, j) => {{
-            optionsHtml += '<label class="option" data-q="' + i + '" data-opt="' + j + '">' +
-                '<input type="radio" name="q' + i + '" value="' + j + '">' +
-                '<span class="letter">' + letters[j] + '</span>' +
-                '<span class="opt-text">' + opt + '</span></label>';
-        }});
-
-        qDiv.innerHTML = '<div class="q-header"><span class="q-number">' + (i+1) + '.</span>' +
-            '<span class="q-type">' + typeLabel + '</span></div>' +
-            '<div class="q-stem">' + stemDisplay + '</div>' +
-            '<div class="q-options">' + optionsHtml + '</div>';
-
-        form.appendChild(qDiv);
-    }});
-
-    // 重新绑定 change 事件
-    document.querySelectorAll('input[type="radio"]').forEach(input => {{
-        input.addEventListener('change', updateProgress);
-    }});
-}}
-
-function updateProgress() {{
-    const answered = new Set();
-    document.querySelectorAll('input[type="radio"]:checked').forEach(r => {{
-        answered.add(r.name);
-    }});
-    document.getElementById('progress-count').textContent = answered.size;
-}}
-
-// 计时器
-function updateTimer() {{
+setInterval(() => {
     if (!testStarted || submitted) return;
     const elapsed = Math.floor((Date.now() - startTime) / 1000);
     const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
     const ss = String(elapsed % 60).padStart(2, '0');
     document.getElementById('timer-display').textContent = mm + ':' + ss;
-}}
-setInterval(updateTimer, 1000);
+}, 1000);
 
-// 进度计数（原题模式）
-document.querySelectorAll('input[type="radio"]').forEach(input => {{
-    input.addEventListener('change', updateProgress);
-}});
-
-function submitQuiz() {{
+function submitQuiz() {
     if (submitted) return;
-
-    const userAnswers = {{}};
+    const userAnswers = {};
     let answeredCount = 0;
-    QUESTIONS_DATA.forEach((q, i) => {{
-        const selected = document.querySelector('input[name="q' + i + '"]:checked');
-        if (selected) {{
-            userAnswers[i] = parseInt(selected.value);
-            answeredCount++;
-        }} else {{
-            userAnswers[i] = -1;
-        }}
-    }});
+    CURRENT.questions.forEach((q, i) => {
+        const sel = document.querySelector('input[name="q' + i + '"]:checked');
+        if (sel) { userAnswers[i] = parseInt(sel.value); answeredCount++; }
+        else { userAnswers[i] = -1; }
+    });
 
-    if (answeredCount < QUESTIONS_DATA.length) {{
-        if (!confirm('You have ' + (QUESTIONS_DATA.length - answeredCount) + ' unanswered question(s). Submit anyway?')) {{
-            return;
-        }}
-    }}
+    if (answeredCount < CURRENT.questions.length) {
+        if (!confirm('You have ' + (CURRENT.questions.length - answeredCount) + ' unanswered. Submit?')) return;
+    }
 
     submitted = true;
     const totalTime = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0;
 
     let correctCount = 0;
     const mistakes = [];
-    const wrongQuestions = [];  // 保留完整题目数据，用于重做
-
-    QUESTIONS_DATA.forEach((q, i) => {{
+    CURRENT.questions.forEach((q, i) => {
         const userAns = userAnswers[i];
         const correctAns = q.correct_index;
-
-        const allOpts = document.querySelectorAll('label.option[data-q="' + i + '"]');
-        allOpts.forEach(opt => {{
-            const optIdx = parseInt(opt.dataset.opt);
+        const opts = document.querySelectorAll('label.option[data-q="' + i + '"]');
+        opts.forEach(opt => {
+            const idx = parseInt(opt.dataset.opt);
             opt.style.pointerEvents = 'none';
-            const radio = opt.querySelector('input');
-            radio.disabled = true;
-
-            if (optIdx === correctAns) {{
-                if (userAns === correctAns) {{
-                    opt.classList.add('user-correct');
-                }} else {{
-                    opt.classList.add('show-correct');
-                }}
-            }} else if (optIdx === userAns) {{
-                opt.classList.add('user-wrong');
-            }}
-        }});
-
-        if (userAns === correctAns) {{
-            correctCount++;
-        }} else {{
-            mistakes.push({{
-                word: q.word,
-                definition: q.definition,
-                type: q.type,
-                stem: q.stem,
-                options: q.options,
-                correct_index: q.correct_index,
-                user_index: userAns,
-                date: new Date().toISOString().split('T')[0]
-            }});
-            wrongQuestions.push(q);
-        }}
-    }});
-
-    // 永久错题本（localStorage）
-    const existing = JSON.parse(localStorage.getItem('isee_mistakes') || '[]');
-    mistakes.forEach(m => {{
-        const isDup = existing.some(e => e.word === m.word && e.stem === m.stem);
-        if (!isDup) existing.push(m);
-    }});
-    localStorage.setItem('isee_mistakes', JSON.stringify(existing));
-
-    // 本次错题（sessionStorage，用于重做）
-    sessionStorage.setItem('last_wrong_questions', JSON.stringify(wrongQuestions));
-
-    // 渲染结果
-    // 保存本次会话到历史记录
-    const sessionRecord = {{
-        date: new Date().toISOString().split('T')[0],
-        timestamp: new Date().toISOString(),
-        type: 'new',
-        total: QUESTIONS_DATA.length,
-        correct: correctCount,
-        accuracy: Math.round((correctCount / QUESTIONS_DATA.length) * 100),
-        duration_sec: totalTime
-    }};
-    const sessionsList = JSON.parse(localStorage.getItem('isee_sessions') || '[]');
-    sessionsList.push(sessionRecord);
-    localStorage.setItem('isee_sessions', JSON.stringify(sessionsList));
-    const accuracy = Math.round((correctCount / QUESTIONS_DATA.length) * 100);
-    const mm = String(Math.floor(totalTime / 60)).padStart(2, '0');
-    const ss = String(totalTime % 60).padStart(2, '0');
-
-    let mistakesHtml = '';
-    if (mistakes.length > 0) {{
-        mistakesHtml = '<div class="mistakes-list"><h3>📝 Review These Words (' + mistakes.length + ')</h3>';
-        mistakes.forEach(m => {{
-            const correctText = m.options[m.correct_index];
-            const userText = m.user_index >= 0 ? m.options[m.user_index] : '(unanswered)';
-            mistakesHtml += '<div class="mistake-item">' +
-                '<div class="mistake-word">' + m.word + '</div>' +
-                '<div class="mistake-def">' + m.definition + '</div>' +
-                '<div class="mistake-detail">' +
-                '<strong>Correct:</strong> ' + correctText + '<br>' +
-                '<strong>Your answer:</strong> ' + userText +
-                '</div></div>';
-        }});
-        mistakesHtml += '</div>';
-    }} else {{
-        mistakesHtml = '<div style="text-align:center;padding:20px;color:#2e7d32;font-size:18px;font-weight:bold;">🎉 Perfect Score! All correct!</div>';
-    }}
-
-    // 重做按钮（只有有错题时才显示）
-    const retakeBtn = wrongQuestions.length > 0
-        ? '<a href="javascript:retakeWrong()">🔁 Retake Wrong Questions (' + wrongQuestions.length + ')</a>'
-        : '';
-
-    document.getElementById('results').innerHTML =
-        '<div class="new-test-section">' +
-        '<button class="start-new-btn" onclick="startNewTest()">🔄 Start New Test</button>' +
-        '</div>' +
-        '<div class="score-summary">' +
-        '<div class="score-item"><span class="score-value">' + correctCount + '/' + QUESTIONS_DATA.length + '</span><span class="score-label">Score</span></div>' +
-        '<div class="score-item"><span class="score-value">' + accuracy + '%</span><span class="score-label">Accuracy</span></div>' +
-        '<div class="score-item"><span class="score-value">' + mm + ':' + ss + '</span><span class="score-label">Time</span></div>' +
-        '</div>' +
-       
-        '<div class="action-links">' +
-        retakeBtn +
-        '<a href="mistakes.html">📖 View All Mistakes</a>' +
-        '<a href="wrong-review.html">🔁 Review Mistakes</a>' +
-                '<a href="history.html">📊 View Progress</a>' +
-        '</div>' +
-        mistakesHtml;
-        
-
-    document.getElementById('results').classList.add('show');
-    document.getElementById('submit-btn').disabled = true;
-    document.getElementById('submit-btn').textContent = 'SUBMITTED';
-
-    document.getElementById('results').scrollIntoView({{behavior: 'smooth'}});
-
-    // 保存完整状态到 sessionStorage（用于跨页面返回时恢复）
-    sessionStorage.setItem('submitted_form_html', document.getElementById('quiz-form').innerHTML);
-    sessionStorage.setItem('submitted_results_html', document.getElementById('results').innerHTML);
-    sessionStorage.setItem('submitted_timer', document.getElementById('timer-display').textContent);
-    sessionStorage.setItem('submitted_progress', document.getElementById('progress-count').textContent);
-}}
-
-function clearSubmittedState() {{
-    sessionStorage.removeItem('submitted_form_html');
-    sessionStorage.removeItem('submitted_results_html');
-    sessionStorage.removeItem('submitted_timer');
-    sessionStorage.removeItem('submitted_progress');
-}}
-
-function startNewTest() {{
-    clearSubmittedState();
-    location.reload();
-}}
-
-function retakeWrong() {{
-    const wrongQuestions = sessionStorage.getItem('last_wrong_questions');
-    if (!wrongQuestions || JSON.parse(wrongQuestions).length === 0) {{
-        alert('No wrong questions to retake.');
-        return;
-    }}
-    clearSubmittedState();
-    sessionStorage.setItem('retake_mode', '1');
-    sessionStorage.setItem('retake_questions', wrongQuestions);
-    location.reload();
-}}
-
-</script>
-
-</body>
-</html>'''
-
-# ============ 生成 wrong-review.html ============
-def render_wrong_review_html():
-    """错题集中复习页面（从 localStorage 读错题）"""
-    return '''<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISEE Vocabulary — Mistakes Review</title>
-<style>
-* { box-sizing: border-box; }
-body {
-    font-family: "Times New Roman", Georgia, serif;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 24px 20px 80px;
-    background: #ffffff;
-    color: #1a1a1a;
-    line-height: 1.6;
-    font-size: 16px;
-}
-.start-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(8px);
-}
-.start-overlay.hidden { display: none; }
-.start-card {
-    background: white;
-    max-width: 480px;
-    width: 90%;
-    padding: 40px 32px;
-    border: 3px double #c62828;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-}
-.start-card h2 {
-    font-size: 26px;
-    color: #c62828;
-    margin: 0 0 8px;
-    letter-spacing: 1px;
-}
-.start-card .start-subtitle {
-    color: #666;
-    font-size: 14px;
-    font-style: italic;
-    margin-bottom: 24px;
-}
-.instructions {
-    text-align: left;
-    background: #fdf6f6;
-    padding: 16px 20px;
-    border-radius: 6px;
-    margin: 20px 0 28px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.7;
-    color: #333;
-}
-.instructions strong {
-    color: #c62828;
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-.instructions ul { margin: 0; padding-left: 20px; }
-.instructions li { margin: 4px 0; }
-.start-btn {
-    background: #c62828;
-    color: white;
-    border: none;
-    padding: 16px 56px;
-    font-size: 17px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    letter-spacing: 2px;
-    transition: background 0.2s;
-}
-.start-btn:hover { background: #9e1f1f; }
-.start-btn:disabled { background: #aaa; cursor: not-allowed; }
-.empty-info {
-    padding: 30px 20px;
-    text-align: center;
-}
-.meta-info {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #888;
-    font-family: Arial, sans-serif;
-}
-
-.test-header {
-    border-bottom: 3px double #c62828;
-    padding-bottom: 16px;
-    margin-bottom: 28px;
-}
-h1 { font-size: 24px; margin: 0 0 6px; color: #c62828; font-weight: bold; }
-.page-subtitle { font-size: 13px; color: #555; font-style: italic; }
-.meta-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 14px;
-    padding: 10px 16px;
-    background: #fdf6f6;
-    border: 1px solid #f0d6d6;
-    border-radius: 4px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-}
-.timer {
-    font-family: "Courier New", monospace;
-    font-size: 17px;
-    font-weight: bold;
-    color: #c62828;
-}
-
-.question {
-    margin-bottom: 28px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #eee;
-}
-.question:last-child { border-bottom: none; }
-.q-header { margin-bottom: 8px; }
-.q-number { font-size: 18px; font-weight: bold; margin-right: 10px; }
-.q-type {
-    font-size: 12px;
-    color: #888;
-    font-style: italic;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.q-stem { font-size: 16px; margin-bottom: 14px; line-height: 1.6; }
-.target-word {
-    font-variant: small-caps;
-    letter-spacing: 1px;
-    font-weight: bold;
-}
-.blank { color: #c62828; font-weight: bold; letter-spacing: 2px; }
-.q-options {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-left: 20px;
-}
-.option {
-    display: flex;
-    align-items: flex-start;
-    padding: 8px 14px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 15px;
-}
-.option:hover { background: #fdf6f6; }
-.option input[type="radio"] { margin-right: 10px; margin-top: 4px; }
-.letter { font-weight: bold; color: #555; margin-right: 8px; min-width: 18px; }
-.option.user-correct { background: #e8f5e9; border-color: #4caf50; }
-.option.user-wrong { background: #ffebee; border-color: #f44336; }
-.option.show-correct { background: #e8f5e9; border-color: #4caf50; border-style: dashed; }
-
-.submit-section {
-    margin-top: 40px;
-    text-align: center;
-    padding-top: 24px;
-    border-top: 3px double #c62828;
-}
-#submit-btn {
-    background: #c62828;
-    color: white;
-    border: none;
-    padding: 12px 48px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    letter-spacing: 1px;
-}
-#submit-btn:hover { background: #9e1f1f; }
-#submit-btn:disabled { background: #aaa; cursor: not-allowed; }
-
-#results {
-    display: none;
-    margin-top: 30px;
-    padding: 24px;
-    background: #fdf6f6;
-    border: 2px solid #c62828;
-    border-radius: 6px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-}
-#results.show { display: block; }
-.score-summary {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 14px;
-}
-.score-item { flex: 1; min-width: 120px; }
-.score-value { font-size: 32px; font-weight: bold; color: #c62828; display: block; }
-.score-label {
-    font-size: 12px;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 4px;
-}
-
-.mastered-list, .still-wrong-list { margin-top: 20px; }
-.mastered-list h3, .still-wrong-list h3 {
-    font-size: 16px;
-    margin: 0 0 12px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 8px;
-}
-.mastered-list h3 { color: #2e7d32; }
-.still-wrong-list h3 { color: #c62828; }
-.mastered-item {
-    background: #e8f5e9;
-    padding: 10px 14px;
-    margin-bottom: 6px;
-    border-left: 4px solid #4caf50;
-    border-radius: 0 4px 4px 0;
-    font-size: 14px;
-}
-.mistake-item {
-    background: white;
-    padding: 12px 16px;
-    margin-bottom: 8px;
-    border-left: 4px solid #f44336;
-    border-radius: 0 4px 4px 0;
-}
-.mistake-word { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
-.mistake-def { color: #666; font-size: 13px; font-style: italic; }
-
-.action-links {
-    margin: 20px 0;
-    padding: 16px 0;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-.action-links a {
-    display: block;
-    text-align: center;
-    padding: 12px 16px;
-    background: #c62828;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-}
-.action-links a:hover { background: #9e1f1f; }
-
-@media (max-width: 480px) {
-    .action-links { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 600px) {
-    body { padding: 16px 14px 60px; font-size: 15px; }
-    h1 { font-size: 20px; }
-    .meta-bar { flex-direction: column; gap: 6px; align-items: flex-start; }
-    .q-options { margin-left: 8px; }
-    .option { padding: 8px 10px; font-size: 14px; }
-    .score-value { font-size: 26px; }
-}
-</style>
-</head>
-<body>
-
-<div id="start-overlay" class="start-overlay">
-    <div class="start-card">
-        <h2>🔁 MISTAKES REVIEW</h2>
-        <div class="start-subtitle">Practice your previously wrong words</div>
-        <div id="review-info"></div>
-        <button id="start-btn" class="start-btn" onclick="startReview()" disabled>START REVIEW</button>
-        <div class="meta-info">
-            <a href="index.html" style="color:#888;">← Back to home</a>
-        </div>
-    </div>
-</div>
-
-<div class="test-header" id="test-header" style="display:none;">
-    <h1>🔁 MISTAKES REVIEW</h1>
-    <div class="page-subtitle">Review words you've previously gotten wrong</div>
-    <div class="meta-bar">
-        <span class="timer">Time: <span id="timer-display">00:00</span></span>
-        <span>Questions: <span id="progress-count">0</span> / <span id="total-count">0</span></span>
-    </div>
-</div>
-
-<form id="quiz-form" onsubmit="return false;"></form>
-
-<div class="submit-section" id="submit-section" style="display:none;">
-    <button id="submit-btn" onclick="submitReview()">SUBMIT REVIEW</button>
-</div>
-
-<div id="results"></div>
-
-<script>
-let allMistakes = JSON.parse(localStorage.getItem('isee_mistakes') || '[]');
-let reviewQuestions = [];
-let startTime = null;
-let submitted = false;
-let testStarted = false;
-let timerInterval = null;
-
-function init() {
-    const info = document.getElementById('review-info');
-    const btn = document.getElementById('start-btn');
-
-    if (allMistakes.length === 0) {
-        info.innerHTML = '<div class="empty-info">' +
-            '<p style="font-size:20px;margin:24px 0;color:#2e7d32;">🎉 No mistakes to review!</p>' +
-            '<p style="color:#666;">Take a practice test first and your mistakes will appear here.</p>' +
-            '</div>';
-        btn.style.display = 'none';
-    } else {
-        const reviewCount = Math.min(10, allMistakes.length);
-        info.innerHTML = '<div class="instructions">' +
-            '<strong>Review Session</strong>' +
-            '<ul>' +
-            '<li><strong>' + allMistakes.length + ' word(s)</strong> currently in your Mistakes Book</li>' +
-            '<li>This session: practice <strong>' + reviewCount + ' random question(s)</strong></li>' +
-            '<li>Words you get RIGHT will be REMOVED from Mistakes Book ✓</li>' +
-            '<li>Words you get WRONG will stay for future review</li>' +
-            '</ul>' +
-            '</div>';
-        btn.disabled = false;
-    }
-}
-
-function startReview() {
-    const shuffled = allMistakes.slice().sort(() => Math.random() - 0.5);
-    reviewQuestions = shuffled.slice(0, Math.min(10, shuffled.length));
-
-    renderQuestions();
-    document.getElementById('start-overlay').classList.add('hidden');
-    document.getElementById('test-header').style.display = 'block';
-    document.getElementById('submit-section').style.display = 'block';
-
-    testStarted = true;
-    startTime = Date.now();
-    timerInterval = setInterval(updateTimer, 1000);
-}
-
-function renderQuestions() {
-    const form = document.getElementById('quiz-form');
-    let html = '';
-    reviewQuestions.forEach((q, i) => {
-        const typeLabel = q.type === 'synonym' ? 'Synonym' : 'Sentence Completion';
-        let stemDisplay;
-        if (q.type === 'synonym') {
-            stemDisplay = q.stem.replace(q.word, '<strong class="target-word">' + q.word + '</strong>');
-        } else {
-            stemDisplay = q.stem.replace(/______/g, '<span class="blank">______</span>');
-        }
-        let optionsHtml = '';
-        const letters = ['A', 'B', 'C', 'D'];
-        q.options.forEach((opt, j) => {
-            optionsHtml += '<label class="option" data-q="' + i + '" data-opt="' + j + '">' +
-                '<input type="radio" name="q' + i + '" value="' + j + '">' +
-                '<span class="letter">' + letters[j] + '</span>' +
-                '<span class="opt-text">' + opt + '</span></label>';
-        });
-        html += '<div class="question" data-q-index="' + i + '">' +
-            '<div class="q-header"><span class="q-number">' + (i+1) + '.</span>' +
-            '<span class="q-type">' + typeLabel + '</span></div>' +
-            '<div class="q-stem">' + stemDisplay + '</div>' +
-            '<div class="q-options">' + optionsHtml + '</div>' +
-            '</div>';
-    });
-    form.innerHTML = html;
-
-    document.querySelectorAll('input[type="radio"]').forEach(input => {
-        input.addEventListener('change', updateProgress);
-    });
-    document.getElementById('total-count').textContent = reviewQuestions.length;
-}
-
-function updateProgress() {
-    const answered = new Set();
-    document.querySelectorAll('input[type="radio"]:checked').forEach(r => answered.add(r.name));
-    document.getElementById('progress-count').textContent = answered.size;
-}
-
-function updateTimer() {
-    if (!testStarted || submitted) return;
-    const elapsed = Math.floor((Date.now() - startTime) / 1000);
-    const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
-    const ss = String(elapsed % 60).padStart(2, '0');
-    document.getElementById('timer-display').textContent = mm + ':' + ss;
-}
-
-function submitReview() {
-    if (submitted) return;
-
-    const userAnswers = {};
-    let answeredCount = 0;
-    reviewQuestions.forEach((q, i) => {
-        const selected = document.querySelector('input[name="q' + i + '"]:checked');
-        if (selected) {
-            userAnswers[i] = parseInt(selected.value);
-            answeredCount++;
-        } else {
-            userAnswers[i] = -1;
-        }
-    });
-
-    if (answeredCount < reviewQuestions.length) {
-        if (!confirm('You have ' + (reviewQuestions.length - answeredCount) + ' unanswered question(s). Submit anyway?')) {
-            return;
-        }
-    }
-
-    submitted = true;
-    clearInterval(timerInterval);
-    const totalTime = Math.floor((Date.now() - startTime) / 1000);
-
-    let correctCount = 0;
-    const wordsToRemove = [];
-    const stillWrong = [];
-
-    reviewQuestions.forEach((q, i) => {
-        const userAns = userAnswers[i];
-        const correctAns = q.correct_index;
-
-        const allOpts = document.querySelectorAll('label.option[data-q="' + i + '"]');
-        allOpts.forEach(opt => {
-            const optIdx = parseInt(opt.dataset.opt);
-            opt.style.pointerEvents = 'none';
-            const radio = opt.querySelector('input');
-            radio.disabled = true;
-            if (optIdx === correctAns) {
-                if (userAns === correctAns) opt.classList.add('user-correct');
-                else opt.classList.add('show-correct');
-            } else if (optIdx === userAns) {
+            opt.querySelector('input').disabled = true;
+            if (idx === correctAns) {
+                opt.classList.add(userAns === correctAns ? 'user-correct' : 'show-correct');
+            } else if (idx === userAns) {
                 opt.classList.add('user-wrong');
             }
         });
-
-        if (userAns === correctAns) {
-            correctCount++;
-            wordsToRemove.push(q);
-        } else {
-            stillWrong.push(q);
+        if (userAns === correctAns) correctCount++;
+        else {
+            mistakes.push({
+                word: q.word,
+                type: q.type,
+                stem: q.stem,
+                correct: q.options[correctAns],
+                user: userAns >= 0 ? q.options[userAns] : '(unanswered)',
+                explanation: q.explanation,
+                date: new Date().toISOString().split('T')[0]
+            });
         }
     });
 
-    // 从错题本移除答对的词
-    const newMistakes = allMistakes.filter(m =>
-        !wordsToRemove.some(r => r.word === m.word && r.stem === m.stem)
-    );
-    localStorage.setItem('isee_mistakes', JSON.stringify(newMistakes));
-
-    // 保存到历史成绩
-    const accuracy = Math.round((correctCount / reviewQuestions.length) * 100);
-    const sessionRecord = {
-        date: new Date().toISOString().split('T')[0],
-        timestamp: new Date().toISOString(),
-        type: 'wrong-review',
-        total: reviewQuestions.length,
-        correct: correctCount,
-        accuracy: accuracy,
-        duration_sec: totalTime
-    };
-    const sessionsList = JSON.parse(localStorage.getItem('isee_sessions') || '[]');
-    sessionsList.push(sessionRecord);
-    localStorage.setItem('isee_sessions', JSON.stringify(sessionsList));
-
-    // 渲染结果
+    const accuracy = Math.round((correctCount / CURRENT.questions.length) * 100);
     const mm = String(Math.floor(totalTime / 60)).padStart(2, '0');
     const ss = String(totalTime % 60).padStart(2, '0');
 
-    let resultsHtml =
+    const sessionRecord = {
+        date: new Date().toISOString().split('T')[0],
+        timestamp: new Date().toISOString(),
+        set_id: CURRENT.id,
+        set_number: CURRENT.set_number,
+        correct: correctCount,
+        total: CURRENT.questions.length,
+        accuracy: accuracy,
+        duration_sec: totalTime
+    };
+    const allSessions = JSON.parse(localStorage.getItem('vocab_sessions') || '[]');
+    allSessions.push(sessionRecord);
+    localStorage.setItem('vocab_sessions', JSON.stringify(allSessions));
+
+    // Update mistakes book
+    if (mistakes.length > 0) {
+        const existingMistakes = JSON.parse(localStorage.getItem('vocab_mistakes') || '[]');
+        mistakes.forEach(m => {
+            // Don't add duplicate if same word already in mistakes
+            if (!existingMistakes.some(em => em.word === m.word && em.type === m.type)) {
+                existingMistakes.push(m);
+            }
+        });
+        localStorage.setItem('vocab_mistakes', JSON.stringify(existingMistakes));
+    }
+
+    let explanationsHtml = '<h3 style="margin-top:20px;color:#1a1a1a;font-size:16px;border-bottom:1px solid #ddd;padding-bottom:8px;">📝 Review</h3>';
+    CURRENT.questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.correct_index;
+        const userText = userAns >= 0 ? q.options[userAns] : '(unanswered)';
+        explanationsHtml += '<div class="explanation-block' + (isCorrect ? '' : ' wrong') + '">' +
+            '<div class="exp-q">' + (i+1) + '. ' + q.stem + '</div>' +
+            '<div class="exp-result">' + (isCorrect ? '✓ Correct: ' : '✗ You answered: ') +
+            '<strong>' + userText + '</strong>' +
+            (isCorrect ? '' : ' &nbsp; Correct: <strong>' + q.options[q.correct_index] + '</strong>') +
+            '</div>' +
+            '<div class="exp-text"><strong>Why:</strong> ' + q.explanation + '</div>' +
+            '</div>';
+    });
+
+    const resultsHtml =
+        '<div class="new-test-section">' +
+        '<button class="start-new-btn" onclick="nextSet()">🔄 Start New Test</button>' +
+        '<p style="color:#666;font-size:12px;margin-top:8px;">Marks this set complete, randomly picks next</p>' +
+        '</div>' +
         '<div class="score-summary">' +
-        '<div class="score-item"><span class="score-value">' + correctCount + '/' + reviewQuestions.length + '</span><span class="score-label">Score</span></div>' +
+        '<div class="score-item"><span class="score-value">' + correctCount + '/' + CURRENT.questions.length + '</span><span class="score-label">Score</span></div>' +
         '<div class="score-item"><span class="score-value">' + accuracy + '%</span><span class="score-label">Accuracy</span></div>' +
         '<div class="score-item"><span class="score-value">' + mm + ':' + ss + '</span><span class="score-label">Time</span></div>' +
-        '</div>';
-
-    if (wordsToRemove.length > 0) {
-        resultsHtml += '<div class="mastered-list"><h3>✅ Mastered & Removed (' + wordsToRemove.length + ')</h3>';
-        wordsToRemove.forEach(w => {
-            resultsHtml += '<div class="mastered-item"><strong>' + w.word + '</strong> — ' + w.definition + '</div>';
-        });
-        resultsHtml += '</div>';
-    }
-    if (stillWrong.length > 0) {
-        resultsHtml += '<div class="still-wrong-list"><h3>🔁 Still Need Review (' + stillWrong.length + ')</h3>';
-        stillWrong.forEach(w => {
-            resultsHtml += '<div class="mistake-item">' +
-                '<div class="mistake-word">' + w.word + '</div>' +
-                '<div class="mistake-def">' + w.definition + '</div>' +
-                '</div>';
-        });
-        resultsHtml += '</div>';
-    }
-
-    resultsHtml += '<div class="action-links">' +
-        '<a href="wrong-review.html">🔁 Review Again</a>' +
-        '<a href="mistakes.html">📖 Mistakes Book</a>' +
-        '<a href="history.html">📊 Progress</a>' +
-        '<a href="index.html">🏠 Home</a>' +
-        '</div>';
+        '</div>' +
+        '<div class="action-links">' +
+        '<a href="history.html">📊 View Progress</a>' +
+        '<a href="mistakes.html">📖 Review Mistakes</a>' +
+        '</div>' +
+        explanationsHtml;
 
     document.getElementById('results').innerHTML = resultsHtml;
     document.getElementById('results').classList.add('show');
     document.getElementById('submit-btn').disabled = true;
     document.getElementById('submit-btn').textContent = 'SUBMITTED';
     document.getElementById('results').scrollIntoView({behavior: 'smooth'});
+
+    sessionStorage.setItem('vocab_submitted_state_' + CURRENT_ID, JSON.stringify({
+        formHTML: document.getElementById('quiz-form').innerHTML,
+        resultsHTML: document.getElementById('results').innerHTML,
+        timer: document.getElementById('timer-display').textContent,
+        progress: document.getElementById('progress-count').textContent
+    }));
+}
+
+function nextSet() {
+    const done = JSON.parse(localStorage.getItem('done_set_ids') || '[]');
+    if (CURRENT && !done.includes(CURRENT.id)) {
+        done.push(CURRENT.id);
+        localStorage.setItem('done_set_ids', JSON.stringify(done));
+    }
+    sessionStorage.removeItem('current_set_id');
+    sessionStorage.removeItem('vocab_submitted_state_' + CURRENT_ID);
+    location.reload();
+}
+
+function showAllDone() {
+    document.body.innerHTML = `
+        <div class="all-done">
+            <h1>🎉 All Quiz Sets Completed!</h1>
+            <p style="color:#666;font-size:17px;margin:24px 0;">
+                You've finished all ${ALL_SETS.length} quiz sets.<br>
+                Great work!
+            </p>
+            <div class="actions">
+                <button onclick="resetAndContinue()">🔄 Reset and Practice Again</button>
+                <button class="secondary" onclick="showGenerateMore()">📚 Generate More</button>
+            </div>
+            <div style="margin-top:40px;font-size:13px;color:#888;">
+                <a href="history.html" style="color:#1a4d8f;">📊 History</a> &nbsp;|&nbsp;
+                <a href="mistakes.html" style="color:#1a4d8f;">📖 Mistakes Book</a>
+            </div>
+        </div>`;
+}
+
+function resetAndContinue() {
+    if (confirm('Reset all "done" records? Your history and mistakes are NOT affected.')) {
+        localStorage.removeItem('done_set_ids');
+        location.reload();
+    }
+}
+
+function showGenerateMore() {
+    alert("To generate more quiz sets, run on your computer:\\n\\ncd ~/code/isee-vocab\\nuv run main.py 50\\n\\nThen: git add . && git commit -m 'More sets' && git push");
+}
+
+function showError(msg) {
+    document.getElementById('start-card').innerHTML = `
+        <h2 style="color:#c62828;">⚠️ Error</h2>
+        <p style="color:#555;font-family:Arial;font-size:14px;">${msg}</p>`;
 }
 
 init();
@@ -1496,523 +781,191 @@ init();
 </body>
 </html>'''
 
-# ============ 生成 history.html ============
+
 def render_history_html():
-    """历史成绩追踪页面 + Chart.js 折线图"""
     return '''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISEE Vocabulary — Progress History</title>
+<title>Vocab Progress History</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 * { box-sizing: border-box; }
-body {
-    font-family: "Times New Roman", Georgia, serif;
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-    background: #ffffff;
-    color: #1a1a1a;
-    line-height: 1.6;
-}
-header {
-    border-bottom: 3px double #333;
-    padding-bottom: 16px;
-    margin-bottom: 28px;
-}
-h1 { font-size: 24px; margin: 0 0 6px; letter-spacing: 0.5px; }
-h2 {
-    font-size: 18px;
-    margin: 32px 0 16px;
-    padding-left: 12px;
-    border-left: 4px solid #1a4d8f;
-    color: #1a1a1a;
-}
+body { font-family: "Georgia", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 60px; background: #fafaf7; }
+header { border-bottom: 3px double #333; padding-bottom: 16px; margin-bottom: 28px; }
+h1 { font-size: 24px; margin: 0 0 6px; }
+h2 { font-size: 18px; margin: 32px 0 16px; padding-left: 12px; border-left: 4px solid #1a4d8f; }
 .subtitle { font-size: 13px; color: #555; font-style: italic; }
-.back-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #1a4d8f;
-    text-decoration: none;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-}
-.back-link:hover { text-decoration: underline; }
-
-/* 统计卡片 */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 12px;
-}
-.stat-card {
-    background: #f5f5f0;
-    padding: 18px 16px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    text-align: center;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-}
-.stat-value {
-    font-size: 28px;
-    font-weight: bold;
-    color: #1a4d8f;
-    line-height: 1.2;
-}
-.stat-label {
-    font-size: 11px;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 6px;
-}
-
-/* 图表区域 */
-.chart-section {
-    background: white;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    margin-top: 16px;
-}
-.chart-container {
-    position: relative;
-    height: 320px;
-    margin-top: 12px;
-}
-
-/* 会话表格 */
-.sessions-section { margin-top: 24px; }
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-th {
-    background: #1a4d8f;
-    color: white;
-    padding: 12px 14px;
-    text-align: left;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-td {
-    padding: 12px 14px;
-    border-bottom: 1px solid #eee;
-}
-tr:last-child td { border-bottom: none; }
+.back-link { display: inline-block; margin-bottom: 20px; color: #1a4d8f; text-decoration: none; font-family: Arial, sans-serif; font-size: 14px; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.stat-card { background: white; padding: 18px 16px; border: 1px solid #ddd; border-radius: 6px; text-align: center; font-family: Arial, sans-serif; }
+.stat-value { font-size: 28px; font-weight: bold; color: #1a4d8f; }
+.stat-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+.chart-section { background: white; padding: 20px; border: 1px solid #ddd; border-radius: 6px; margin-top: 12px; }
+.chart-container { position: relative; height: 320px; }
+table { width: 100%; border-collapse: collapse; background: white; font-family: Arial, sans-serif; font-size: 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border-radius: 6px; overflow: hidden; }
+th { background: #1a4d8f; color: white; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+td { padding: 10px 12px; border-bottom: 1px solid #eee; }
 tr:hover td { background: #fafafa; }
-
-.clear-section {
-    margin-top: 20px;
-    text-align: right;
-}
-button {
-    background: #1a4d8f;
-    color: white;
-    border: none;
-    padding: 8px 18px;
-    font-size: 13px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-}
+button { background: #1a4d8f; color: white; border: none; padding: 8px 18px; font-size: 13px; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif; }
 button.danger { background: #c62828; }
-button:hover { opacity: 0.9; }
-
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: #888;
-}
-.empty-state h2 {
-    color: #555;
-    font-weight: normal;
-    border-left: none;
-    padding-left: 0;
-}
-
-@media (max-width: 600px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .stat-value { font-size: 22px; }
-    .chart-container { height: 240px; }
-    table { font-size: 12px; }
-    th, td { padding: 8px 6px; }
-}
+.clear-section { margin-top: 20px; text-align: right; }
+.empty-state { text-align: center; padding: 60px 20px; color: #888; }
+@media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } table { font-size: 11px; } th, td { padding: 8px 6px; } }
 </style>
 </head>
 <body>
-
 <a href="index.html" class="back-link">← Back to Practice</a>
-
-<header>
-    <h1>PROGRESS HISTORY</h1>
-    <div class="subtitle">Track your ISEE vocabulary improvement over time</div>
-</header>
-
+<header><h1>VOCAB PROGRESS</h1><div class="subtitle">Practice history</div></header>
 <div id="content"></div>
-
 <script>
 function render() {
-    const sessions = JSON.parse(localStorage.getItem('isee_sessions') || '[]');
+    const sessions = JSON.parse(localStorage.getItem('vocab_sessions') || '[]');
     const content = document.getElementById('content');
-
     if (sessions.length === 0) {
-        content.innerHTML = '<div class="empty-state">' +
-            '<h2>📊 No sessions yet!</h2>' +
-            '<p>Complete a practice test and your progress will appear here.</p>' +
-            '</div>';
+        content.innerHTML = '<div class="empty-state"><h2 style="border:none;padding:0;">📊 No sessions yet</h2><p>Complete a quiz to start tracking.</p></div>';
         return;
     }
-
-    // 统计
-    const totalSessions = sessions.length;
-    const totalQuestions = sessions.reduce((sum, s) => sum + s.total, 0);
-    const totalCorrect = sessions.reduce((sum, s) => sum + s.correct, 0);
-    const avgAccuracy = Math.round(totalCorrect / totalQuestions * 100);
-
-    // 趋势：最近 3 次 vs 最早 3 次
-    let trendText = '—';
-    let trendColor = '#888';
+    const totalQ = sessions.reduce((s, x) => s + x.total, 0);
+    const totalCorrect = sessions.reduce((s, x) => s + x.correct, 0);
+    const avgAcc = Math.round(totalCorrect / totalQ * 100);
+    let trend = '—', trendColor = '#888';
     if (sessions.length >= 4) {
-        const recent = sessions.slice(-3).reduce((sum, s) => sum + s.accuracy, 0) / 3;
-        const earlier = sessions.slice(0, 3).reduce((sum, s) => sum + s.accuracy, 0) / 3;
+        const recent = sessions.slice(-3).reduce((s, x) => s + x.accuracy, 0) / 3;
+        const earlier = sessions.slice(0, 3).reduce((s, x) => s + x.accuracy, 0) / 3;
         const diff = Math.round(recent - earlier);
-        if (diff > 0) { trendText = '↑ +' + diff + '%'; trendColor = '#27ae60'; }
-        else if (diff < 0) { trendText = '↓ ' + diff + '%'; trendColor = '#c62828'; }
-        else { trendText = '→ 0%'; }
+        if (diff > 0) { trend = '↑ +' + diff + '%'; trendColor = '#27ae60'; }
+        else if (diff < 0) { trend = '↓ ' + diff + '%'; trendColor = '#c62828'; }
+        else trend = '→ 0%';
     }
-
     let html = '<div class="stats-grid">' +
-        '<div class="stat-card"><div class="stat-value">' + totalSessions + '</div><div class="stat-label">Sessions</div></div>' +
-        '<div class="stat-card"><div class="stat-value">' + totalQuestions + '</div><div class="stat-label">Questions</div></div>' +
-        '<div class="stat-card"><div class="stat-value">' + avgAccuracy + '%</div><div class="stat-label">Avg Accuracy</div></div>' +
-        '<div class="stat-card"><div class="stat-value" style="color:' + trendColor + '">' + trendText + '</div><div class="stat-label">Trend</div></div>' +
-        '</div>';
-
-    html += '<h2>📈 Accuracy Over Time</h2>' +
-        '<div class="chart-section"><div class="chart-container"><canvas id="accuracy-chart"></canvas></div></div>';
-
-    html += '<h2>📋 All Sessions</h2>' +
-        '<table><thead><tr>' +
-        '<th>Date</th><th>Time</th><th>Score</th><th>Accuracy</th><th>Duration</th>' +
-        '</tr></thead><tbody>';
-
-    // 倒序显示（最新在上）
+        '<div class="stat-card"><div class="stat-value">' + sessions.length + '</div><div class="stat-label">Quizzes</div></div>' +
+        '<div class="stat-card"><div class="stat-value">' + totalQ + '</div><div class="stat-label">Questions</div></div>' +
+        '<div class="stat-card"><div class="stat-value">' + avgAcc + '%</div><div class="stat-label">Avg Accuracy</div></div>' +
+        '<div class="stat-card"><div class="stat-value" style="color:' + trendColor + '">' + trend + '</div><div class="stat-label">Trend</div></div>' +
+        '</div>' +
+        '<h2>📈 Accuracy Over Time</h2>' +
+        '<div class="chart-section"><div class="chart-container"><canvas id="acc-chart"></canvas></div></div>' +
+        '<h2>📋 All Sessions</h2>' +
+        '<table><thead><tr><th>Date</th><th>Set #</th><th>Score</th><th>Acc.</th><th>Time</th></tr></thead><tbody>';
     sessions.slice().reverse().forEach(s => {
-        const time = new Date(s.timestamp).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
-        const mins = Math.floor(s.duration_sec / 60);
-        const secs = s.duration_sec % 60;
-        const duration = mins + 'm ' + secs + 's';
+        const time = new Date(s.timestamp).toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+        const dur = Math.floor(s.duration_sec/60) + 'm' + (s.duration_sec%60) + 's';
         const accColor = s.accuracy >= 80 ? '#27ae60' : (s.accuracy >= 60 ? '#f57c00' : '#c62828');
-        html += '<tr>' +
-            '<td>' + s.date + '</td>' +
-            '<td>' + time + '</td>' +
-            '<td>' + s.correct + ' / ' + s.total + '</td>' +
+        html += '<tr><td>' + s.date + '<br><span style="color:#999;font-size:10px;">' + time + '</span></td>' +
+            '<td>#' + (s.set_number || '?') + '</td>' +
+            '<td>' + s.correct + '/' + s.total + '</td>' +
             '<td style="color:' + accColor + ';font-weight:bold;">' + s.accuracy + '%</td>' +
-            '<td>' + duration + '</td>' +
-            '</tr>';
+            '<td>' + dur + '</td></tr>';
     });
-
-    html += '</tbody></table>' +
-        '<div class="clear-section">' +
-        '<button class="danger" onclick="clearHistory()">Clear All History</button>' +
-        '</div>';
-
+    html += '</tbody></table><div class="clear-section"><button class="danger" onclick="if(confirm(\\'Clear all?\\')){localStorage.removeItem(\\'vocab_sessions\\');render();}">Clear All History</button></div>';
     content.innerHTML = html;
-
-    // 渲染 Chart.js 折线图
-    const ctx = document.getElementById('accuracy-chart');
-    const labels = sessions.map(s => s.date);
-    const data = sessions.map(s => s.accuracy);
-
+    const ctx = document.getElementById('acc-chart');
     new Chart(ctx, {
         type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Accuracy',
-                data: data,
-                borderColor: '#1a4d8f',
-                backgroundColor: 'rgba(26, 77, 143, 0.1)',
-                borderWidth: 2.5,
-                pointRadius: 5,
-                pointBackgroundColor: '#1a4d8f',
-                pointHoverRadius: 8,
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const idx = context.dataIndex;
-                            const s = sessions[idx];
-                            return [
-                                'Accuracy: ' + s.accuracy + '%',
-                                'Score: ' + s.correct + '/' + s.total,
-                                'Duration: ' + Math.floor(s.duration_sec / 60) + 'm ' + (s.duration_sec % 60) + 's'
-                            ];
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        callback: function(value) { return value + '%'; }
-                    },
-                    title: { display: true, text: 'Accuracy (%)' }
-                },
-                x: {
-                    ticks: { maxRotation: 45, minRotation: 0 }
-                }
-            }
-        }
+        data: { labels: sessions.map(s => s.date), datasets: [{ label: 'Accuracy', data: sessions.map(s => s.accuracy), borderColor: '#1a4d8f', backgroundColor: 'rgba(26,77,143,0.1)', borderWidth: 2.5, pointRadius: 5, tension: 0.3, fill: true }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
     });
 }
-
-function clearHistory() {
-    if (confirm('Clear all session history? This cannot be undone.')) {
-        localStorage.removeItem('isee_sessions');
-        render();
-    }
-}
-
 render();
 </script>
-
 </body>
 </html>'''
 
-# ============ 生成 mistakes.html ============
+
 def render_mistakes_html():
-    """错题本页面（从 localStorage 读数据）"""
     return '''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISEE Vocabulary — Mistakes Book</title>
+<title>Mistakes Book</title>
 <style>
 * { box-sizing: border-box; }
-body {
-    font-family: "Times New Roman", Georgia, serif;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-    background: #ffffff;
-    color: #1a1a1a;
-    line-height: 1.6;
-}
-header {
-    border-bottom: 3px double #333;
-    padding-bottom: 16px;
-    margin-bottom: 28px;
-}
-h1 { font-size: 24px; margin: 0 0 6px; letter-spacing: 0.5px; }
+body { font-family: "Georgia", serif; max-width: 760px; margin: 0 auto; padding: 24px 20px 60px; background: #fafaf7; }
+header { border-bottom: 3px double #333; padding-bottom: 16px; margin-bottom: 28px; }
+h1 { font-size: 24px; margin: 0 0 6px; }
 .subtitle { font-size: 13px; color: #555; font-style: italic; }
-.stats {
-    background: #f5f5f0;
-    padding: 14px 18px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 24px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.mistake-card {
-    background: white;
-    padding: 18px 20px;
-    margin-bottom: 14px;
-    border-left: 4px solid #f44336;
-    border-radius: 0 4px 4px 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.mistake-word {
-    font-size: 20px;
-    font-weight: bold;
-    color: #1a1a1a;
-    margin-bottom: 6px;
-}
-.mistake-type {
-    display: inline-block;
-    font-size: 11px;
-    background: #1a4d8f;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 3px;
-    margin-left: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    vertical-align: middle;
-}
-.mistake-def {
-    color: #333;
-    font-size: 15px;
-    font-style: italic;
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    background: #f9f9f7;
-    border-radius: 4px;
-}
-.mistake-stem {
-    font-size: 14px;
-    color: #444;
-    margin-bottom: 8px;
-}
-.mistake-options { font-size: 14px; margin-top: 8px; }
-.opt-row { margin: 3px 0; padding: 4px 8px; border-radius: 3px; }
-.opt-correct { background: #e8f5e9; color: #1e7e3e; font-weight: 600; }
-.opt-wrong { background: #ffebee; color: #c62828; text-decoration: line-through; }
-.opt-neutral { color: #666; }
-.mistake-date {
-    font-size: 11px;
-    color: #999;
-    margin-top: 10px;
-    text-align: right;
-    font-family: Arial, sans-serif;
-}
-button {
-    background: #1a4d8f;
-    color: white;
-    border: none;
-    padding: 8px 18px;
-    font-size: 13px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-}
-button.danger { background: #c62828; }
-button:hover { opacity: 0.9; }
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: #888;
-}
-.empty-state h2 { color: #555; font-weight: normal; }
-.back-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #1a4d8f;
-    text-decoration: none;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-}
-.back-link:hover { text-decoration: underline; }
+.back-link { display: inline-block; margin-bottom: 20px; color: #1a4d8f; text-decoration: none; font-family: Arial, sans-serif; font-size: 14px; }
+.stats { background: white; padding: 14px 18px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 24px; font-family: Arial, sans-serif; font-size: 14px; }
+.mistake-card { background: white; padding: 14px 18px; margin-bottom: 10px; border-left: 4px solid #c62828; border-radius: 0 4px 4px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.mistake-word { font-size: 18px; font-weight: bold; color: #1a4d8f; }
+.mistake-stem { color: #333; font-size: 14px; margin-top: 4px; }
+.mistake-answer { font-size: 13px; margin: 6px 0; }
+.mistake-answer .user { color: #c62828; }
+.mistake-answer .correct { color: #2e7d32; }
+.mistake-exp { font-size: 12px; color: #666; margin-top: 6px; font-style: italic; }
+.empty-state { text-align: center; padding: 60px 20px; color: #888; }
+button { background: #c62828; color: white; border: none; padding: 8px 18px; font-size: 13px; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif; }
+.clear-section { margin-top: 20px; text-align: right; }
 </style>
 </head>
 <body>
-
 <a href="index.html" class="back-link">← Back to Practice</a>
-
-<header>
-    <h1>MISTAKES BOOK</h1>
-    <div class="subtitle">Words to review for ISEE Lower Level vocabulary</div>
-</header>
-
-<div id="content">
-    <!-- populated by JS -->
-</div>
-
+<header><h1>MISTAKES BOOK</h1><div class="subtitle">Words you missed — review these</div></header>
+<div id="content"></div>
 <script>
 function render() {
-    const mistakes = JSON.parse(localStorage.getItem('isee_mistakes') || '[]');
+    const mistakes = JSON.parse(localStorage.getItem('vocab_mistakes') || '[]');
     const content = document.getElementById('content');
-
     if (mistakes.length === 0) {
-        content.innerHTML = '<div class="empty-state">' +
-            '<h2>📚 No mistakes yet!</h2>' +
-            '<p>Take the practice test and your mistakes will appear here for review.</p>' +
-            '</div>';
+        content.innerHTML = '<div class="empty-state"><p>🎯 No mistakes yet! Keep practicing.</p></div>';
         return;
     }
-
-    // 按日期倒序
-    mistakes.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-
-    let html = '<div class="stats">' +
-        '<span><strong>' + mistakes.length + '</strong> word(s) to review</span>' +
-        '<button class="danger" onclick="clearMistakes()">Clear All</button>' +
-        '</div>';
-
-    mistakes.forEach(m => {
-        const typeLabel = m.type === 'synonym' ? 'Synonym' : 'Sentence';
-        let optsHtml = '<div class="mistake-options">';
-        m.options.forEach((opt, idx) => {
-            let cls = 'opt-neutral';
-            let prefix = '   ';
-            if (idx === m.correct_index) {
-                cls = 'opt-correct';
-                prefix = '✓ ';
-            } else if (idx === m.user_index) {
-                cls = 'opt-wrong';
-                prefix = '✗ ';
-            }
-            const letter = String.fromCharCode(65 + idx);
-            optsHtml += '<div class="opt-row ' + cls + '">' + prefix + letter + '. ' + opt + '</div>';
-        });
-        optsHtml += '</div>';
-
+    let html = '<div class="stats"><strong>' + mistakes.length + '</strong> words in your mistakes book</div>';
+    mistakes.slice().reverse().forEach(m => {
         html += '<div class="mistake-card">' +
-            '<div class="mistake-word">' + m.word + '<span class="mistake-type">' + typeLabel + '</span></div>' +
-            '<div class="mistake-def">' + m.definition + '</div>' +
+            '<div class="mistake-word">' + (m.word || '(word)') + ' <span style="font-size:11px;color:#999;font-weight:normal;font-family:Arial;">(' + m.type + ')</span></div>' +
             '<div class="mistake-stem">' + m.stem + '</div>' +
-            optsHtml +
-            '<div class="mistake-date">' + (m.date || 'unknown') + '</div>' +
+            '<div class="mistake-answer">You: <span class="user">' + m.user + '</span> → Correct: <span class="correct">' + m.correct + '</span></div>' +
+            '<div class="mistake-exp">' + m.explanation + '</div>' +
             '</div>';
     });
-
+    html += '<div class="clear-section"><button onclick="if(confirm(\\'Clear all mistakes?\\')){localStorage.removeItem(\\'vocab_mistakes\\');render();}">Clear All</button></div>';
     content.innerHTML = html;
 }
-
-function clearMistakes() {
-    if (confirm('Clear all mistake records? This cannot be undone.')) {
-        localStorage.removeItem('isee_mistakes');
-        render();
-    }
-}
-
 render();
 </script>
-
 </body>
 </html>'''
 
-# ============ 写入文件 ============
-with open(INDEX_FILE, "w", encoding="utf-8") as f:
-    f.write(render_index_html(questions, timestamp))
 
-with open(MISTAKES_FILE, "w", encoding="utf-8") as f:
-    f.write(render_mistakes_html())
-with open(HISTORY_FILE, "w", encoding="utf-8") as f:
-    f.write(render_history_html())
-with open(WRONG_REVIEW_FILE, "w", encoding="utf-8") as f:
-    f.write(render_wrong_review_html())
+# ============ Entry Point ============
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        arg = sys.argv[1].lower()
+        if arg == "reset":
+            confirm = input("⚠️  Delete quiz-sets.json? (yes/no): ")
+            if confirm.lower() == "yes":
+                if QUIZ_SETS_FILE.exists():
+                    QUIZ_SETS_FILE.unlink()
+                    print("✅ quiz-sets.json deleted.")
+                else:
+                    print("File doesn't exist.")
+            else:
+                print("Cancelled.")
+            sys.exit(0)
+        try:
+            batch_size = int(arg)
+        except ValueError:
+            print(f"⚠️  Invalid argument. Use a number or 'reset'.")
+            sys.exit(1)
+    else:
+        batch_size = DEFAULT_BATCH_SIZE
 
-print(f"📄 已生成：")
-print(f"   - {INDEX_FILE} （做题入口）")
-print(f"   - {MISTAKES_FILE} （错题本）")
-print(f"   - {HISTORY_FILE} （历史成绩 + 折线图）")
-print(f"   - {WRONG_REVIEW_FILE} （错题集中复习）")
-print(f"\n✅ 全部完成！本地双击 index.html 测试")
-print(f"📊 词库利用率：{TOTAL_QUESTIONS}/{len(word_pool)} = {TOTAL_QUESTIONS*100//len(word_pool)}%")
+    sets = run_batch(batch_size)
+
+    with open(INDEX_FILE, "w", encoding="utf-8") as f:
+        f.write(render_index_html())
+    with open(HISTORY_PAGE, "w", encoding="utf-8") as f:
+        f.write(render_history_html())
+    with open(MISTAKES_FILE, "w", encoding="utf-8") as f:
+        f.write(render_mistakes_html())
+
+    print(f"📄 HTML files generated:")
+    print(f"   - {INDEX_FILE}")
+    print(f"   - {HISTORY_PAGE}")
+    print(f"   - {MISTAKES_FILE}")
+    print(f"   - {QUIZ_SETS_FILE}  ({len(sets)} sets)")
+    print(f"\n✅ Done!")

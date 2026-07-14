@@ -3,1032 +3,308 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISEE Lower Level — Vocabulary Practice</title>
+<title>ISEE Vocabulary Practice</title>
 <style>
-/* Start 遮罩 */
-.start-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-}
-.start-card {
-    background: white;
-    max-width: 480px;
-    width: 90%;
-    padding: 40px 32px;
-    border: 3px double #1a4d8f;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    font-family: "Times New Roman", Georgia, serif;
-}
-.start-card h2 {
-    font-size: 26px;
-    color: #1a4d8f;
-    margin: 0 0 8px;
-    letter-spacing: 1px;
-}
-.start-card .start-subtitle {
-    color: #666;
-    font-size: 14px;
-    font-style: italic;
-    margin-bottom: 24px;
-}
-.start-card .instructions {
-    text-align: left;
-    background: #f5f5f0;
-    padding: 16px 20px;
-    border-radius: 6px;
-    margin: 20px 0 28px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.7;
-    color: #333;
-}
-.start-card .instructions strong {
-    color: #1a4d8f;
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-.start-card .instructions ul {
-    margin: 0;
-    padding-left: 20px;
-}
-.start-card .instructions li {
-    margin: 4px 0;
-}
-.start-btn {
-    background: #1a4d8f;
-    color: white;
-    border: none;
-    padding: 16px 56px;
-    font-size: 17px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    letter-spacing: 2px;
-    transition: background 0.2s;
-}
-.start-btn:hover {
-    background: #143a6b;
-}
-.start-card .meta-info {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #888;
-    font-family: Arial, sans-serif;
-}
-.hidden-until-start {
-    visibility: hidden;
-}
-.start-overlay.hidden {
-    display: none;
-}
 * { box-sizing: border-box; }
 body {
-    font-family: "Times New Roman", Georgia, serif;
+    font-family: "Georgia", "Times New Roman", serif;
     max-width: 760px;
     margin: 0 auto;
-    padding: 24px 20px 80px;
-    background: #ffffff;
+    padding: 24px 22px 80px;
+    background: #fafaf7;
     color: #1a1a1a;
-    line-height: 1.6;
-    font-size: 16px;
-}
-.test-header {
-    border-bottom: 3px double #333;
-    padding-bottom: 16px;
-    margin-bottom: 28px;
-}
-h1 {
-    font-size: 24px;
-    margin: 0 0 6px;
-    color: #1a1a1a;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}
-.subtitle { font-size: 13px; color: #555; font-style: italic; }
-.meta-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 14px;
-    padding: 10px 16px;
-    background: #f5f5f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-}
-.timer {
-    font-family: "Courier New", monospace;
+    line-height: 1.7;
     font-size: 17px;
-    font-weight: bold;
-    color: #1a4d8f;
 }
-.progress { color: #555; }
-
-.question {
-    margin-bottom: 28px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #eee;
+.start-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(250, 250, 247, 0.98); z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
 }
-.question:last-child { border-bottom: none; }
-.q-header { margin-bottom: 8px; }
-.q-number {
-    font-size: 18px;
-    font-weight: bold;
-    color: #1a1a1a;
-    margin-right: 10px;
+.start-overlay.hidden { display: none; }
+.start-card {
+    background: white; max-width: 500px; width: 90%;
+    padding: 40px 32px; border: 3px double #1a4d8f;
+    border-radius: 8px; text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
 }
-.q-type {
-    font-size: 12px;
-    color: #888;
-    font-style: italic;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.start-card h2 { font-size: 26px; color: #1a4d8f; margin: 0 0 8px; }
+.start-card .subtitle { color: #666; font-size: 15px; font-style: italic; margin: 8px 0 20px; }
+.start-card .instructions {
+    text-align: left; background: #f5f5f0; padding: 16px 20px;
+    border-radius: 6px; margin: 20px 0 28px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px; line-height: 1.7;
 }
-.q-stem {
-    font-size: 16px;
-    margin-bottom: 14px;
-    line-height: 1.6;
+.start-card .instructions strong {
+    color: #1a4d8f; display: block; margin-bottom: 6px;
+    font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
 }
-.target-word {
-    font-variant: small-caps;
-    letter-spacing: 1px;
-    font-weight: bold;
-}
-.blank {
-    color: #1a4d8f;
-    font-weight: bold;
+.start-card .instructions ul { margin: 0; padding-left: 20px; }
+.start-btn {
+    background: #1a4d8f; color: white; border: none;
+    padding: 16px 56px; font-size: 17px; font-weight: bold;
+    border-radius: 4px; cursor: pointer;
+    font-family: "Helvetica Neue", Arial, sans-serif;
     letter-spacing: 2px;
 }
-.q-options {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-left: 20px;
+.start-btn:hover { background: #143a6b; }
+header { border-bottom: 3px double #333; padding-bottom: 20px; margin-bottom: 28px; }
+h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: 1px; }
+.subtitle { font-size: 14px; color: #555; font-style: italic; }
+.meta-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 14px; padding: 10px 16px; background: white;
+    border: 1px solid #ddd; border-radius: 4px;
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 14px;
 }
+.timer { font-family: "Courier New", monospace; font-size: 17px; font-weight: bold; color: #1a4d8f; }
+.progress-pill { background: white; padding: 6px 12px; border-radius: 12px; font-size: 12px; color: #555; border: 1px solid #ddd; font-family: Arial, sans-serif; }
+.question {
+    background: white; padding: 22px 28px; border-radius: 8px;
+    margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.q-header { margin-bottom: 12px; font-family: "Helvetica Neue", Arial, sans-serif; }
+.q-number { font-size: 18px; font-weight: bold; margin-right: 12px; }
+.q-type {
+    font-size: 11px; color: #666;
+    font-style: italic; letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.q-stem { font-size: 17px; margin-bottom: 14px; line-height: 1.6; }
+.q-stem .highlight { font-weight: bold; letter-spacing: 0.5px; }
+.q-options { display: flex; flex-direction: column; gap: 6px; margin-left: 28px; font-family: "Georgia", serif; }
 .option {
-    display: flex;
-    align-items: flex-start;
-    padding: 8px 14px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.15s;
-    font-size: 15px;
+    display: flex; align-items: center; padding: 10px 14px;
+    border: 1.5px solid #e0e0e0; border-radius: 5px;
+    cursor: pointer; font-size: 15px;
 }
-.option:hover { background: #f5f5f0; }
-.option input[type="radio"] {
-    margin-right: 10px;
-    margin-top: 4px;
-    cursor: pointer;
-}
-.letter {
-    font-weight: bold;
-    color: #555;
-    margin-right: 8px;
-    min-width: 18px;
-}
-.opt-text { flex: 1; }
-
-/* 提交后的状态样式 */
-.option.user-correct {
-    background: #e8f5e9;
-    border-color: #4caf50;
-}
-.option.user-wrong {
-    background: #ffebee;
-    border-color: #f44336;
-}
-.option.show-correct {
-    background: #e8f5e9;
-    border-color: #4caf50;
-    border-style: dashed;
-}
-
-.submit-section {
-    margin-top: 40px;
-    text-align: center;
-    padding-top: 24px;
-    border-top: 3px double #333;
-}
+.option:hover { border-color: #1a4d8f; background: #f0f5fb; }
+.option input { margin-right: 10px; }
+.letter { font-weight: bold; color: #555; margin-right: 12px; min-width: 20px; font-style: italic; }
+.option.user-correct { background: #e8f5e9; border-color: #4caf50; }
+.option.user-wrong { background: #ffebee; border-color: #f44336; }
+.option.show-correct { background: #e8f5e9; border-color: #4caf50; border-style: dashed; }
+.submit-section { margin-top: 32px; text-align: center; padding-top: 20px; border-top: 3px double #333; }
 #submit-btn {
-    background: #1a4d8f;
-    color: white;
-    border: none;
-    padding: 12px 48px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
+    background: #1a4d8f; color: white; border: none;
+    padding: 14px 52px; font-size: 16px; font-weight: bold;
+    border-radius: 4px; cursor: pointer;
     font-family: "Helvetica Neue", Arial, sans-serif;
     letter-spacing: 1px;
-    transition: background 0.2s;
 }
 #submit-btn:hover { background: #143a6b; }
-#submit-btn:disabled {
-    background: #aaa;
-    cursor: not-allowed;
-}
-
-.new-test-section {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #ddd;
-}
-.start-new-btn {
-    background: #2e7d32;
-    color: white;
-    border: none;
-    padding: 12px 40px;
-    font-size: 15px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    letter-spacing: 1px;
-    transition: background 0.2s;
-}
-.start-new-btn:hover {
-    background: #1b5e20;
-}
-
-/* 结果区 */
+#submit-btn:disabled { background: #aaa; cursor: not-allowed; }
 #results {
-    display: none;
-    margin-top: 30px;
-    padding: 24px;
-    background: #f9f9f7;
-    border: 2px solid #1a4d8f;
-    border-radius: 6px;
-    font-family: "Helvetica Neue", Arial, sans-serif;
+    display: none; margin-top: 30px; padding: 28px;
+    background: #f9f9f7; border: 2px solid #1a4d8f;
+    border-radius: 8px; font-family: "Helvetica Neue", Arial, sans-serif;
 }
 #results.show { display: block; }
-.score-summary {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 14px;
+.new-test-section { text-align: center; margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid #ddd; }
+.start-new-btn {
+    background: #2e7d32; color: white; border: none;
+    padding: 12px 40px; font-size: 15px; font-weight: bold;
+    border-radius: 6px; cursor: pointer; letter-spacing: 1px;
 }
+.start-new-btn:hover { background: #1b5e20; }
+.score-summary { display: flex; justify-content: space-around; text-align: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px; }
 .score-item { flex: 1; min-width: 120px; }
-.score-value {
-    font-size: 32px;
-    font-weight: bold;
-    color: #1a4d8f;
-    display: block;
-}
-.score-label {
-    font-size: 12px;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 4px;
-}
-
-.mistakes-list { margin-top: 20px; }
-.mistakes-list h3 {
-    font-size: 16px;
-    color: #c62828;
-    margin: 0 0 12px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 8px;
-}
-.mistake-item {
-    background: white;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    border-left: 4px solid #f44336;
-    border-radius: 0 4px 4px 0;
-}
-.mistake-word {
-    font-weight: bold;
-    font-size: 16px;
-    color: #1a1a1a;
-    margin-bottom: 4px;
-}
-.mistake-def {
-    color: #444;
-    font-size: 14px;
-    font-style: italic;
-    margin-bottom: 6px;
-}
-.mistake-detail {
-    font-size: 13px;
-    color: #666;
-    line-height: 1.5;
-}
+.score-value { font-size: 32px; font-weight: bold; color: #1a4d8f; display: block; }
+.score-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 .action-links {
-    margin: 20px 0;
-    padding: 16px 0;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    margin: 20px 0; padding: 16px 0;
+    border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
 }
 .action-links a {
-    display: block;
-    text-align: center;
-    padding: 12px 16px;
-    background: #1a4d8f;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
+    display: block; text-align: center; padding: 12px 16px;
+    background: #1a4d8f; color: white; text-decoration: none;
+    border-radius: 4px; font-size: 14px; font-weight: 500;
 }
 .action-links a:hover { background: #143a6b; }
-@media (max-width: 480px) {
-    .action-links { grid-template-columns: 1fr; }
-}
-
-footer {
-    text-align: center;
-    margin-top: 50px;
-    color: #999;
-    font-size: 12px;
-    font-family: Arial, sans-serif;
-}
-
+.explanation-block { background: white; padding: 14px 18px; margin-bottom: 12px; border-radius: 6px; border-left: 4px solid #4caf50; }
+.explanation-block.wrong { border-left-color: #f44336; }
+.exp-q { font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+.exp-result { font-size: 13px; color: #555; margin-bottom: 8px; }
+.exp-text { font-size: 14px; color: #333; line-height: 1.6; }
+footer { text-align: center; margin-top: 50px; color: #999; font-size: 13px; font-family: "Helvetica Neue", Arial, sans-serif; }
+footer a { color: #888; text-decoration: none; }
+.all-done { text-align: center; padding: 60px 20px; }
+.all-done h1 { color: #1a4d8f; font-size: 32px; border: none; }
+.all-done .actions { margin-top: 32px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.all-done button { background: #1a4d8f; color: white; border: none; padding: 14px 28px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; font-family: "Helvetica Neue", Arial, sans-serif; }
+.all-done button.secondary { background: #6c757d; }
 @media (max-width: 600px) {
-    body { padding: 16px 14px 60px; font-size: 15px; }
-    h1 { font-size: 20px; }
-    .meta-bar { flex-direction: column; gap: 6px; align-items: flex-start; }
+    body { padding: 18px 14px 60px; font-size: 16px; }
+    h1 { font-size: 22px; }
+    .question { padding: 18px 16px; }
     .q-options { margin-left: 8px; }
-    .option { padding: 8px 10px; font-size: 14px; }
-    .score-value { font-size: 26px; }
+    .meta-bar { flex-direction: column; gap: 6px; align-items: flex-start; }
+    .action-links { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
+
 <div id="start-overlay" class="start-overlay">
-    <div class="start-card">
-        <h2>ISEE LOWER LEVEL</h2>
-        <div class="start-subtitle">Vocabulary Practice Test</div>
-
-        <div class="instructions">
-            <strong>Instructions</strong>
-            <ul>
-                <li><strong>20 questions</strong> (14 synonym + 6 sentence completion)</li>
-                <li>Timer starts when you click <strong>START</strong></li>
-                <li>Select one answer for each question</li>
-                <li>Click <strong>SUBMIT TEST</strong> when finished</li>
-                <li>Wrong answers will be saved to your Mistakes Book</li>
-            </ul>
-        </div>
-
-        <button class="start-btn" onclick="startTest()">START</button>
-
-        <div class="meta-info">Generated: 2026-06-09_183315</div>
+    <div class="start-card" id="start-card">
+        <div style="text-align:center;color:#999;font-size:14px;">Loading quiz library...</div>
     </div>
 </div>
-<div class="test-header">
+
+<header id="main-header" style="display:none;">
     <h1>ISEE LOWER LEVEL</h1>
     <div class="subtitle">Vocabulary Practice — Synonyms &amp; Sentence Completion</div>
     <div class="meta-bar">
         <span class="timer">Time: <span id="timer-display">00:00</span></span>
-        <span class="progress">Questions: <span id="progress-count">0</span> / 20</span>
-        <span style="color:#888;font-size:12px;">2026-06-09_183315</span>
+        <span>Questions: <span id="progress-count">0</span> / 20</span>
+        <span class="progress-pill" id="library-progress">Loading...</span>
     </div>
-</div>
+</header>
 
-<form id="quiz-form" onsubmit="return false;">
+<form id="quiz-form" onsubmit="return false;"></form>
 
-        <div class="question" data-q-index="0">
-            <div class="q-header">
-                <span class="q-number">1.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">ESOTERIC</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="0" data-opt="0">
-                <input type="radio" name="q0" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">obscure</span>
-            </label>
-            <label class="option" data-q="0" data-opt="1">
-                <input type="radio" name="q0" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">ancient</span>
-            </label>
-            <label class="option" data-q="0" data-opt="2">
-                <input type="radio" name="q0" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">exotic</span>
-            </label>
-            <label class="option" data-q="0" data-opt="3">
-                <input type="radio" name="q0" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">mysterious</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="1">
-            <div class="q-header">
-                <span class="q-number">2.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">SOMBER</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="1" data-opt="0">
-                <input type="radio" name="q1" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">serious</span>
-            </label>
-            <label class="option" data-q="1" data-opt="1">
-                <input type="radio" name="q1" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">gloomy</span>
-            </label>
-            <label class="option" data-q="1" data-opt="2">
-                <input type="radio" name="q1" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">quiet</span>
-            </label>
-            <label class="option" data-q="1" data-opt="3">
-                <input type="radio" name="q1" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">peaceful</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="2">
-            <div class="q-header">
-                <span class="q-number">3.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">OBSTINATE</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="2" data-opt="0">
-                <input type="radio" name="q2" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">defiant</span>
-            </label>
-            <label class="option" data-q="2" data-opt="1">
-                <input type="radio" name="q2" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">persistent</span>
-            </label>
-            <label class="option" data-q="2" data-opt="2">
-                <input type="radio" name="q2" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">stubborn</span>
-            </label>
-            <label class="option" data-q="2" data-opt="3">
-                <input type="radio" name="q2" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">determined</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="3">
-            <div class="q-header">
-                <span class="q-number">4.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">DICHOTOMY</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="3" data-opt="0">
-                <input type="radio" name="q3" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">paradox</span>
-            </label>
-            <label class="option" data-q="3" data-opt="1">
-                <input type="radio" name="q3" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">controversy</span>
-            </label>
-            <label class="option" data-q="3" data-opt="2">
-                <input type="radio" name="q3" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">disagreement</span>
-            </label>
-            <label class="option" data-q="3" data-opt="3">
-                <input type="radio" name="q3" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">division</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="4">
-            <div class="q-header">
-                <span class="q-number">5.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">COMPACT</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="4" data-opt="0">
-                <input type="radio" name="q4" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">dense</span>
-            </label>
-            <label class="option" data-q="4" data-opt="1">
-                <input type="radio" name="q4" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">sturdy</span>
-            </label>
-            <label class="option" data-q="4" data-opt="2">
-                <input type="radio" name="q4" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">portable</span>
-            </label>
-            <label class="option" data-q="4" data-opt="3">
-                <input type="radio" name="q4" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">efficient</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="5">
-            <div class="q-header">
-                <span class="q-number">6.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">COMPOSED</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="5" data-opt="0">
-                <input type="radio" name="q5" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">confident</span>
-            </label>
-            <label class="option" data-q="5" data-opt="1">
-                <input type="radio" name="q5" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">calm</span>
-            </label>
-            <label class="option" data-q="5" data-opt="2">
-                <input type="radio" name="q5" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">mature</span>
-            </label>
-            <label class="option" data-q="5" data-opt="3">
-                <input type="radio" name="q5" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">reserved</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="6">
-            <div class="q-header">
-                <span class="q-number">7.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">SUSTAIN</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="6" data-opt="0">
-                <input type="radio" name="q6" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">nourish</span>
-            </label>
-            <label class="option" data-q="6" data-opt="1">
-                <input type="radio" name="q6" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">strengthen</span>
-            </label>
-            <label class="option" data-q="6" data-opt="2">
-                <input type="radio" name="q6" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">maintain</span>
-            </label>
-            <label class="option" data-q="6" data-opt="3">
-                <input type="radio" name="q6" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">endure</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="7">
-            <div class="q-header">
-                <span class="q-number">8.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">LOYAL</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="7" data-opt="0">
-                <input type="radio" name="q7" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">devoted</span>
-            </label>
-            <label class="option" data-q="7" data-opt="1">
-                <input type="radio" name="q7" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">reliable</span>
-            </label>
-            <label class="option" data-q="7" data-opt="2">
-                <input type="radio" name="q7" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">honorable</span>
-            </label>
-            <label class="option" data-q="7" data-opt="3">
-                <input type="radio" name="q7" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">faithful</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="8">
-            <div class="q-header">
-                <span class="q-number">9.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">VARIABLE</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="8" data-opt="0">
-                <input type="radio" name="q8" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">changeable</span>
-            </label>
-            <label class="option" data-q="8" data-opt="1">
-                <input type="radio" name="q8" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">unpredictable</span>
-            </label>
-            <label class="option" data-q="8" data-opt="2">
-                <input type="radio" name="q8" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">flexible</span>
-            </label>
-            <label class="option" data-q="8" data-opt="3">
-                <input type="radio" name="q8" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">diverse</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="9">
-            <div class="q-header">
-                <span class="q-number">10.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">RETALIATE</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="9" data-opt="0">
-                <input type="radio" name="q9" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">respond</span>
-            </label>
-            <label class="option" data-q="9" data-opt="1">
-                <input type="radio" name="q9" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">avenge</span>
-            </label>
-            <label class="option" data-q="9" data-opt="2">
-                <input type="radio" name="q9" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">resist</span>
-            </label>
-            <label class="option" data-q="9" data-opt="3">
-                <input type="radio" name="q9" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">confront</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="10">
-            <div class="q-header">
-                <span class="q-number">11.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">IMPLICIT</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="10" data-opt="0">
-                <input type="radio" name="q10" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">vague</span>
-            </label>
-            <label class="option" data-q="10" data-opt="1">
-                <input type="radio" name="q10" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">implied</span>
-            </label>
-            <label class="option" data-q="10" data-opt="2">
-                <input type="radio" name="q10" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">inherent</span>
-            </label>
-            <label class="option" data-q="10" data-opt="3">
-                <input type="radio" name="q10" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">subtle</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="11">
-            <div class="q-header">
-                <span class="q-number">12.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">AUTHORITATIVE</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="11" data-opt="0">
-                <input type="radio" name="q11" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">commanding</span>
-            </label>
-            <label class="option" data-q="11" data-opt="1">
-                <input type="radio" name="q11" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">credible</span>
-            </label>
-            <label class="option" data-q="11" data-opt="2">
-                <input type="radio" name="q11" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">official</span>
-            </label>
-            <label class="option" data-q="11" data-opt="3">
-                <input type="radio" name="q11" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">decisive</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="12">
-            <div class="q-header">
-                <span class="q-number">13.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">AXIOM</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="12" data-opt="0">
-                <input type="radio" name="q12" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">principle</span>
-            </label>
-            <label class="option" data-q="12" data-opt="1">
-                <input type="radio" name="q12" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">theorem</span>
-            </label>
-            <label class="option" data-q="12" data-opt="2">
-                <input type="radio" name="q12" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">doctrine</span>
-            </label>
-            <label class="option" data-q="12" data-opt="3">
-                <input type="radio" name="q12" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">hypothesis</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="13">
-            <div class="q-header">
-                <span class="q-number">14.</span>
-                <span class="q-type">Synonym</span>
-            </div>
-            <div class="q-stem"><strong class="target-word">PROCUREMENT</strong> most nearly means</div>
-            <div class="q-options">
-            <label class="option" data-q="13" data-opt="0">
-                <input type="radio" name="q13" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">purchase</span>
-            </label>
-            <label class="option" data-q="13" data-opt="1">
-                <input type="radio" name="q13" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">acquisition</span>
-            </label>
-            <label class="option" data-q="13" data-opt="2">
-                <input type="radio" name="q13" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">distribution</span>
-            </label>
-            <label class="option" data-q="13" data-opt="3">
-                <input type="radio" name="q13" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">allocation</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="14">
-            <div class="q-header">
-                <span class="q-number">15.</span>
-                <span class="q-type">Sentence Completion</span>
-            </div>
-            <div class="q-stem">Although the startup required significant initial investment, the founders believed their innovative technology would eventually prove <span class="blank">______</span> enough to justify the risk.</div>
-            <div class="q-options">
-            <label class="option" data-q="14" data-opt="0">
-                <input type="radio" name="q14" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">profitable</span>
-            </label>
-            <label class="option" data-q="14" data-opt="1">
-                <input type="radio" name="q14" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">lucrative</span>
-            </label>
-            <label class="option" data-q="14" data-opt="2">
-                <input type="radio" name="q14" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">sustainable</span>
-            </label>
-            <label class="option" data-q="14" data-opt="3">
-                <input type="radio" name="q14" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">viable</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="15">
-            <div class="q-header">
-                <span class="q-number">16.</span>
-                <span class="q-type">Sentence Completion</span>
-            </div>
-            <div class="q-stem">When the scholarship committee announced her name as the recipient, Maria felt <span class="blank">______</span> by the recognition of years of academic dedication.</div>
-            <div class="q-options">
-            <label class="option" data-q="15" data-opt="0">
-                <input type="radio" name="q15" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">surprised</span>
-            </label>
-            <label class="option" data-q="15" data-opt="1">
-                <input type="radio" name="q15" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">honored</span>
-            </label>
-            <label class="option" data-q="15" data-opt="2">
-                <input type="radio" name="q15" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">elated</span>
-            </label>
-            <label class="option" data-q="15" data-opt="3">
-                <input type="radio" name="q15" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">grateful</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="16">
-            <div class="q-header">
-                <span class="q-number">17.</span>
-                <span class="q-type">Sentence Completion</span>
-            </div>
-            <div class="q-stem">Despite the economic challenges facing the industry, the CEO remained <span class="blank">______</span> that strategic innovation would restore the company's market position.</div>
-            <div class="q-options">
-            <label class="option" data-q="16" data-opt="0">
-                <input type="radio" name="q16" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">hopeful</span>
-            </label>
-            <label class="option" data-q="16" data-opt="1">
-                <input type="radio" name="q16" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">confident</span>
-            </label>
-            <label class="option" data-q="16" data-opt="2">
-                <input type="radio" name="q16" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">determined</span>
-            </label>
-            <label class="option" data-q="16" data-opt="3">
-                <input type="radio" name="q16" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">optimistic</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="17">
-            <div class="q-header">
-                <span class="q-number">18.</span>
-                <span class="q-type">Sentence Completion</span>
-            </div>
-            <div class="q-stem">Because the ancient manuscript was partially damaged, historians could offer only <span class="blank">______</span> about the civilization's religious practices rather than definitive conclusions.</div>
-            <div class="q-options">
-            <label class="option" data-q="17" data-opt="0">
-                <input type="radio" name="q17" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">speculation</span>
-            </label>
-            <label class="option" data-q="17" data-opt="1">
-                <input type="radio" name="q17" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">conjecture</span>
-            </label>
-            <label class="option" data-q="17" data-opt="2">
-                <input type="radio" name="q17" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">theories</span>
-            </label>
-            <label class="option" data-q="17" data-opt="3">
-                <input type="radio" name="q17" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">interpretation</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="18">
-            <div class="q-header">
-                <span class="q-number">19.</span>
-                <span class="q-type">Sentence Completion</span>
-            </div>
-            <div class="q-stem">The patient's recovery was complicated by <span class="blank">______</span> symptoms that appeared unpredictably, making it difficult for doctors to establish a consistent treatment protocol.</div>
-            <div class="q-options">
-            <label class="option" data-q="18" data-opt="0">
-                <input type="radio" name="q18" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">sporadic</span>
-            </label>
-            <label class="option" data-q="18" data-opt="1">
-                <input type="radio" name="q18" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">intermittent</span>
-            </label>
-            <label class="option" data-q="18" data-opt="2">
-                <input type="radio" name="q18" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">persistent</span>
-            </label>
-            <label class="option" data-q="18" data-opt="3">
-                <input type="radio" name="q18" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">recurring</span>
-            </label></div>
-        </div>
-        <div class="question" data-q-index="19">
-            <div class="q-header">
-                <span class="q-number">20.</span>
-                <span class="q-type">Sentence Completion</span>
-            </div>
-            <div class="q-stem">When the laboratory equipment malfunctioned during the critical experiment, the <span class="blank">______</span> scientist improvised alternative methods to collect the necessary data.</div>
-            <div class="q-options">
-            <label class="option" data-q="19" data-opt="0">
-                <input type="radio" name="q19" value="0">
-                <span class="letter">A</span>
-                <span class="opt-text">creative</span>
-            </label>
-            <label class="option" data-q="19" data-opt="1">
-                <input type="radio" name="q19" value="1">
-                <span class="letter">B</span>
-                <span class="opt-text">adaptable</span>
-            </label>
-            <label class="option" data-q="19" data-opt="2">
-                <input type="radio" name="q19" value="2">
-                <span class="letter">C</span>
-                <span class="opt-text">ingenious</span>
-            </label>
-            <label class="option" data-q="19" data-opt="3">
-                <input type="radio" name="q19" value="3">
-                <span class="letter">D</span>
-                <span class="opt-text">resourceful</span>
-            </label></div>
-        </div>
-</form>
-
-<div class="submit-section">
-    <button id="submit-btn" onclick="submitQuiz()">SUBMIT TEST</button>
+<div class="submit-section" id="submit-section" style="display:none;">
+    <button id="submit-btn" onclick="submitQuiz()">SUBMIT</button>
 </div>
 
 <div id="results"></div>
 
-<footer>
-    <a href="mistakes.html" style="color:#888;">📖 View Mistakes Book</a>
+<footer style="display:none;" id="footer">
+    <a href="history.html">📊 View History</a>
     &nbsp;|&nbsp;
-    <a href="history.html" style="color:#888;">📊 View History</a>
+    <a href="mistakes.html">📖 Mistakes Book</a>
     &nbsp;|&nbsp;
-    Generated by Claude
+    <span id="library-count-footer"></span>
 </footer>
 
 <script>
-// 检查是否处于"重做错题"模式
-// === 变量声明（必须放在最前面） ===
+let ALL_SETS = [];
+let CURRENT = null;
+let CURRENT_ID = null;
 let startTime = null;
 let submitted = false;
 let testStarted = false;
-let QUESTIONS_DATA;
 
-// === 优先级 1：检查是否有上次提交的状态需要恢复 ===
-const savedFormHTML = sessionStorage.getItem('submitted_form_html');
+async function init() {
+    try {
+        const res = await fetch('quiz-sets.json?v=' + Date.now());
+        const data = await res.json();
+        ALL_SETS = data.sets || [];
 
-// === 检查是否处于"重做错题"模式 ===
-const isRetakeMode = sessionStorage.getItem('retake_mode') === '1';
+        if (ALL_SETS.length === 0) {
+            showError("No quiz sets in library. Run 'uv run main.py' on your computer.");
+            return;
+        }
 
-if (savedFormHTML) {
-    // 恢复上次提交后的完整结果页
-    QUESTIONS_DATA = [{"type": "synonym", "word": "ESOTERIC", "definition": "Intended for or understood by only a small number of people with specialized knowledge.", "stem": "ESOTERIC most nearly means", "options": ["obscure", "ancient", "exotic", "mysterious"], "correct_index": 0}, {"type": "synonym", "word": "SOMBER", "definition": "Dark or dull in color or tone; gloomy.", "stem": "SOMBER most nearly means", "options": ["serious", "gloomy", "quiet", "peaceful"], "correct_index": 1}, {"type": "synonym", "word": "OBSTINATE", "definition": "Stubbornly refusing to change one's opinion or chosen course of action.", "stem": "OBSTINATE most nearly means", "options": ["defiant", "persistent", "stubborn", "determined"], "correct_index": 2}, {"type": "synonym", "word": "DICHOTOMY", "definition": "A division or contrast between two things that are represented as being opposed or entirely different.", "stem": "DICHOTOMY most nearly means", "options": ["paradox", "controversy", "disagreement", "division"], "correct_index": 3}, {"type": "synonym", "word": "COMPACT", "definition": "Closely and neatly packed together; dense.", "stem": "COMPACT most nearly means", "options": ["dense", "sturdy", "portable", "efficient"], "correct_index": 0}, {"type": "synonym", "word": "COMPOSED", "definition": "Having one's feelings and expression under control; calm.", "stem": "COMPOSED most nearly means", "options": ["confident", "calm", "mature", "reserved"], "correct_index": 1}, {"type": "synonym", "word": "SUSTAIN", "definition": "To cause or allow something to continue for a period of time; to support or maintain.", "stem": "SUSTAIN most nearly means", "options": ["nourish", "strengthen", "maintain", "endure"], "correct_index": 2}, {"type": "synonym", "word": "LOYAL", "definition": "Giving or showing firm and constant support or allegiance to a person or institution.", "stem": "LOYAL most nearly means", "options": ["devoted", "reliable", "honorable", "faithful"], "correct_index": 3}, {"type": "synonym", "word": "VARIABLE", "definition": "Not consistent or having a fixed pattern; liable to change.", "stem": "VARIABLE most nearly means", "options": ["changeable", "unpredictable", "flexible", "diverse"], "correct_index": 0}, {"type": "synonym", "word": "RETALIATE", "definition": "To make an attack or assault in return for a similar attack.", "stem": "RETALIATE most nearly means", "options": ["respond", "avenge", "resist", "confront"], "correct_index": 1}, {"type": "synonym", "word": "IMPLICIT", "definition": "Suggested though not directly expressed; implied.", "stem": "IMPLICIT most nearly means", "options": ["vague", "implied", "inherent", "subtle"], "correct_index": 1}, {"type": "synonym", "word": "AUTHORITATIVE", "definition": "Commanding and self-confident; able to be trusted as being accurate or true.", "stem": "AUTHORITATIVE most nearly means", "options": ["commanding", "credible", "official", "decisive"], "correct_index": 3}, {"type": "synonym", "word": "AXIOM", "definition": "A statement or proposition that is regarded as being self-evidently true.", "stem": "AXIOM most nearly means", "options": ["principle", "theorem", "doctrine", "hypothesis"], "correct_index": 0}, {"type": "synonym", "word": "PROCUREMENT", "definition": "The action of obtaining or acquiring something.", "stem": "PROCUREMENT most nearly means", "options": ["purchase", "acquisition", "distribution", "allocation"], "correct_index": 1}, {"type": "sentence", "word": "lucrative", "definition": "Producing a great deal of profit.", "stem": "Although the startup required significant initial investment, the founders believed their innovative technology would eventually prove ______ enough to justify the risk.", "options": ["profitable", "lucrative", "sustainable", "viable"], "correct_index": 1}, {"type": "sentence", "word": "elated", "definition": "Making someone ecstatically happy.", "stem": "When the scholarship committee announced her name as the recipient, Maria felt ______ by the recognition of years of academic dedication.", "options": ["surprised", "honored", "elated", "grateful"], "correct_index": 2}, {"type": "sentence", "word": "optimistic", "definition": "Hopeful and confident about the future.", "stem": "Despite the economic challenges facing the industry, the CEO remained ______ that strategic innovation would restore the company's market position.", "options": ["hopeful", "confident", "determined", "optimistic"], "correct_index": 3}, {"type": "sentence", "word": "conjecture", "definition": "An opinion or conclusion formed on the basis of incomplete information.", "stem": "Because the ancient manuscript was partially damaged, historians could offer only ______ about the civilization's religious practices rather than definitive conclusions.", "options": ["speculation", "conjecture", "theories", "interpretation"], "correct_index": 1}, {"type": "sentence", "word": "intermittent", "definition": "Occurring at irregular intervals; not continuous or steady.", "stem": "The patient's recovery was complicated by ______ symptoms that appeared unpredictably, making it difficult for doctors to establish a consistent treatment protocol.", "options": ["sporadic", "intermittent", "persistent", "recurring"], "correct_index": 1}, {"type": "sentence", "word": "resourceful", "definition": "Having the ability to find quick and clever ways to overcome difficulties.", "stem": "When the laboratory equipment malfunctioned during the critical experiment, the ______ scientist improvised alternative methods to collect the necessary data.", "options": ["creative", "adaptable", "ingenious", "resourceful"], "correct_index": 3}];
-    submitted = true;
+        const savedId = sessionStorage.getItem('current_set_id');
+        if (savedId) {
+            CURRENT = ALL_SETS.find(s => s.id === savedId);
+            CURRENT_ID = savedId;
+        }
 
-    document.getElementById('start-overlay').classList.add('hidden');
-    document.getElementById('quiz-form').innerHTML = savedFormHTML;
-    document.getElementById('results').innerHTML = sessionStorage.getItem('submitted_results_html');
-    document.getElementById('results').classList.add('show');
-    document.getElementById('timer-display').textContent = sessionStorage.getItem('submitted_timer');
-    document.getElementById('progress-count').textContent = sessionStorage.getItem('submitted_progress');
-    document.getElementById('submit-btn').disabled = true;
-    document.getElementById('submit-btn').textContent = 'SUBMITTED';
-} else if (isRetakeMode) {
-    QUESTIONS_DATA = JSON.parse(sessionStorage.getItem('retake_questions') || '[]');
-    sessionStorage.removeItem('retake_mode');
-    sessionStorage.removeItem('retake_questions');
+        if (!CURRENT) {
+            const done = JSON.parse(localStorage.getItem('done_set_ids') || '[]');
+            const available = ALL_SETS.filter(s => !done.includes(s.id));
 
-    if (QUESTIONS_DATA.length === 0) {
-        document.body.innerHTML = '<div style="padding:60px;text-align:center;font-family:Arial;"><h2>No wrong questions to retake.</h2><a href="index.html">← Back to start</a></div>';
-    } else {
-        // 重做模式：自动开始，跳过 Start 遮罩
-        document.getElementById('start-overlay').classList.add('hidden');
-        testStarted = true;
-        startTime = Date.now();
-        // 重新渲染题目
-        rerenderQuestions(QUESTIONS_DATA);
+            if (available.length === 0) {
+                showAllDone();
+                return;
+            }
+
+            CURRENT = available[Math.floor(Math.random() * available.length)];
+            CURRENT_ID = CURRENT.id;
+            sessionStorage.setItem('current_set_id', CURRENT_ID);
+        }
+
+        renderSet();
+
+        const savedState = sessionStorage.getItem('vocab_submitted_state_' + CURRENT_ID);
+        if (savedState) {
+            const state = JSON.parse(savedState);
+            document.getElementById('start-overlay').classList.add('hidden');
+            document.getElementById('quiz-form').innerHTML = state.formHTML;
+            document.getElementById('results').innerHTML = state.resultsHTML;
+            document.getElementById('results').classList.add('show');
+            document.getElementById('timer-display').textContent = state.timer;
+            document.getElementById('progress-count').textContent = state.progress;
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').textContent = 'SUBMITTED';
+            submitted = true;
+        }
+    } catch (err) {
+        showError("Failed to load quiz sets: " + err.message);
     }
-} else {
-    QUESTIONS_DATA = [{"type": "synonym", "word": "ESOTERIC", "definition": "Intended for or understood by only a small number of people with specialized knowledge.", "stem": "ESOTERIC most nearly means", "options": ["obscure", "ancient", "exotic", "mysterious"], "correct_index": 0}, {"type": "synonym", "word": "SOMBER", "definition": "Dark or dull in color or tone; gloomy.", "stem": "SOMBER most nearly means", "options": ["serious", "gloomy", "quiet", "peaceful"], "correct_index": 1}, {"type": "synonym", "word": "OBSTINATE", "definition": "Stubbornly refusing to change one's opinion or chosen course of action.", "stem": "OBSTINATE most nearly means", "options": ["defiant", "persistent", "stubborn", "determined"], "correct_index": 2}, {"type": "synonym", "word": "DICHOTOMY", "definition": "A division or contrast between two things that are represented as being opposed or entirely different.", "stem": "DICHOTOMY most nearly means", "options": ["paradox", "controversy", "disagreement", "division"], "correct_index": 3}, {"type": "synonym", "word": "COMPACT", "definition": "Closely and neatly packed together; dense.", "stem": "COMPACT most nearly means", "options": ["dense", "sturdy", "portable", "efficient"], "correct_index": 0}, {"type": "synonym", "word": "COMPOSED", "definition": "Having one's feelings and expression under control; calm.", "stem": "COMPOSED most nearly means", "options": ["confident", "calm", "mature", "reserved"], "correct_index": 1}, {"type": "synonym", "word": "SUSTAIN", "definition": "To cause or allow something to continue for a period of time; to support or maintain.", "stem": "SUSTAIN most nearly means", "options": ["nourish", "strengthen", "maintain", "endure"], "correct_index": 2}, {"type": "synonym", "word": "LOYAL", "definition": "Giving or showing firm and constant support or allegiance to a person or institution.", "stem": "LOYAL most nearly means", "options": ["devoted", "reliable", "honorable", "faithful"], "correct_index": 3}, {"type": "synonym", "word": "VARIABLE", "definition": "Not consistent or having a fixed pattern; liable to change.", "stem": "VARIABLE most nearly means", "options": ["changeable", "unpredictable", "flexible", "diverse"], "correct_index": 0}, {"type": "synonym", "word": "RETALIATE", "definition": "To make an attack or assault in return for a similar attack.", "stem": "RETALIATE most nearly means", "options": ["respond", "avenge", "resist", "confront"], "correct_index": 1}, {"type": "synonym", "word": "IMPLICIT", "definition": "Suggested though not directly expressed; implied.", "stem": "IMPLICIT most nearly means", "options": ["vague", "implied", "inherent", "subtle"], "correct_index": 1}, {"type": "synonym", "word": "AUTHORITATIVE", "definition": "Commanding and self-confident; able to be trusted as being accurate or true.", "stem": "AUTHORITATIVE most nearly means", "options": ["commanding", "credible", "official", "decisive"], "correct_index": 3}, {"type": "synonym", "word": "AXIOM", "definition": "A statement or proposition that is regarded as being self-evidently true.", "stem": "AXIOM most nearly means", "options": ["principle", "theorem", "doctrine", "hypothesis"], "correct_index": 0}, {"type": "synonym", "word": "PROCUREMENT", "definition": "The action of obtaining or acquiring something.", "stem": "PROCUREMENT most nearly means", "options": ["purchase", "acquisition", "distribution", "allocation"], "correct_index": 1}, {"type": "sentence", "word": "lucrative", "definition": "Producing a great deal of profit.", "stem": "Although the startup required significant initial investment, the founders believed their innovative technology would eventually prove ______ enough to justify the risk.", "options": ["profitable", "lucrative", "sustainable", "viable"], "correct_index": 1}, {"type": "sentence", "word": "elated", "definition": "Making someone ecstatically happy.", "stem": "When the scholarship committee announced her name as the recipient, Maria felt ______ by the recognition of years of academic dedication.", "options": ["surprised", "honored", "elated", "grateful"], "correct_index": 2}, {"type": "sentence", "word": "optimistic", "definition": "Hopeful and confident about the future.", "stem": "Despite the economic challenges facing the industry, the CEO remained ______ that strategic innovation would restore the company's market position.", "options": ["hopeful", "confident", "determined", "optimistic"], "correct_index": 3}, {"type": "sentence", "word": "conjecture", "definition": "An opinion or conclusion formed on the basis of incomplete information.", "stem": "Because the ancient manuscript was partially damaged, historians could offer only ______ about the civilization's religious practices rather than definitive conclusions.", "options": ["speculation", "conjecture", "theories", "interpretation"], "correct_index": 1}, {"type": "sentence", "word": "intermittent", "definition": "Occurring at irregular intervals; not continuous or steady.", "stem": "The patient's recovery was complicated by ______ symptoms that appeared unpredictably, making it difficult for doctors to establish a consistent treatment protocol.", "options": ["sporadic", "intermittent", "persistent", "recurring"], "correct_index": 1}, {"type": "sentence", "word": "resourceful", "definition": "Having the ability to find quick and clever ways to overcome difficulties.", "stem": "When the laboratory equipment malfunctioned during the critical experiment, the ______ scientist improvised alternative methods to collect the necessary data.", "options": ["creative", "adaptable", "ingenious", "resourceful"], "correct_index": 3}];
+}
+
+function renderSet() {
+    const done = JSON.parse(localStorage.getItem('done_set_ids') || '[]');
+    const remaining = ALL_SETS.length - done.length;
+
+    document.getElementById('start-card').innerHTML = `
+        <h2>ISEE VOCABULARY</h2>
+        <div class="subtitle">Quiz Set #${CURRENT.set_number || '?'}</div>
+        <div class="instructions">
+            <strong>Instructions</strong>
+            <ul>
+                <li>20 questions: 14 synonyms + 6 sentence completions</li>
+                <li>Read each question carefully</li>
+                <li>Select the best answer</li>
+                <li>Timer starts when you click START</li>
+            </ul>
+        </div>
+        <button class="start-btn" onclick="startTest()">START</button>
+        <div style="margin-top:16px;font-size:12px;color:#888;font-family:Arial;">
+            📚 ${ALL_SETS.length - remaining}/${ALL_SETS.length} sets completed
+        </div>
+    `;
+
+    document.getElementById('library-progress').textContent = `${ALL_SETS.length - remaining}/${ALL_SETS.length} done`;
+    document.getElementById('library-count-footer').textContent = `Library: ${ALL_SETS.length} sets`;
+
+    let questionsHTML = "";
+    CURRENT.questions.forEach((q, i) => {
+        const typeLabel = q.type === "synonym" ? "SYNONYM" : "SENTENCE COMPLETION";
+        let stemHTML = q.stem;
+        if (q.type === "synonym" && q.word) {
+            stemHTML = `<span class="highlight">${q.word}</span> most nearly means`;
+        }
+
+        let optionsHTML = "";
+        const letters = ["A", "B", "C", "D"];
+        q.options.forEach((opt, j) => {
+            optionsHTML += `
+                <label class="option" data-q="${i}" data-opt="${j}">
+                    <input type="radio" name="q${i}" value="${j}">
+                    <span class="letter">${letters[j]}</span>
+                    <span>${opt}</span>
+                </label>`;
+        });
+        questionsHTML += `
+            <div class="question" data-q-index="${i}">
+                <div class="q-header">
+                    <span class="q-number">${i+1}.</span>
+                    <span class="q-type">${typeLabel}</span>
+                </div>
+                <div class="q-stem">${stemHTML}</div>
+                <div class="q-options">${optionsHTML}</div>
+            </div>`;
+    });
+    document.getElementById('quiz-form').innerHTML = questionsHTML;
+
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener('change', () => {
+            const answered = new Set();
+            document.querySelectorAll('input[type="radio"]:checked').forEach(r => answered.add(r.name));
+            document.getElementById('progress-count').textContent = answered.size;
+        });
+    });
+
+    document.getElementById('main-header').style.display = 'block';
+    document.getElementById('submit-section').style.display = 'block';
+    document.getElementById('footer').style.display = 'block';
 }
 
 function startTest() {
@@ -1037,99 +313,26 @@ function startTest() {
     document.getElementById('start-overlay').classList.add('hidden');
 }
 
-function rerenderQuestions(questions) {
-    // 更新计数
-    document.querySelector('.progress').innerHTML = 'Questions: <span id="progress-count">0</span> / ' + questions.length;
-
-    // 添加重做模式标记
-    const headerSubtitle = document.querySelector('.subtitle');
-    headerSubtitle.innerHTML = '🔁 RETAKING WRONG QUESTIONS — ' + questions.length + ' question(s)';
-    headerSubtitle.style.color = '#c62828';
-    headerSubtitle.style.fontWeight = 'bold';
-
-    // 清空原题目，重新渲染
-    const form = document.getElementById('quiz-form');
-    form.innerHTML = '';
-
-    questions.forEach((q, i) => {
-        const qDiv = document.createElement('div');
-        qDiv.className = 'question';
-        qDiv.dataset.qIndex = i;
-
-        let stemDisplay;
-        if (q.type === 'synonym') {
-            stemDisplay = q.stem.replace(q.word, '<strong class="target-word">' + q.word + '</strong>');
-        } else {
-            stemDisplay = q.stem.replace(/______/g, '<span class="blank">______</span>');
-        }
-
-        const typeLabel = q.type === 'synonym' ? 'Synonym' : 'Sentence Completion';
-
-        let optionsHtml = '';
-        const letters = ['A', 'B', 'C', 'D'];
-        q.options.forEach((opt, j) => {
-            optionsHtml += '<label class="option" data-q="' + i + '" data-opt="' + j + '">' +
-                '<input type="radio" name="q' + i + '" value="' + j + '">' +
-                '<span class="letter">' + letters[j] + '</span>' +
-                '<span class="opt-text">' + opt + '</span></label>';
-        });
-
-        qDiv.innerHTML = '<div class="q-header"><span class="q-number">' + (i+1) + '.</span>' +
-            '<span class="q-type">' + typeLabel + '</span></div>' +
-            '<div class="q-stem">' + stemDisplay + '</div>' +
-            '<div class="q-options">' + optionsHtml + '</div>';
-
-        form.appendChild(qDiv);
-    });
-
-    // 重新绑定 change 事件
-    document.querySelectorAll('input[type="radio"]').forEach(input => {
-        input.addEventListener('change', updateProgress);
-    });
-}
-
-function updateProgress() {
-    const answered = new Set();
-    document.querySelectorAll('input[type="radio"]:checked').forEach(r => {
-        answered.add(r.name);
-    });
-    document.getElementById('progress-count').textContent = answered.size;
-}
-
-// 计时器
-function updateTimer() {
+setInterval(() => {
     if (!testStarted || submitted) return;
     const elapsed = Math.floor((Date.now() - startTime) / 1000);
     const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
     const ss = String(elapsed % 60).padStart(2, '0');
     document.getElementById('timer-display').textContent = mm + ':' + ss;
-}
-setInterval(updateTimer, 1000);
-
-// 进度计数（原题模式）
-document.querySelectorAll('input[type="radio"]').forEach(input => {
-    input.addEventListener('change', updateProgress);
-});
+}, 1000);
 
 function submitQuiz() {
     if (submitted) return;
-
     const userAnswers = {};
     let answeredCount = 0;
-    QUESTIONS_DATA.forEach((q, i) => {
-        const selected = document.querySelector('input[name="q' + i + '"]:checked');
-        if (selected) {
-            userAnswers[i] = parseInt(selected.value);
-            answeredCount++;
-        } else {
-            userAnswers[i] = -1;
-        }
+    CURRENT.questions.forEach((q, i) => {
+        const sel = document.querySelector('input[name="q' + i + '"]:checked');
+        if (sel) { userAnswers[i] = parseInt(sel.value); answeredCount++; }
+        else { userAnswers[i] = -1; }
     });
 
-    if (answeredCount < QUESTIONS_DATA.length) {
-        if (!confirm('You have ' + (QUESTIONS_DATA.length - answeredCount) + ' unanswered question(s). Submit anyway?')) {
-            return;
-        }
+    if (answeredCount < CURRENT.questions.length) {
+        if (!confirm('You have ' + (CURRENT.questions.length - answeredCount) + ' unanswered. Submit?')) return;
     }
 
     submitted = true;
@@ -1137,156 +340,157 @@ function submitQuiz() {
 
     let correctCount = 0;
     const mistakes = [];
-    const wrongQuestions = [];  // 保留完整题目数据，用于重做
-
-    QUESTIONS_DATA.forEach((q, i) => {
+    CURRENT.questions.forEach((q, i) => {
         const userAns = userAnswers[i];
         const correctAns = q.correct_index;
-
-        const allOpts = document.querySelectorAll('label.option[data-q="' + i + '"]');
-        allOpts.forEach(opt => {
-            const optIdx = parseInt(opt.dataset.opt);
+        const opts = document.querySelectorAll('label.option[data-q="' + i + '"]');
+        opts.forEach(opt => {
+            const idx = parseInt(opt.dataset.opt);
             opt.style.pointerEvents = 'none';
-            const radio = opt.querySelector('input');
-            radio.disabled = true;
-
-            if (optIdx === correctAns) {
-                if (userAns === correctAns) {
-                    opt.classList.add('user-correct');
-                } else {
-                    opt.classList.add('show-correct');
-                }
-            } else if (optIdx === userAns) {
+            opt.querySelector('input').disabled = true;
+            if (idx === correctAns) {
+                opt.classList.add(userAns === correctAns ? 'user-correct' : 'show-correct');
+            } else if (idx === userAns) {
                 opt.classList.add('user-wrong');
             }
         });
-
-        if (userAns === correctAns) {
-            correctCount++;
-        } else {
+        if (userAns === correctAns) correctCount++;
+        else {
             mistakes.push({
                 word: q.word,
-                definition: q.definition,
                 type: q.type,
                 stem: q.stem,
-                options: q.options,
-                correct_index: q.correct_index,
-                user_index: userAns,
+                correct: q.options[correctAns],
+                user: userAns >= 0 ? q.options[userAns] : '(unanswered)',
+                explanation: q.explanation,
                 date: new Date().toISOString().split('T')[0]
             });
-            wrongQuestions.push(q);
         }
     });
 
-    // 永久错题本（localStorage）
-    const existing = JSON.parse(localStorage.getItem('isee_mistakes') || '[]');
-    mistakes.forEach(m => {
-        const isDup = existing.some(e => e.word === m.word && e.stem === m.stem);
-        if (!isDup) existing.push(m);
-    });
-    localStorage.setItem('isee_mistakes', JSON.stringify(existing));
-
-    // 本次错题（sessionStorage，用于重做）
-    sessionStorage.setItem('last_wrong_questions', JSON.stringify(wrongQuestions));
-
-    // 渲染结果
-    // 保存本次会话到历史记录
-    const sessionRecord = {
-        date: new Date().toISOString().split('T')[0],
-        timestamp: new Date().toISOString(),
-        type: 'new',
-        total: QUESTIONS_DATA.length,
-        correct: correctCount,
-        accuracy: Math.round((correctCount / QUESTIONS_DATA.length) * 100),
-        duration_sec: totalTime
-    };
-    const sessionsList = JSON.parse(localStorage.getItem('isee_sessions') || '[]');
-    sessionsList.push(sessionRecord);
-    localStorage.setItem('isee_sessions', JSON.stringify(sessionsList));
-    const accuracy = Math.round((correctCount / QUESTIONS_DATA.length) * 100);
+    const accuracy = Math.round((correctCount / CURRENT.questions.length) * 100);
     const mm = String(Math.floor(totalTime / 60)).padStart(2, '0');
     const ss = String(totalTime % 60).padStart(2, '0');
 
-    let mistakesHtml = '';
+    const sessionRecord = {
+        date: new Date().toISOString().split('T')[0],
+        timestamp: new Date().toISOString(),
+        set_id: CURRENT.id,
+        set_number: CURRENT.set_number,
+        correct: correctCount,
+        total: CURRENT.questions.length,
+        accuracy: accuracy,
+        duration_sec: totalTime
+    };
+    const allSessions = JSON.parse(localStorage.getItem('vocab_sessions') || '[]');
+    allSessions.push(sessionRecord);
+    localStorage.setItem('vocab_sessions', JSON.stringify(allSessions));
+
+    // Update mistakes book
     if (mistakes.length > 0) {
-        mistakesHtml = '<div class="mistakes-list"><h3>📝 Review These Words (' + mistakes.length + ')</h3>';
+        const existingMistakes = JSON.parse(localStorage.getItem('vocab_mistakes') || '[]');
         mistakes.forEach(m => {
-            const correctText = m.options[m.correct_index];
-            const userText = m.user_index >= 0 ? m.options[m.user_index] : '(unanswered)';
-            mistakesHtml += '<div class="mistake-item">' +
-                '<div class="mistake-word">' + m.word + '</div>' +
-                '<div class="mistake-def">' + m.definition + '</div>' +
-                '<div class="mistake-detail">' +
-                '<strong>Correct:</strong> ' + correctText + '<br>' +
-                '<strong>Your answer:</strong> ' + userText +
-                '</div></div>';
+            // Don't add duplicate if same word already in mistakes
+            if (!existingMistakes.some(em => em.word === m.word && em.type === m.type)) {
+                existingMistakes.push(m);
+            }
         });
-        mistakesHtml += '</div>';
-    } else {
-        mistakesHtml = '<div style="text-align:center;padding:20px;color:#2e7d32;font-size:18px;font-weight:bold;">🎉 Perfect Score! All correct!</div>';
+        localStorage.setItem('vocab_mistakes', JSON.stringify(existingMistakes));
     }
 
-    // 重做按钮（只有有错题时才显示）
-    const retakeBtn = wrongQuestions.length > 0
-        ? '<a href="javascript:retakeWrong()">🔁 Retake Wrong Questions (' + wrongQuestions.length + ')</a>'
-        : '';
+    let explanationsHtml = '<h3 style="margin-top:20px;color:#1a1a1a;font-size:16px;border-bottom:1px solid #ddd;padding-bottom:8px;">📝 Review</h3>';
+    CURRENT.questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.correct_index;
+        const userText = userAns >= 0 ? q.options[userAns] : '(unanswered)';
+        explanationsHtml += '<div class="explanation-block' + (isCorrect ? '' : ' wrong') + '">' +
+            '<div class="exp-q">' + (i+1) + '. ' + q.stem + '</div>' +
+            '<div class="exp-result">' + (isCorrect ? '✓ Correct: ' : '✗ You answered: ') +
+            '<strong>' + userText + '</strong>' +
+            (isCorrect ? '' : ' &nbsp; Correct: <strong>' + q.options[q.correct_index] + '</strong>') +
+            '</div>' +
+            '<div class="exp-text"><strong>Why:</strong> ' + q.explanation + '</div>' +
+            '</div>';
+    });
 
-    document.getElementById('results').innerHTML =
+    const resultsHtml =
         '<div class="new-test-section">' +
-        '<button class="start-new-btn" onclick="startNewTest()">🔄 Start New Test</button>' +
+        '<button class="start-new-btn" onclick="nextSet()">🔄 Start New Test</button>' +
+        '<p style="color:#666;font-size:12px;margin-top:8px;">Marks this set complete, randomly picks next</p>' +
         '</div>' +
         '<div class="score-summary">' +
-        '<div class="score-item"><span class="score-value">' + correctCount + '/' + QUESTIONS_DATA.length + '</span><span class="score-label">Score</span></div>' +
+        '<div class="score-item"><span class="score-value">' + correctCount + '/' + CURRENT.questions.length + '</span><span class="score-label">Score</span></div>' +
         '<div class="score-item"><span class="score-value">' + accuracy + '%</span><span class="score-label">Accuracy</span></div>' +
         '<div class="score-item"><span class="score-value">' + mm + ':' + ss + '</span><span class="score-label">Time</span></div>' +
         '</div>' +
-       
         '<div class="action-links">' +
-        retakeBtn +
-        '<a href="mistakes.html">📖 View All Mistakes</a>' +
-        '<a href="wrong-review.html">🔁 Review Mistakes</a>' +
-                '<a href="history.html">📊 View Progress</a>' +
+        '<a href="history.html">📊 View Progress</a>' +
+        '<a href="mistakes.html">📖 Review Mistakes</a>' +
         '</div>' +
-        mistakesHtml;
-        
+        explanationsHtml;
 
+    document.getElementById('results').innerHTML = resultsHtml;
     document.getElementById('results').classList.add('show');
     document.getElementById('submit-btn').disabled = true;
     document.getElementById('submit-btn').textContent = 'SUBMITTED';
-
     document.getElementById('results').scrollIntoView({behavior: 'smooth'});
 
-    // 保存完整状态到 sessionStorage（用于跨页面返回时恢复）
-    sessionStorage.setItem('submitted_form_html', document.getElementById('quiz-form').innerHTML);
-    sessionStorage.setItem('submitted_results_html', document.getElementById('results').innerHTML);
-    sessionStorage.setItem('submitted_timer', document.getElementById('timer-display').textContent);
-    sessionStorage.setItem('submitted_progress', document.getElementById('progress-count').textContent);
+    sessionStorage.setItem('vocab_submitted_state_' + CURRENT_ID, JSON.stringify({
+        formHTML: document.getElementById('quiz-form').innerHTML,
+        resultsHTML: document.getElementById('results').innerHTML,
+        timer: document.getElementById('timer-display').textContent,
+        progress: document.getElementById('progress-count').textContent
+    }));
 }
 
-function clearSubmittedState() {
-    sessionStorage.removeItem('submitted_form_html');
-    sessionStorage.removeItem('submitted_results_html');
-    sessionStorage.removeItem('submitted_timer');
-    sessionStorage.removeItem('submitted_progress');
-}
-
-function startNewTest() {
-    clearSubmittedState();
-    location.reload();
-}
-
-function retakeWrong() {
-    const wrongQuestions = sessionStorage.getItem('last_wrong_questions');
-    if (!wrongQuestions || JSON.parse(wrongQuestions).length === 0) {
-        alert('No wrong questions to retake.');
-        return;
+function nextSet() {
+    const done = JSON.parse(localStorage.getItem('done_set_ids') || '[]');
+    if (CURRENT && !done.includes(CURRENT.id)) {
+        done.push(CURRENT.id);
+        localStorage.setItem('done_set_ids', JSON.stringify(done));
     }
-    clearSubmittedState();
-    sessionStorage.setItem('retake_mode', '1');
-    sessionStorage.setItem('retake_questions', wrongQuestions);
+    sessionStorage.removeItem('current_set_id');
+    sessionStorage.removeItem('vocab_submitted_state_' + CURRENT_ID);
     location.reload();
 }
 
+function showAllDone() {
+    document.body.innerHTML = `
+        <div class="all-done">
+            <h1>🎉 All Quiz Sets Completed!</h1>
+            <p style="color:#666;font-size:17px;margin:24px 0;">
+                You've finished all ${ALL_SETS.length} quiz sets.<br>
+                Great work!
+            </p>
+            <div class="actions">
+                <button onclick="resetAndContinue()">🔄 Reset and Practice Again</button>
+                <button class="secondary" onclick="showGenerateMore()">📚 Generate More</button>
+            </div>
+            <div style="margin-top:40px;font-size:13px;color:#888;">
+                <a href="history.html" style="color:#1a4d8f;">📊 History</a> &nbsp;|&nbsp;
+                <a href="mistakes.html" style="color:#1a4d8f;">📖 Mistakes Book</a>
+            </div>
+        </div>`;
+}
+
+function resetAndContinue() {
+    if (confirm('Reset all "done" records? Your history and mistakes are NOT affected.')) {
+        localStorage.removeItem('done_set_ids');
+        location.reload();
+    }
+}
+
+function showGenerateMore() {
+    alert("To generate more quiz sets, run on your computer:\n\ncd ~/code/isee-vocab\nuv run main.py 50\n\nThen: git add . && git commit -m 'More sets' && git push");
+}
+
+function showError(msg) {
+    document.getElementById('start-card').innerHTML = `
+        <h2 style="color:#c62828;">⚠️ Error</h2>
+        <p style="color:#555;font-family:Arial;font-size:14px;">${msg}</p>`;
+}
+
+init();
 </script>
 
 </body>
