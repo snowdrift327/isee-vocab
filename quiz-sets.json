@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-07-13T17:59:02.256841",
-  "total": 23,
+  "total": 34,
   "sets": [
     {
       "id": "set_20260713_175931_509407",
@@ -6648,7 +6648,3186 @@
           "explanation": "An advocate is someone who publicly supports a cause, which matches Maria's active support for recycling through teaching others."
         }
       ]
+    },
+    {
+      "id": "set_20260714_163642_438461",
+      "set_number": 24,
+      "created_at": "2026-07-14T16:36:42.438939",
+      "words_used": [
+        "Comparable",
+        "Discrimination",
+        "Exploit",
+        "Resolution",
+        "Suspect",
+        "Ignite",
+        "Deceit",
+        "Particular",
+        "Dismantle",
+        "Tragic",
+        "Verdict",
+        "Predicament",
+        "Inferior",
+        "Artificial",
+        "Decent",
+        "Deserve",
+        "Reluctant",
+        "Deliberate",
+        "Retrieve",
+        "Delicate"
+      ],
+      "questions": [
+        {
+          "type": "sentence",
+          "word": "Decent",
+          "stem": "Although the restaurant was not fancy, the food was ______ and satisfied everyone in our group.",
+          "options": [
+            "decent",
+            "spoiled",
+            "forbidden",
+            "distant"
+          ],
+          "correct_index": 0,
+          "explanation": "The contrast word 'although' and the phrase 'satisfied everyone' indicate the food was good enough or acceptable, making 'decent' correct."
+        },
+        {
+          "type": "sentence",
+          "word": "Retrieve",
+          "stem": "The trained dog ran across the field to ______ the stick that his owner had thrown.",
+          "options": [
+            "retrieve",
+            "hide",
+            "destroy",
+            "examine"
+          ],
+          "correct_index": 0,
+          "explanation": "Since the dog ran to get the stick that was thrown, 'retrieve' meaning to get and bring back is correct."
+        },
+        {
+          "type": "sentence",
+          "word": "Deliberate",
+          "stem": "The chess master made each move with care, taking her time to ensure every decision was ______.",
+          "options": [
+            "deliberate",
+            "accidental",
+            "hasty",
+            "forgotten"
+          ],
+          "correct_index": 0,
+          "explanation": "The phrase 'made each move with care' and 'taking her time' indicate intentional and thoughtful decisions, so 'deliberate' fits best."
+        },
+        {
+          "type": "synonym",
+          "word": "Artificial",
+          "stem": "Artificial most nearly means",
+          "options": [
+            "synthetic",
+            "artistic",
+            "fake",
+            "false"
+          ],
+          "correct_index": 0,
+          "explanation": "Artificial means synthetic or made by humans rather than natural, while artistic means showing creative skill, fake means counterfeit (noun/informal), and false means untrue rather than man-made."
+        },
+        {
+          "type": "synonym",
+          "word": "Discrimination",
+          "stem": "Discrimination most nearly means",
+          "options": [
+            "bias",
+            "disagreement",
+            "distinction",
+            "criticism"
+          ],
+          "correct_index": 0,
+          "explanation": "Discrimination means unfair bias or prejudice against a group, while disagreement is a difference of opinion, distinction is a difference or honor, and criticism is expressing disapproval."
+        },
+        {
+          "type": "synonym",
+          "word": "Verdict",
+          "stem": "Verdict most nearly means",
+          "options": [
+            "judgment",
+            "accusation",
+            "sentence",
+            "testimony"
+          ],
+          "correct_index": 0,
+          "explanation": "Verdict means a judgment or decision made by a jury or judge, while accusation is a charge of wrongdoing, sentence is the punishment given, and testimony is evidence given in court."
+        },
+        {
+          "type": "synonym",
+          "word": "Exploit",
+          "stem": "Exploit most nearly means",
+          "options": [
+            "utilize",
+            "expose",
+            "explore",
+            "explain"
+          ],
+          "correct_index": 0,
+          "explanation": "Exploit means to utilize or take advantage of something (often unfairly), while expose means to reveal, explore means to investigate, and explain means to clarify."
+        },
+        {
+          "type": "synonym",
+          "word": "Particular",
+          "stem": "Particular most nearly means",
+          "options": [
+            "specific",
+            "peculiar",
+            "partial",
+            "popular"
+          ],
+          "correct_index": 0,
+          "explanation": "Particular means specific or relating to a single distinct thing, while peculiar means strange, partial means incomplete or biased, and popular means well-liked."
+        },
+        {
+          "type": "sentence",
+          "word": "Deserve",
+          "stem": "After practicing piano every day for three months, Maya felt she would ______ first place in the competition.",
+          "options": [
+            "deserve",
+            "prevent",
+            "ignore",
+            "abandon"
+          ],
+          "correct_index": 0,
+          "explanation": "Maya's consistent hard work suggests she has earned or merits recognition, so 'deserve' is the correct choice."
+        },
+        {
+          "type": "synonym",
+          "word": "Ignite",
+          "stem": "Ignite most nearly means",
+          "options": [
+            "kindle",
+            "explode",
+            "burn",
+            "extinguish"
+          ],
+          "correct_index": 0,
+          "explanation": "Ignite means to kindle or start a fire, while explode means to burst violently, burn means to be on fire, and extinguish means to put out a fire."
+        },
+        {
+          "type": "synonym",
+          "word": "Resolution",
+          "stem": "Resolution most nearly means",
+          "options": [
+            "solution",
+            "revolution",
+            "determination",
+            "conclusion"
+          ],
+          "correct_index": 0,
+          "explanation": "Resolution means a solution or decision that settles a problem, while revolution is a major change or overthrow, determination is firmness of purpose, and conclusion is an ending."
+        },
+        {
+          "type": "synonym",
+          "word": "Predicament",
+          "stem": "Predicament most nearly means",
+          "options": [
+            "dilemma",
+            "prediction",
+            "situation",
+            "problem"
+          ],
+          "correct_index": 0,
+          "explanation": "Predicament means a difficult dilemma or troublesome situation with no easy solution, while prediction is a forecast, situation is any circumstance (not necessarily difficult), and problem is an issue but less specific."
+        },
+        {
+          "type": "synonym",
+          "word": "Suspect",
+          "stem": "Suspect most nearly means",
+          "options": [
+            "doubt",
+            "accuse",
+            "investigate",
+            "reject"
+          ],
+          "correct_index": 0,
+          "explanation": "Suspect means to doubt or have an uncertain belief about something, while accuse means to blame directly, investigate means to examine, and reject means to refuse."
+        },
+        {
+          "type": "sentence",
+          "word": "Reluctant",
+          "stem": "Tommy was ______ to jump into the cold lake water, hesitating at the edge for several minutes.",
+          "options": [
+            "reluctant",
+            "eager",
+            "prepared",
+            "qualified"
+          ],
+          "correct_index": 0,
+          "explanation": "The detail that Tommy hesitated for several minutes shows he was unwilling or hesitant, making 'reluctant' correct."
+        },
+        {
+          "type": "synonym",
+          "word": "Deceit",
+          "stem": "Deceit most nearly means",
+          "options": [
+            "dishonesty",
+            "disappointment",
+            "deception",
+            "betrayal"
+          ],
+          "correct_index": 0,
+          "explanation": "Deceit means dishonesty or the act of misleading someone, while disappointment is a feeling of sadness, deception is the act itself (very close but deceit is the quality), and betrayal is breaking trust."
+        },
+        {
+          "type": "synonym",
+          "word": "Dismantle",
+          "stem": "Dismantle most nearly means",
+          "options": [
+            "disassemble",
+            "destroy",
+            "dismiss",
+            "discontinue"
+          ],
+          "correct_index": 0,
+          "explanation": "Dismantle means to disassemble or take apart piece by piece, while destroy means to ruin completely, dismiss means to send away, and discontinue means to stop doing something."
+        },
+        {
+          "type": "synonym",
+          "word": "Comparable",
+          "stem": "Comparable most nearly means",
+          "options": [
+            "similar",
+            "identical",
+            "compatible",
+            "competitive"
+          ],
+          "correct_index": 0,
+          "explanation": "Comparable means similar or equivalent in nature, while identical means exactly the same, compatible means able to work together, and competitive means involving rivalry."
+        },
+        {
+          "type": "synonym",
+          "word": "Tragic",
+          "stem": "Tragic most nearly means",
+          "options": [
+            "disastrous",
+            "dramatic",
+            "unfortunate",
+            "terrible"
+          ],
+          "correct_index": 0,
+          "explanation": "Tragic means disastrous or involving great suffering and sadness, while dramatic means striking or theatrical, unfortunate means unlucky, and terrible means very bad but less specific."
+        },
+        {
+          "type": "synonym",
+          "word": "Inferior",
+          "stem": "Inferior most nearly means",
+          "options": [
+            "substandard",
+            "internal",
+            "lower",
+            "unimportant"
+          ],
+          "correct_index": 0,
+          "explanation": "Inferior means substandard or of lower quality, while internal means inside, lower means beneath in position, and unimportant means not significant."
+        },
+        {
+          "type": "sentence",
+          "word": "Delicate",
+          "stem": "The glass butterfly ornament was so ______ that we had to wrap it carefully in soft tissue paper.",
+          "options": [
+            "delicate",
+            "sturdy",
+            "heavy",
+            "enormous"
+          ],
+          "correct_index": 0,
+          "explanation": "The need to wrap the glass ornament carefully indicates it is fragile and easily broken, making 'delicate' the best answer."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_163709_553612",
+      "set_number": 25,
+      "created_at": "2026-07-14T16:37:09.553659",
+      "words_used": [
+        "Marvel",
+        "Ordinance",
+        "Consequence",
+        "Summary",
+        "Stifle",
+        "Quote",
+        "Dilate",
+        "Outlook",
+        "Trait",
+        "Discretion",
+        "Dissatisfied",
+        "Explanation",
+        "Onset",
+        "Intrude",
+        "Superstition",
+        "Refuge",
+        "Judicial",
+        "Terminate",
+        "Prejudice",
+        "Interview"
+      ],
+      "questions": [
+        {
+          "type": "synonym",
+          "word": "Discretion",
+          "stem": "Discretion most nearly means",
+          "options": [
+            "judgment",
+            "secrecy",
+            "caution",
+            "freedom"
+          ],
+          "correct_index": 0,
+          "explanation": "Discretion means the quality of using good judgment in making decisions or handling situations."
+        },
+        {
+          "type": "sentence",
+          "word": "Terminate",
+          "stem": "The company decided to ______ the contract early because the supplier failed to deliver the products on time repeatedly.",
+          "options": [
+            "terminate",
+            "celebrate",
+            "duplicate",
+            "examine"
+          ],
+          "correct_index": 0,
+          "explanation": "Terminate means to end or stop something, which makes sense when ending a contract due to poor performance."
+        },
+        {
+          "type": "sentence",
+          "word": "Refuge",
+          "stem": "When the sudden thunderstorm began, the hikers quickly sought ______ under a large rock ledge to stay dry and safe.",
+          "options": [
+            "refuge",
+            "adventure",
+            "permission",
+            "direction"
+          ],
+          "correct_index": 0,
+          "explanation": "Refuge means shelter or protection, which is what hikers need when escaping a dangerous storm."
+        },
+        {
+          "type": "synonym",
+          "word": "Stifle",
+          "stem": "Stifle most nearly means",
+          "options": [
+            "suppress",
+            "suffocate",
+            "silence",
+            "prevent"
+          ],
+          "correct_index": 0,
+          "explanation": "Stifle means to suppress or hold back something, such as emotions or growth."
+        },
+        {
+          "type": "synonym",
+          "word": "Marvel",
+          "stem": "Marvel most nearly means",
+          "options": [
+            "wonder",
+            "celebrate",
+            "discover",
+            "admire"
+          ],
+          "correct_index": 0,
+          "explanation": "Marvel means to wonder at something with surprise or amazement, making 'wonder' the best synonym."
+        },
+        {
+          "type": "synonym",
+          "word": "Onset",
+          "stem": "Onset most nearly means",
+          "options": [
+            "beginning",
+            "arrival",
+            "attack",
+            "start"
+          ],
+          "correct_index": 0,
+          "explanation": "Onset means the beginning or early stages of something, especially something unpleasant."
+        },
+        {
+          "type": "synonym",
+          "word": "Quote",
+          "stem": "Quote most nearly means",
+          "options": [
+            "cite",
+            "speak",
+            "mention",
+            "repeat"
+          ],
+          "correct_index": 0,
+          "explanation": "Quote means to cite or repeat someone's exact words as evidence or illustration."
+        },
+        {
+          "type": "synonym",
+          "word": "Outlook",
+          "stem": "Outlook most nearly means",
+          "options": [
+            "perspective",
+            "forecast",
+            "scenery",
+            "appearance"
+          ],
+          "correct_index": 0,
+          "explanation": "Outlook means a person's perspective or way of regarding situations and future possibilities."
+        },
+        {
+          "type": "synonym",
+          "word": "Consequence",
+          "stem": "Consequence most nearly means",
+          "options": [
+            "result",
+            "punishment",
+            "sequence",
+            "importance"
+          ],
+          "correct_index": 0,
+          "explanation": "Consequence means a result or effect that follows from an action or condition."
+        },
+        {
+          "type": "synonym",
+          "word": "Intrude",
+          "stem": "Intrude most nearly means",
+          "options": [
+            "trespass",
+            "interrupt",
+            "invade",
+            "disturb"
+          ],
+          "correct_index": 0,
+          "explanation": "Intrude means to trespass or enter without permission or welcome, disrupting a situation."
+        },
+        {
+          "type": "synonym",
+          "word": "Dissatisfied",
+          "stem": "Dissatisfied most nearly means",
+          "options": [
+            "discontented",
+            "disappointed",
+            "unhappy",
+            "displeased"
+          ],
+          "correct_index": 0,
+          "explanation": "Dissatisfied means discontented or not pleased with a situation or outcome."
+        },
+        {
+          "type": "sentence",
+          "word": "Interview",
+          "stem": "The newspaper reporter scheduled an ______ with the mayor to ask questions about the new park being built downtown.",
+          "options": [
+            "interview",
+            "argument",
+            "vacation",
+            "election"
+          ],
+          "correct_index": 0,
+          "explanation": "Interview is a formal meeting where one person asks another questions, which fits a reporter asking a mayor questions."
+        },
+        {
+          "type": "sentence",
+          "word": "Judicial",
+          "stem": "The ______ branch of government includes judges and courts that interpret laws and decide whether they have been broken.",
+          "options": [
+            "judicial",
+            "financial",
+            "medical",
+            "educational"
+          ],
+          "correct_index": 0,
+          "explanation": "Judicial refers to the court system and judges, which is the branch that interprets laws."
+        },
+        {
+          "type": "synonym",
+          "word": "Summary",
+          "stem": "Summary most nearly means",
+          "options": [
+            "overview",
+            "conclusion",
+            "report",
+            "statement"
+          ],
+          "correct_index": 0,
+          "explanation": "A summary is a brief overview that covers the main points of something longer."
+        },
+        {
+          "type": "synonym",
+          "word": "Explanation",
+          "stem": "Explanation most nearly means",
+          "options": [
+            "clarification",
+            "description",
+            "excuse",
+            "reason"
+          ],
+          "correct_index": 0,
+          "explanation": "An explanation is a clarification that makes something clear or easier to understand."
+        },
+        {
+          "type": "sentence",
+          "word": "Superstition",
+          "stem": "The baseball player's ______ made him wear the same unwashed socks to every game because he believed they brought him luck.",
+          "options": [
+            "superstition",
+            "discipline",
+            "reputation",
+            "instruction"
+          ],
+          "correct_index": 0,
+          "explanation": "Superstition is a belief in luck or magic not based on reason, which explains why he wore unwashed socks for luck."
+        },
+        {
+          "type": "synonym",
+          "word": "Ordinance",
+          "stem": "Ordinance most nearly means",
+          "options": [
+            "regulation",
+            "announcement",
+            "ceremony",
+            "order"
+          ],
+          "correct_index": 0,
+          "explanation": "An ordinance is an official regulation or law, typically established by a local government."
+        },
+        {
+          "type": "synonym",
+          "word": "Trait",
+          "stem": "Trait most nearly means",
+          "options": [
+            "characteristic",
+            "habit",
+            "feature",
+            "quality"
+          ],
+          "correct_index": 0,
+          "explanation": "A trait is a distinguishing characteristic or quality that defines a person or thing."
+        },
+        {
+          "type": "sentence",
+          "word": "Prejudice",
+          "stem": "The teacher worked hard to eliminate ______ in her classroom by teaching students to judge others by their character, not appearance.",
+          "options": [
+            "prejudice",
+            "silence",
+            "creativity",
+            "competition"
+          ],
+          "correct_index": 0,
+          "explanation": "Prejudice means unfair judgment based on superficial traits, which contrasts with judging by character."
+        },
+        {
+          "type": "synonym",
+          "word": "Dilate",
+          "stem": "Dilate most nearly means",
+          "options": [
+            "expand",
+            "stretch",
+            "swell",
+            "inflate"
+          ],
+          "correct_index": 0,
+          "explanation": "Dilate means to expand or become wider, especially used to describe pupils or blood vessels."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_163737_864955",
+      "set_number": 26,
+      "created_at": "2026-07-14T16:37:37.864995",
+      "words_used": [
+        "Hoax",
+        "Eventually",
+        "Aloof",
+        "Supplement",
+        "Sleuth",
+        "Plural",
+        "Equivalent",
+        "Quibble",
+        "Reject",
+        "Lobby",
+        "Drawback",
+        "Former",
+        "Vow",
+        "Dispute",
+        "Emblem",
+        "Inept",
+        "Emission",
+        "Prey",
+        "Diversity",
+        "Leisure"
+      ],
+      "questions": [
+        {
+          "type": "synonym",
+          "word": "Lobby",
+          "stem": "Lobby most nearly means",
+          "options": [
+            "entrance",
+            "hallway",
+            "waiting room",
+            "balcony"
+          ],
+          "correct_index": 0,
+          "explanation": "A lobby is an entrance hall or main area just inside the doorway of a building."
+        },
+        {
+          "type": "synonym",
+          "word": "Aloof",
+          "stem": "Aloof most nearly means",
+          "options": [
+            "distant",
+            "lonely",
+            "proud",
+            "shy"
+          ],
+          "correct_index": 0,
+          "explanation": "Aloof means distant and detached, keeping oneself apart from others emotionally or physically."
+        },
+        {
+          "type": "synonym",
+          "word": "Dispute",
+          "stem": "Dispute most nearly means",
+          "options": [
+            "disagreement",
+            "discussion",
+            "competition",
+            "complaint"
+          ],
+          "correct_index": 0,
+          "explanation": "A dispute is a disagreement or argument, typically a serious or prolonged one between parties."
+        },
+        {
+          "type": "synonym",
+          "word": "Drawback",
+          "stem": "Drawback most nearly means",
+          "options": [
+            "disadvantage",
+            "obstacle",
+            "mistake",
+            "delay"
+          ],
+          "correct_index": 0,
+          "explanation": "A drawback is a disadvantage or undesirable feature that makes something less appealing."
+        },
+        {
+          "type": "synonym",
+          "word": "Plural",
+          "stem": "Plural most nearly means",
+          "options": [
+            "multiple",
+            "double",
+            "common",
+            "extra"
+          ],
+          "correct_index": 0,
+          "explanation": "Plural means multiple or more than one, referring to a quantity greater than a single item."
+        },
+        {
+          "type": "sentence",
+          "word": "Inept",
+          "stem": "The new juggler was so ______ that he dropped every ball within seconds and had to leave the stage in embarrassment.",
+          "options": [
+            "inept",
+            "skilled",
+            "famous",
+            "wealthy"
+          ],
+          "correct_index": 0,
+          "explanation": "Inept means lacking skill or ability, which matches the context of dropping every ball and leaving in embarrassment."
+        },
+        {
+          "type": "sentence",
+          "word": "Emission",
+          "stem": "The factory installed special filters to reduce the ______ of smoke and harmful gases into the surrounding air.",
+          "options": [
+            "emission",
+            "collection",
+            "purchase",
+            "measurement"
+          ],
+          "correct_index": 0,
+          "explanation": "Emission means the release or discharge of something, especially gas or radiation, which fits with smoke and gases going into the air."
+        },
+        {
+          "type": "synonym",
+          "word": "Supplement",
+          "stem": "Supplement most nearly means",
+          "options": [
+            "addition",
+            "replacement",
+            "requirement",
+            "sample"
+          ],
+          "correct_index": 0,
+          "explanation": "A supplement is an addition to something else to complete or enhance it."
+        },
+        {
+          "type": "synonym",
+          "word": "Vow",
+          "stem": "Vow most nearly means",
+          "options": [
+            "promise",
+            "wish",
+            "request",
+            "statement"
+          ],
+          "correct_index": 0,
+          "explanation": "A vow is a solemn promise or pledge, often made with serious commitment or in a formal setting."
+        },
+        {
+          "type": "synonym",
+          "word": "Eventually",
+          "stem": "Eventually most nearly means",
+          "options": [
+            "ultimately",
+            "quickly",
+            "possibly",
+            "recently"
+          ],
+          "correct_index": 0,
+          "explanation": "Eventually means ultimately or finally, at some point in the future after a period of time."
+        },
+        {
+          "type": "synonym",
+          "word": "Hoax",
+          "stem": "Hoax most nearly means",
+          "options": [
+            "deception",
+            "joke",
+            "mystery",
+            "rumor"
+          ],
+          "correct_index": 0,
+          "explanation": "A hoax is a deception or trick intended to fool people into believing something false."
+        },
+        {
+          "type": "sentence",
+          "word": "Prey",
+          "stem": "The hawk circled overhead, searching the field below for small ______ such as mice and rabbits to catch for its meal.",
+          "options": [
+            "prey",
+            "shelter",
+            "weather",
+            "farmers"
+          ],
+          "correct_index": 0,
+          "explanation": "Prey refers to animals hunted and eaten by predators, which fits with the hawk hunting mice and rabbits for food."
+        },
+        {
+          "type": "sentence",
+          "word": "Emblem",
+          "stem": "The eagle serves as a national ______ for the United States, appearing on coins, flags, and official government documents.",
+          "options": [
+            "emblem",
+            "habitat",
+            "prediction",
+            "climate"
+          ],
+          "correct_index": 0,
+          "explanation": "An emblem is a symbol that represents something, which fits the context of the eagle representing the nation on official items."
+        },
+        {
+          "type": "synonym",
+          "word": "Former",
+          "stem": "Former most nearly means",
+          "options": [
+            "previous",
+            "first",
+            "original",
+            "elder"
+          ],
+          "correct_index": 0,
+          "explanation": "Former means previous or earlier, referring to something that existed or held a position in the past."
+        },
+        {
+          "type": "synonym",
+          "word": "Equivalent",
+          "stem": "Equivalent most nearly means",
+          "options": [
+            "equal",
+            "similar",
+            "adequate",
+            "compatible"
+          ],
+          "correct_index": 0,
+          "explanation": "Equivalent means equal in value, amount, meaning, or function to something else."
+        },
+        {
+          "type": "synonym",
+          "word": "Quibble",
+          "stem": "Quibble most nearly means",
+          "options": [
+            "complain",
+            "whisper",
+            "question",
+            "argue"
+          ],
+          "correct_index": 0,
+          "explanation": "To quibble means to complain or argue about minor, trivial matters or details."
+        },
+        {
+          "type": "synonym",
+          "word": "Sleuth",
+          "stem": "Sleuth most nearly means",
+          "options": [
+            "detective",
+            "spy",
+            "thief",
+            "witness"
+          ],
+          "correct_index": 0,
+          "explanation": "A sleuth is a detective or investigator who searches for clues and solves mysteries."
+        },
+        {
+          "type": "synonym",
+          "word": "Reject",
+          "stem": "Reject most nearly means",
+          "options": [
+            "refuse",
+            "ignore",
+            "dislike",
+            "postpone"
+          ],
+          "correct_index": 0,
+          "explanation": "To reject means to refuse to accept, consider, or use something."
+        },
+        {
+          "type": "sentence",
+          "word": "Diversity",
+          "stem": "The school celebrated the ______ of its student body by hosting an international festival featuring foods and traditions from twenty different countries.",
+          "options": [
+            "diversity",
+            "similarity",
+            "absence",
+            "schedule"
+          ],
+          "correct_index": 0,
+          "explanation": "Diversity means variety or the presence of different types, which matches the context of students from twenty different countries with various traditions."
+        },
+        {
+          "type": "sentence",
+          "word": "Leisure",
+          "stem": "After finishing all her homework and chores, Maria finally had some ______ time to read her favorite book and relax.",
+          "options": [
+            "leisure",
+            "difficult",
+            "required",
+            "stressful"
+          ],
+          "correct_index": 0,
+          "explanation": "Leisure means free time for relaxation and enjoyment, which fits the context of having time to read and relax after completing responsibilities."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_163805_136178",
+      "set_number": 27,
+      "created_at": "2026-07-14T16:38:05.136202",
+      "words_used": [
+        "Elude",
+        "Condemn",
+        "Drastic",
+        "Avert",
+        "Makeshift",
+        "Replicate",
+        "Superior",
+        "Analysis",
+        "Sanctuary",
+        "Instinctive",
+        "Anticipate",
+        "Incompetent",
+        "Rigorous",
+        "Devise",
+        "Accommodate",
+        "Propel",
+        "Conserve",
+        "Optimist",
+        "Generation",
+        "Legend"
+      ],
+      "questions": [
+        {
+          "type": "sentence",
+          "word": "Legend",
+          "stem": "The old story about a dragon protecting the mountain treasure is just a ______ that villagers have passed down for centuries.",
+          "options": [
+            "legend",
+            "photograph",
+            "contract",
+            "schedule"
+          ],
+          "correct_index": 0,
+          "explanation": "A legend is a traditional story from the past that may not be true, which fits with an old dragon tale passed down through generations."
+        },
+        {
+          "type": "synonym",
+          "word": "Devise",
+          "stem": "Devise most nearly means",
+          "options": [
+            "invent",
+            "copy",
+            "destroy",
+            "purchase"
+          ],
+          "correct_index": 0,
+          "explanation": "Devise means to invent or plan something, especially through careful thought and creativity."
+        },
+        {
+          "type": "synonym",
+          "word": "Makeshift",
+          "stem": "Makeshift most nearly means",
+          "options": [
+            "temporary",
+            "permanent",
+            "expensive",
+            "perfect"
+          ],
+          "correct_index": 0,
+          "explanation": "Makeshift means temporary or improvised, used as a substitute when something better is not available."
+        },
+        {
+          "type": "sentence",
+          "word": "Propel",
+          "stem": "The strong winds helped to ______ the sailboat quickly across the lake toward the opposite shore.",
+          "options": [
+            "propel",
+            "anchor",
+            "submerge",
+            "balance"
+          ],
+          "correct_index": 0,
+          "explanation": "Propel means to push or drive something forward, which matches how winds would move a sailboat across the lake."
+        },
+        {
+          "type": "synonym",
+          "word": "Avert",
+          "stem": "Avert most nearly means",
+          "options": [
+            "prevent",
+            "cause",
+            "witness",
+            "announce"
+          ],
+          "correct_index": 0,
+          "explanation": "Avert means to prevent something undesirable from happening or to turn away from something."
+        },
+        {
+          "type": "sentence",
+          "word": "Conserve",
+          "stem": "During the drought, the town asked residents to ______ water by taking shorter showers and watering gardens less often.",
+          "options": [
+            "conserve",
+            "purchase",
+            "filter",
+            "measure"
+          ],
+          "correct_index": 0,
+          "explanation": "Conserve means to use something carefully to avoid waste, which fits with taking shorter showers and reducing watering during a drought."
+        },
+        {
+          "type": "synonym",
+          "word": "Sanctuary",
+          "stem": "Sanctuary most nearly means",
+          "options": [
+            "refuge",
+            "prison",
+            "marketplace",
+            "battlefield"
+          ],
+          "correct_index": 0,
+          "explanation": "Sanctuary means a place of refuge or safety where someone or something is protected from danger or harm."
+        },
+        {
+          "type": "synonym",
+          "word": "Elude",
+          "stem": "Elude most nearly means",
+          "options": [
+            "escape",
+            "discover",
+            "capture",
+            "confuse"
+          ],
+          "correct_index": 0,
+          "explanation": "Elude means to escape or avoid someone or something, often in a skillful or clever way."
+        },
+        {
+          "type": "sentence",
+          "word": "Generation",
+          "stem": "My grandmother's ______ experienced life without computers or smartphones, using typewriters and rotary phones to communicate instead.",
+          "options": [
+            "generation",
+            "occupation",
+            "education",
+            "neighborhood"
+          ],
+          "correct_index": 0,
+          "explanation": "A generation is a group of people born around the same time period, which fits the context of describing technology differences across age groups."
+        },
+        {
+          "type": "synonym",
+          "word": "Analysis",
+          "stem": "Analysis most nearly means",
+          "options": [
+            "examination",
+            "summary",
+            "guess",
+            "opinion"
+          ],
+          "correct_index": 0,
+          "explanation": "Analysis means a detailed examination of something to understand its nature or to determine its essential features."
+        },
+        {
+          "type": "sentence",
+          "word": "Optimist",
+          "stem": "Even though her team lost the first five games, Maria remained an ______ and believed they would improve with more practice.",
+          "options": [
+            "optimist",
+            "athlete",
+            "organizer",
+            "observer"
+          ],
+          "correct_index": 0,
+          "explanation": "An optimist is someone who expects positive outcomes, which matches Maria believing in improvement despite the losing streak."
+        },
+        {
+          "type": "synonym",
+          "word": "Rigorous",
+          "stem": "Rigorous most nearly means",
+          "options": [
+            "strict",
+            "relaxed",
+            "brief",
+            "simple"
+          ],
+          "correct_index": 0,
+          "explanation": "Rigorous means strict, thorough, or demanding, often applied to rules, standards, or methods that are carefully followed."
+        },
+        {
+          "type": "synonym",
+          "word": "Incompetent",
+          "stem": "Incompetent most nearly means",
+          "options": [
+            "incapable",
+            "skilled",
+            "experienced",
+            "confident"
+          ],
+          "correct_index": 0,
+          "explanation": "Incompetent means incapable or lacking the necessary skills or ability to do something successfully."
+        },
+        {
+          "type": "synonym",
+          "word": "Instinctive",
+          "stem": "Instinctive most nearly means",
+          "options": [
+            "natural",
+            "learned",
+            "difficult",
+            "unusual"
+          ],
+          "correct_index": 0,
+          "explanation": "Instinctive means natural or automatic, done without conscious thought or as a result of inborn tendency."
+        },
+        {
+          "type": "synonym",
+          "word": "Replicate",
+          "stem": "Replicate most nearly means",
+          "options": [
+            "duplicate",
+            "destroy",
+            "modify",
+            "examine"
+          ],
+          "correct_index": 0,
+          "explanation": "Replicate means to duplicate or reproduce something, making an exact or very similar copy."
+        },
+        {
+          "type": "synonym",
+          "word": "Anticipate",
+          "stem": "Anticipate most nearly means",
+          "options": [
+            "expect",
+            "remember",
+            "regret",
+            "avoid"
+          ],
+          "correct_index": 0,
+          "explanation": "Anticipate means to expect or predict something will happen and often to prepare for it in advance."
+        },
+        {
+          "type": "synonym",
+          "word": "Superior",
+          "stem": "Superior most nearly means",
+          "options": [
+            "better",
+            "equal",
+            "worse",
+            "similar"
+          ],
+          "correct_index": 0,
+          "explanation": "Superior means better in quality, rank, or status compared to something or someone else."
+        },
+        {
+          "type": "sentence",
+          "word": "Accommodate",
+          "stem": "The hotel manager decided to ______ the large family by providing extra beds and moving them to a bigger suite.",
+          "options": [
+            "accommodate",
+            "dismiss",
+            "restrict",
+            "separate"
+          ],
+          "correct_index": 0,
+          "explanation": "Accommodate means to provide what is needed or to make adjustments for someone, which fits with providing extra beds and a bigger suite."
+        },
+        {
+          "type": "synonym",
+          "word": "Condemn",
+          "stem": "Condemn most nearly means",
+          "options": [
+            "criticize",
+            "praise",
+            "ignore",
+            "forgive"
+          ],
+          "correct_index": 0,
+          "explanation": "Condemn means to express strong disapproval or criticism of something, often in a formal or official way."
+        },
+        {
+          "type": "synonym",
+          "word": "Drastic",
+          "stem": "Drastic most nearly means",
+          "options": [
+            "extreme",
+            "gradual",
+            "minor",
+            "careful"
+          ],
+          "correct_index": 0,
+          "explanation": "Drastic means extreme or severe, often referring to actions or changes that are forceful and far-reaching."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_163833_172077",
+      "set_number": 28,
+      "created_at": "2026-07-14T16:38:33.172123",
+      "words_used": [
+        "Invasion",
+        "Prosper",
+        "Deductive",
+        "Agony",
+        "Equality",
+        "Utopia",
+        "Fracture",
+        "Immigrant",
+        "Motive",
+        "Static",
+        "Theme",
+        "Climax",
+        "Intermediate",
+        "Barter",
+        "Hurricane",
+        "Continuous",
+        "Arrogance",
+        "Livelihood",
+        "Insist",
+        "Allegiance"
+      ],
+      "questions": [
+        {
+          "type": "synonym",
+          "word": "Utopia",
+          "stem": "Utopia most nearly means",
+          "options": [
+            "paradise",
+            "community",
+            "fantasy",
+            "countryside"
+          ],
+          "correct_index": 0,
+          "explanation": "A utopia is an imagined paradise or perfect place where everything is ideal."
+        },
+        {
+          "type": "synonym",
+          "word": "Invasion",
+          "stem": "Invasion most nearly means",
+          "options": [
+            "attack",
+            "arrival",
+            "journey",
+            "argument"
+          ],
+          "correct_index": 0,
+          "explanation": "An invasion is a forceful attack or entry into a place, especially by an army or large group."
+        },
+        {
+          "type": "synonym",
+          "word": "Static",
+          "stem": "Static most nearly means",
+          "options": [
+            "unchanging",
+            "quiet",
+            "stable",
+            "motionless"
+          ],
+          "correct_index": 0,
+          "explanation": "Static means unchanging or remaining the same over time, without movement or development."
+        },
+        {
+          "type": "sentence",
+          "word": "Hurricane",
+          "stem": "The powerful ______ destroyed hundreds of homes and uprooted trees along the entire coastline during the storm season.",
+          "options": [
+            "hurricane",
+            "celebration",
+            "discussion",
+            "invention"
+          ],
+          "correct_index": 0,
+          "explanation": "A hurricane is a violent tropical storm that can destroy homes and uproot trees, matching the destructive context described."
+        },
+        {
+          "type": "synonym",
+          "word": "Climax",
+          "stem": "Climax most nearly means",
+          "options": [
+            "peak",
+            "conclusion",
+            "conflict",
+            "excitement"
+          ],
+          "correct_index": 0,
+          "explanation": "The climax is the peak or highest point of intensity in a story or event."
+        },
+        {
+          "type": "synonym",
+          "word": "Intermediate",
+          "stem": "Intermediate most nearly means",
+          "options": [
+            "middle",
+            "average",
+            "moderate",
+            "temporary"
+          ],
+          "correct_index": 0,
+          "explanation": "Intermediate means in the middle level or position, between beginner and advanced."
+        },
+        {
+          "type": "synonym",
+          "word": "Prosper",
+          "stem": "Prosper most nearly means",
+          "options": [
+            "thrive",
+            "improve",
+            "survive",
+            "continue"
+          ],
+          "correct_index": 0,
+          "explanation": "To prosper means to thrive or succeed, especially in terms of wealth and growth."
+        },
+        {
+          "type": "synonym",
+          "word": "Equality",
+          "stem": "Equality most nearly means",
+          "options": [
+            "fairness",
+            "similarity",
+            "unity",
+            "balance"
+          ],
+          "correct_index": 0,
+          "explanation": "Equality means fairness in treatment and status, ensuring everyone has the same rights and opportunities."
+        },
+        {
+          "type": "sentence",
+          "word": "Allegiance",
+          "stem": "The soldiers pledged their ______ to their country by promising to defend it faithfully during the formal ceremony.",
+          "options": [
+            "allegiance",
+            "confusion",
+            "complaints",
+            "hobbies"
+          ],
+          "correct_index": 0,
+          "explanation": "Allegiance means loyalty and commitment to a country or cause, matching the context of soldiers making a pledge to defend."
+        },
+        {
+          "type": "synonym",
+          "word": "Deductive",
+          "stem": "Deductive most nearly means",
+          "options": [
+            "logical",
+            "creative",
+            "educational",
+            "persuasive"
+          ],
+          "correct_index": 0,
+          "explanation": "Deductive describes logical reasoning that moves from general principles to specific conclusions."
+        },
+        {
+          "type": "sentence",
+          "word": "Arrogance",
+          "stem": "The champion's ______ was obvious when he refused to shake hands with opponents and boasted constantly about his superiority.",
+          "options": [
+            "arrogance",
+            "kindness",
+            "confusion",
+            "patience"
+          ],
+          "correct_index": 0,
+          "explanation": "Arrogance means excessive pride and self-importance, which fits someone who refuses to show respect and constantly brags."
+        },
+        {
+          "type": "synonym",
+          "word": "Immigrant",
+          "stem": "Immigrant most nearly means",
+          "options": [
+            "newcomer",
+            "traveler",
+            "foreigner",
+            "visitor"
+          ],
+          "correct_index": 0,
+          "explanation": "An immigrant is a newcomer who comes to live permanently in a different country."
+        },
+        {
+          "type": "sentence",
+          "word": "Livelihood",
+          "stem": "Fishing was the family's ______ because they depended entirely on selling their daily catch to pay for food and shelter.",
+          "options": [
+            "livelihood",
+            "hobby",
+            "punishment",
+            "vacation"
+          ],
+          "correct_index": 0,
+          "explanation": "Livelihood means a way of earning money to live, which matches the description of depending on fishing income for survival."
+        },
+        {
+          "type": "synonym",
+          "word": "Fracture",
+          "stem": "Fracture most nearly means",
+          "options": [
+            "break",
+            "crack",
+            "injury",
+            "damage"
+          ],
+          "correct_index": 0,
+          "explanation": "To fracture means to break something, especially a bone or hard material, into pieces."
+        },
+        {
+          "type": "synonym",
+          "word": "Theme",
+          "stem": "Theme most nearly means",
+          "options": [
+            "topic",
+            "title",
+            "message",
+            "genre"
+          ],
+          "correct_index": 0,
+          "explanation": "A theme is the main topic or subject that runs throughout a work of literature or discussion."
+        },
+        {
+          "type": "synonym",
+          "word": "Motive",
+          "stem": "Motive most nearly means",
+          "options": [
+            "reason",
+            "goal",
+            "excuse",
+            "plan"
+          ],
+          "correct_index": 0,
+          "explanation": "A motive is the reason or purpose behind someone's action or behavior."
+        },
+        {
+          "type": "sentence",
+          "word": "Continuous",
+          "stem": "The ______ sound of the dripping faucet kept everyone awake throughout the night without a single moment of silence.",
+          "options": [
+            "continuous",
+            "brief",
+            "occasional",
+            "final"
+          ],
+          "correct_index": 0,
+          "explanation": "Continuous means ongoing without stopping, which matches the description of a sound that lasted all night without pause."
+        },
+        {
+          "type": "sentence",
+          "word": "Insist",
+          "stem": "The teacher will ______ that all students complete their homework assignments before participating in any after-school activities.",
+          "options": [
+            "insist",
+            "forget",
+            "wonder",
+            "deny"
+          ],
+          "correct_index": 0,
+          "explanation": "Insist means to demand firmly, which fits the context of a teacher requiring homework completion before other activities."
+        },
+        {
+          "type": "synonym",
+          "word": "Barter",
+          "stem": "Barter most nearly means",
+          "options": [
+            "trade",
+            "sell",
+            "negotiate",
+            "purchase"
+          ],
+          "correct_index": 0,
+          "explanation": "To barter means to trade goods or services directly without using money."
+        },
+        {
+          "type": "synonym",
+          "word": "Agony",
+          "stem": "Agony most nearly means",
+          "options": [
+            "torment",
+            "discomfort",
+            "sadness",
+            "illness"
+          ],
+          "correct_index": 0,
+          "explanation": "Agony is extreme physical or mental torment and suffering, more intense than simple discomfort."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_163903_456542",
+      "set_number": 29,
+      "created_at": "2026-07-14T16:39:03.456584",
+      "words_used": [
+        "Amnesia",
+        "Monotonous",
+        "Relieve",
+        "Painstaking",
+        "Expansion",
+        "Philosophy",
+        "Descent",
+        "Disregard",
+        "Cumulative",
+        "Unanimous",
+        "Negotiate",
+        "Urge",
+        "Jovial",
+        "Prompt",
+        "Impeach",
+        "Humiliate",
+        "Loathe",
+        "Originate",
+        "Inner",
+        "Grievance"
+      ],
+      "questions": [
+        {
+          "type": "synonym",
+          "word": "Painstaking",
+          "stem": "Painstaking most nearly means",
+          "options": [
+            "thorough",
+            "difficult",
+            "slow",
+            "careful"
+          ],
+          "correct_index": 0,
+          "explanation": "Painstaking means thorough and done with great attention to detail, emphasizing completeness rather than just carefulness."
+        },
+        {
+          "type": "sentence",
+          "word": "Originate",
+          "stem": "Many historians believe that the practice of celebrating birthdays with cake and candles did ______ in ancient Greece.",
+          "options": [
+            "originate",
+            "disappear",
+            "fail",
+            "conclude"
+          ],
+          "correct_index": 0,
+          "explanation": "Originate means to begin or come into being, which matches the context of when and where a historical practice first started."
+        },
+        {
+          "type": "sentence",
+          "word": "Loathe",
+          "stem": "Because spiders had frightened her since childhood, Maria grew to ______ them and would leave any room where one appeared.",
+          "options": [
+            "loathe",
+            "admire",
+            "collect",
+            "study"
+          ],
+          "correct_index": 0,
+          "explanation": "Loathe means to hate intensely, which fits someone who has feared spiders since childhood and avoids them completely."
+        },
+        {
+          "type": "synonym",
+          "word": "Disregard",
+          "stem": "Disregard most nearly means",
+          "options": [
+            "ignore",
+            "dismiss",
+            "reject",
+            "overlook"
+          ],
+          "correct_index": 0,
+          "explanation": "Disregard means to ignore or pay no attention to something, which is more deliberate than simply overlooking."
+        },
+        {
+          "type": "sentence",
+          "word": "Inner",
+          "stem": "The ______ layers of the onion were much softer and sweeter than the tough, bitter outer skin.",
+          "options": [
+            "inner",
+            "frozen",
+            "painted",
+            "missing"
+          ],
+          "correct_index": 0,
+          "explanation": "Inner refers to something located on the inside, contrasting with the outer skin mentioned in the sentence."
+        },
+        {
+          "type": "synonym",
+          "word": "Philosophy",
+          "stem": "Philosophy most nearly means",
+          "options": [
+            "belief system",
+            "theory",
+            "wisdom",
+            "knowledge"
+          ],
+          "correct_index": 0,
+          "explanation": "Philosophy refers to a belief system or set of guiding principles about life, not just wisdom or general knowledge."
+        },
+        {
+          "type": "synonym",
+          "word": "Expansion",
+          "stem": "Expansion most nearly means",
+          "options": [
+            "growth",
+            "increase",
+            "extension",
+            "improvement"
+          ],
+          "correct_index": 0,
+          "explanation": "Expansion means growth or becoming larger in size or scope, which is broader than just increase in number."
+        },
+        {
+          "type": "sentence",
+          "word": "Impeach",
+          "stem": "After discovering that the president had broken several laws, Congress voted to ______ him and remove him from office.",
+          "options": [
+            "impeach",
+            "promote",
+            "congratulate",
+            "elect"
+          ],
+          "correct_index": 0,
+          "explanation": "Impeach means to charge a public official with misconduct, which fits the context of a president breaking laws and being removed from office."
+        },
+        {
+          "type": "sentence",
+          "word": "Humiliate",
+          "stem": "The bully tried to ______ the new student by laughing at his clothes in front of the entire cafeteria.",
+          "options": [
+            "humiliate",
+            "assist",
+            "welcome",
+            "ignore"
+          ],
+          "correct_index": 0,
+          "explanation": "Humiliate means to embarrass someone deeply, which matches the bully's action of publicly mocking the student's appearance."
+        },
+        {
+          "type": "synonym",
+          "word": "Unanimous",
+          "stem": "Unanimous most nearly means",
+          "options": [
+            "in complete agreement",
+            "unified",
+            "cooperative",
+            "supportive"
+          ],
+          "correct_index": 0,
+          "explanation": "Unanimous means in complete agreement with everyone agreeing, while unified means joined together and cooperative means working together."
+        },
+        {
+          "type": "synonym",
+          "word": "Relieve",
+          "stem": "Relieve most nearly means",
+          "options": [
+            "ease",
+            "remove",
+            "cure",
+            "help"
+          ],
+          "correct_index": 0,
+          "explanation": "Relieve means to ease or reduce pain or stress, while cure means to eliminate completely and help is more general."
+        },
+        {
+          "type": "synonym",
+          "word": "Urge",
+          "stem": "Urge most nearly means",
+          "options": [
+            "encourage strongly",
+            "request",
+            "persuade",
+            "recommend"
+          ],
+          "correct_index": 0,
+          "explanation": "Urge means to encourage strongly or push someone toward an action, which is more forceful than recommend or request."
+        },
+        {
+          "type": "synonym",
+          "word": "Cumulative",
+          "stem": "Cumulative most nearly means",
+          "options": [
+            "increasing",
+            "total",
+            "growing",
+            "collective"
+          ],
+          "correct_index": 0,
+          "explanation": "Cumulative means increasing by successive additions over time, emphasizing the building-up process rather than just a final total."
+        },
+        {
+          "type": "synonym",
+          "word": "Jovial",
+          "stem": "Jovial most nearly means",
+          "options": [
+            "cheerful",
+            "friendly",
+            "happy",
+            "energetic"
+          ],
+          "correct_index": 0,
+          "explanation": "Jovial means cheerful and full of good humor in a hearty way, which is more specific than just happy or friendly."
+        },
+        {
+          "type": "synonym",
+          "word": "Negotiate",
+          "stem": "Negotiate most nearly means",
+          "options": [
+            "bargain",
+            "discuss",
+            "compromise",
+            "debate"
+          ],
+          "correct_index": 0,
+          "explanation": "Negotiate means to bargain or work out terms of an agreement, which is more specific than just discussing or debating."
+        },
+        {
+          "type": "synonym",
+          "word": "Monotonous",
+          "stem": "Monotonous most nearly means",
+          "options": [
+            "repetitive",
+            "quiet",
+            "lengthy",
+            "boring"
+          ],
+          "correct_index": 0,
+          "explanation": "Monotonous means repetitive and unchanging in a tedious way, though things can be boring without being repetitive."
+        },
+        {
+          "type": "synonym",
+          "word": "Descent",
+          "stem": "Descent most nearly means",
+          "options": [
+            "downward movement",
+            "decline",
+            "drop",
+            "fall"
+          ],
+          "correct_index": 0,
+          "explanation": "Descent means downward movement, typically controlled, while fall implies suddenness and decline suggests deterioration in quality."
+        },
+        {
+          "type": "synonym",
+          "word": "Amnesia",
+          "stem": "Amnesia most nearly means",
+          "options": [
+            "memory loss",
+            "confusion",
+            "sleepiness",
+            "forgetfulness"
+          ],
+          "correct_index": 0,
+          "explanation": "Amnesia specifically means memory loss, often caused by injury or trauma, while forgetfulness is minor and confusion relates to unclear thinking."
+        },
+        {
+          "type": "synonym",
+          "word": "Prompt",
+          "stem": "Prompt most nearly means",
+          "options": [
+            "quick",
+            "immediate",
+            "early",
+            "timely"
+          ],
+          "correct_index": 0,
+          "explanation": "Prompt means quick to act without delay, emphasizing speed of response rather than just being early or on time."
+        },
+        {
+          "type": "sentence",
+          "word": "Grievance",
+          "stem": "The workers submitted a formal ______ to their manager, complaining about the unsafe conditions and demanding immediate improvements.",
+          "options": [
+            "grievance",
+            "celebration",
+            "invitation",
+            "compliment"
+          ],
+          "correct_index": 0,
+          "explanation": "Grievance means a formal complaint about something unjust, which fits workers complaining about unsafe conditions."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_163931_686967",
+      "set_number": 30,
+      "created_at": "2026-07-14T16:39:31.687005",
+      "words_used": [
+        "Inductive",
+        "Obstacle",
+        "Paraphrase",
+        "Rebellion",
+        "Consideration",
+        "Particle",
+        "Plummet",
+        "Outstanding",
+        "Nausea",
+        "Subordinate",
+        "Formulate",
+        "Detach",
+        "Confession",
+        "Knack",
+        "Navigate",
+        "Participate",
+        "Discipline",
+        "Extinct",
+        "Obligation",
+        "Interrupt"
+      ],
+      "questions": [
+        {
+          "type": "synonym",
+          "word": "Formulate",
+          "stem": "Formulate most nearly means",
+          "options": [
+            "devise",
+            "create",
+            "organize",
+            "calculate"
+          ],
+          "correct_index": 0,
+          "explanation": "To formulate means to devise or develop a plan, idea, or strategy systematically."
+        },
+        {
+          "type": "synonym",
+          "word": "Detach",
+          "stem": "Detach most nearly means",
+          "options": [
+            "separate",
+            "remove",
+            "disconnect",
+            "release"
+          ],
+          "correct_index": 0,
+          "explanation": "To detach means to separate or unfasten something from something else."
+        },
+        {
+          "type": "sentence",
+          "word": "Navigate",
+          "stem": "The captain used a compass and detailed maps to ______ the ship safely through the narrow channels between the rocky islands.",
+          "options": [
+            "navigate",
+            "construct",
+            "celebrate",
+            "imagine"
+          ],
+          "correct_index": 0,
+          "explanation": "Navigate means to find one's way or steer a course, which fits the context of guiding a ship through channels using maps and a compass."
+        },
+        {
+          "type": "synonym",
+          "word": "Obstacle",
+          "stem": "Obstacle most nearly means",
+          "options": [
+            "barrier",
+            "challenge",
+            "mistake",
+            "destination"
+          ],
+          "correct_index": 0,
+          "explanation": "An obstacle is a barrier or something that blocks progress or movement."
+        },
+        {
+          "type": "sentence",
+          "word": "Obligation",
+          "stem": "Because the library had loaned him the book for free, Sam felt an ______ to return it on time and in good condition.",
+          "options": [
+            "obligation",
+            "opportunity",
+            "attitude",
+            "advantage"
+          ],
+          "correct_index": 0,
+          "explanation": "Obligation means a duty or responsibility, which fits the context of feeling responsible for returning the borrowed book properly."
+        },
+        {
+          "type": "synonym",
+          "word": "Confession",
+          "stem": "Confession most nearly means",
+          "options": [
+            "admission",
+            "statement",
+            "apology",
+            "testimony"
+          ],
+          "correct_index": 0,
+          "explanation": "A confession is an admission of guilt or acknowledgment of something previously hidden."
+        },
+        {
+          "type": "synonym",
+          "word": "Paraphrase",
+          "stem": "Paraphrase most nearly means",
+          "options": [
+            "reword",
+            "summarize",
+            "quote",
+            "translate"
+          ],
+          "correct_index": 0,
+          "explanation": "To paraphrase means to reword or express the same meaning using different words."
+        },
+        {
+          "type": "synonym",
+          "word": "Knack",
+          "stem": "Knack most nearly means",
+          "options": [
+            "talent",
+            "skill",
+            "ability",
+            "trick"
+          ],
+          "correct_index": 0,
+          "explanation": "A knack is a natural talent or special ability to do something easily and well."
+        },
+        {
+          "type": "synonym",
+          "word": "Subordinate",
+          "stem": "Subordinate most nearly means",
+          "options": [
+            "inferior",
+            "assistant",
+            "employee",
+            "follower"
+          ],
+          "correct_index": 0,
+          "explanation": "Subordinate means inferior in rank or position, lower in a hierarchy."
+        },
+        {
+          "type": "synonym",
+          "word": "Plummet",
+          "stem": "Plummet most nearly means",
+          "options": [
+            "plunge",
+            "descend",
+            "collapse",
+            "tumble"
+          ],
+          "correct_index": 0,
+          "explanation": "To plummet means to plunge or fall straight down rapidly and steeply."
+        },
+        {
+          "type": "synonym",
+          "word": "Rebellion",
+          "stem": "Rebellion most nearly means",
+          "options": [
+            "revolt",
+            "protest",
+            "disagreement",
+            "violence"
+          ],
+          "correct_index": 0,
+          "explanation": "A rebellion is a revolt or organized resistance against authority or control."
+        },
+        {
+          "type": "synonym",
+          "word": "Particle",
+          "stem": "Particle most nearly means",
+          "options": [
+            "speck",
+            "molecule",
+            "fragment",
+            "atom"
+          ],
+          "correct_index": 0,
+          "explanation": "A particle is a very small speck or tiny piece of matter."
+        },
+        {
+          "type": "synonym",
+          "word": "Outstanding",
+          "stem": "Outstanding most nearly means",
+          "options": [
+            "exceptional",
+            "excellent",
+            "noticeable",
+            "unpaid"
+          ],
+          "correct_index": 0,
+          "explanation": "Outstanding means exceptional or remarkably good, standing out above others."
+        },
+        {
+          "type": "sentence",
+          "word": "Participate",
+          "stem": "Although Maya had a sore ankle, she decided to ______ in the relay race because her team was counting on her.",
+          "options": [
+            "participate",
+            "retire",
+            "hesitate",
+            "interfere"
+          ],
+          "correct_index": 0,
+          "explanation": "Participate means to take part in an activity, which matches the context of joining the relay race despite an injury."
+        },
+        {
+          "type": "synonym",
+          "word": "Consideration",
+          "stem": "Consideration most nearly means",
+          "options": [
+            "thoughtfulness",
+            "opinion",
+            "kindness",
+            "decision"
+          ],
+          "correct_index": 0,
+          "explanation": "Consideration means thoughtfulness or careful thinking about something before deciding."
+        },
+        {
+          "type": "sentence",
+          "word": "Extinct",
+          "stem": "Dinosaurs became ______ millions of years ago, so scientists can only study them by examining fossils found buried in ancient rock.",
+          "options": [
+            "extinct",
+            "famous",
+            "peaceful",
+            "enormous"
+          ],
+          "correct_index": 0,
+          "explanation": "Extinct means no longer existing or living, which matches the context that dinosaurs died out long ago and can only be studied through fossils."
+        },
+        {
+          "type": "sentence",
+          "word": "Interrupt",
+          "stem": "It is considered rude to ______ someone while they are speaking, so you should wait until they finish before adding your thoughts.",
+          "options": [
+            "interrupt",
+            "applaud",
+            "assist",
+            "notice"
+          ],
+          "correct_index": 0,
+          "explanation": "Interrupt means to break into or stop someone while they are doing something, which matches the context of rudely cutting in while someone is talking."
+        },
+        {
+          "type": "synonym",
+          "word": "Inductive",
+          "stem": "Inductive most nearly means",
+          "options": [
+            "reasoning",
+            "electrical",
+            "introductory",
+            "persuasive"
+          ],
+          "correct_index": 0,
+          "explanation": "Inductive means using specific observations to form general conclusions, which is a type of reasoning."
+        },
+        {
+          "type": "synonym",
+          "word": "Nausea",
+          "stem": "Nausea most nearly means",
+          "options": [
+            "queasiness",
+            "sickness",
+            "dizziness",
+            "discomfort"
+          ],
+          "correct_index": 0,
+          "explanation": "Nausea is queasiness or the uncomfortable feeling that you might vomit."
+        },
+        {
+          "type": "sentence",
+          "word": "Discipline",
+          "stem": "It takes great ______ to practice piano for an hour every day, even when you would rather play outside with friends.",
+          "options": [
+            "discipline",
+            "fortune",
+            "confusion",
+            "sympathy"
+          ],
+          "correct_index": 0,
+          "explanation": "Discipline means self-control and dedication to a task, which fits the context of consistently practicing even when tempted to do something more fun."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_164001_801874",
+      "set_number": 31,
+      "created_at": "2026-07-14T16:40:01.801896",
+      "words_used": [
+        "Decline",
+        "Alliteration",
+        "Eerie",
+        "Whimsical",
+        "Narrator",
+        "Futile",
+        "Inflated",
+        "Protagonist",
+        "Quest",
+        "Influence",
+        "Delightful",
+        "Suffrage",
+        "Desperate",
+        "Intimidate",
+        "Petition",
+        "Magnificent",
+        "Impress",
+        "Acquaint",
+        "Fringe",
+        "Repeal"
+      ],
+      "questions": [
+        {
+          "type": "sentence",
+          "word": "Acquaint",
+          "stem": "The tour guide took time to ______ the new museum visitors with the building's layout before they explored on their own.",
+          "options": [
+            "acquaint",
+            "confuse",
+            "separate",
+            "distract"
+          ],
+          "correct_index": 0,
+          "explanation": "Acquaint means to make someone familiar with something, which matches the guide helping visitors learn the museum layout."
+        },
+        {
+          "type": "sentence",
+          "word": "Magnificent",
+          "stem": "The sunset over the ocean was absolutely ______, with brilliant shades of orange, pink, and purple stretching across the entire sky.",
+          "options": [
+            "magnificent",
+            "terrible",
+            "brief",
+            "ordinary"
+          ],
+          "correct_index": 0,
+          "explanation": "Magnificent means extremely beautiful or impressive, which fits the description of brilliant colors stretching across the sky."
+        },
+        {
+          "type": "synonym",
+          "word": "Futile",
+          "stem": "Futile most nearly means",
+          "options": [
+            "useless",
+            "difficult",
+            "hopeless",
+            "careless"
+          ],
+          "correct_index": 0,
+          "explanation": "Futile means useless or having no effect, while difficult means hard to do, hopeless means without hope, and careless means not paying attention."
+        },
+        {
+          "type": "sentence",
+          "word": "Repeal",
+          "stem": "After many complaints from families, the city council voted to ______ the unpopular law that had banned ice cream trucks from neighborhoods.",
+          "options": [
+            "repeal",
+            "create",
+            "enforce",
+            "celebrate"
+          ],
+          "correct_index": 0,
+          "explanation": "Repeal means to officially revoke or cancel a law, which fits with the council responding to complaints by removing an unpopular law."
+        },
+        {
+          "type": "synonym",
+          "word": "Eerie",
+          "stem": "Eerie most nearly means",
+          "options": [
+            "spooky",
+            "gloomy",
+            "mysterious",
+            "dangerous"
+          ],
+          "correct_index": 0,
+          "explanation": "Eerie means spooky or causing fear in a strange way, while gloomy means dark and depressing, mysterious means hard to understand, and dangerous means likely to cause harm."
+        },
+        {
+          "type": "sentence",
+          "word": "Impress",
+          "stem": "Maya hoped to ______ her piano teacher by memorizing the entire difficult concerto without looking at the sheet music.",
+          "options": [
+            "impress",
+            "disappoint",
+            "ignore",
+            "question"
+          ],
+          "correct_index": 0,
+          "explanation": "Impress means to make someone feel admiration or respect, which fits with Maya's effort to memorize a difficult piece to please her teacher."
+        },
+        {
+          "type": "synonym",
+          "word": "Influence",
+          "stem": "Influence most nearly means",
+          "options": [
+            "affect",
+            "persuade",
+            "control",
+            "inspire"
+          ],
+          "correct_index": 0,
+          "explanation": "Influence means to affect or have an effect on someone or something, while persuade means to convince, control means to command, and inspire means to motivate."
+        },
+        {
+          "type": "synonym",
+          "word": "Desperate",
+          "stem": "Desperate most nearly means",
+          "options": [
+            "frantic",
+            "worried",
+            "urgent",
+            "fearful"
+          ],
+          "correct_index": 0,
+          "explanation": "Desperate means frantic or driven by extreme need, while worried means anxious, urgent means needing immediate attention, and fearful means afraid."
+        },
+        {
+          "type": "synonym",
+          "word": "Protagonist",
+          "stem": "Protagonist most nearly means",
+          "options": [
+            "hero",
+            "narrator",
+            "villain",
+            "actor"
+          ],
+          "correct_index": 0,
+          "explanation": "The protagonist is the main character or hero of a story, while the narrator tells the story, the villain opposes the hero, and an actor performs in a play."
+        },
+        {
+          "type": "synonym",
+          "word": "Narrator",
+          "stem": "Narrator most nearly means",
+          "options": [
+            "storyteller",
+            "author",
+            "character",
+            "speaker"
+          ],
+          "correct_index": 0,
+          "explanation": "A narrator is the storyteller who tells what happens in a story, while the author writes the story, a character is a person in the story, and a speaker is anyone who talks."
+        },
+        {
+          "type": "synonym",
+          "word": "Whimsical",
+          "stem": "Whimsical most nearly means",
+          "options": [
+            "playful",
+            "cheerful",
+            "unusual",
+            "childish"
+          ],
+          "correct_index": 0,
+          "explanation": "Whimsical means playful and fanciful in an imaginative way, while cheerful means happy, unusual means not common, and childish means immature."
+        },
+        {
+          "type": "synonym",
+          "word": "Alliteration",
+          "stem": "Alliteration most nearly means",
+          "options": [
+            "repetition",
+            "rhyming",
+            "exaggeration",
+            "comparison"
+          ],
+          "correct_index": 0,
+          "explanation": "Alliteration is the repetition of the same beginning sounds in words, while rhyming involves similar ending sounds, exaggeration is overstating something, and comparison is showing similarities between things."
+        },
+        {
+          "type": "synonym",
+          "word": "Suffrage",
+          "stem": "Suffrage most nearly means",
+          "options": [
+            "voting",
+            "freedom",
+            "equality",
+            "representation"
+          ],
+          "correct_index": 0,
+          "explanation": "Suffrage means the right to vote in elections, while freedom means liberty, equality means being equal, and representation means having someone speak for you."
+        },
+        {
+          "type": "synonym",
+          "word": "Intimidate",
+          "stem": "Intimidate most nearly means",
+          "options": [
+            "frighten",
+            "threaten",
+            "bully",
+            "discourage"
+          ],
+          "correct_index": 0,
+          "explanation": "Intimidate means to frighten someone to make them do what you want, while threaten means to warn of harm, bully means to hurt repeatedly, and discourage means to make less confident."
+        },
+        {
+          "type": "sentence",
+          "word": "Fringe",
+          "stem": "The decorative pillow had a colorful ______ of hanging threads and tassels sewn all around its edges.",
+          "options": [
+            "fringe",
+            "center",
+            "button",
+            "pattern"
+          ],
+          "correct_index": 0,
+          "explanation": "Fringe refers to a decorative border of hanging threads or tassels, which matches the description of threads hanging around the pillow's edges."
+        },
+        {
+          "type": "synonym",
+          "word": "Delightful",
+          "stem": "Delightful most nearly means",
+          "options": [
+            "charming",
+            "pleasant",
+            "joyful",
+            "beautiful"
+          ],
+          "correct_index": 0,
+          "explanation": "Delightful means charming and highly pleasing, while pleasant means agreeable, joyful means full of happiness, and beautiful means attractive to look at."
+        },
+        {
+          "type": "synonym",
+          "word": "Inflated",
+          "stem": "Inflated most nearly means",
+          "options": [
+            "exaggerated",
+            "enlarged",
+            "expanded",
+            "elevated"
+          ],
+          "correct_index": 0,
+          "explanation": "Inflated means exaggerated or made to seem more important than it is, while enlarged means made bigger, expanded means spread out, and elevated means raised up."
+        },
+        {
+          "type": "sentence",
+          "word": "Petition",
+          "stem": "The students created a ______ asking the principal to extend recess by ten minutes and collected over two hundred signatures.",
+          "options": [
+            "petition",
+            "celebration",
+            "magazine",
+            "trophy"
+          ],
+          "correct_index": 0,
+          "explanation": "A petition is a formal written request signed by many people, which matches the context of students asking for something and collecting signatures."
+        },
+        {
+          "type": "synonym",
+          "word": "Decline",
+          "stem": "Decline most nearly means",
+          "options": [
+            "refuse",
+            "descend",
+            "weaken",
+            "remove"
+          ],
+          "correct_index": 0,
+          "explanation": "Decline means to refuse or say no to something, while descend means to go down physically, weaken means to become less strong, and remove means to take away."
+        },
+        {
+          "type": "synonym",
+          "word": "Quest",
+          "stem": "Quest most nearly means",
+          "options": [
+            "search",
+            "journey",
+            "mission",
+            "adventure"
+          ],
+          "correct_index": 0,
+          "explanation": "A quest is a search for something important, while a journey is simply traveling somewhere, a mission is an assigned task, and an adventure is an exciting experience."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_164036_179796",
+      "set_number": 32,
+      "created_at": "2026-07-14T16:40:36.179840",
+      "words_used": [
+        "Dissolve",
+        "Diagram",
+        "Inhale",
+        "Dose",
+        "Invincible",
+        "Disability",
+        "Trance",
+        "Royal",
+        "Priority",
+        "Expanse",
+        "Contaminate",
+        "Informal",
+        "Legislation",
+        "Historian",
+        "Verge",
+        "Identical",
+        "Liberate",
+        "Decay",
+        "Awe",
+        "Memoir"
+      ],
+      "questions": [
+        {
+          "type": "synonym",
+          "word": "Invincible",
+          "stem": "Invincible most nearly means",
+          "options": [
+            "unbeatable",
+            "invisible",
+            "immortal",
+            "fearless"
+          ],
+          "correct_index": 0,
+          "explanation": "Invincible means unable to be defeated or conquered, making 'unbeatable' the best match, while invisible means cannot be seen, immortal means cannot die, and fearless means without fear."
+        },
+        {
+          "type": "sentence",
+          "word": "Liberate",
+          "stem": "The animal rescue workers worked carefully to ______ the trapped deer from the fence where its antlers had become tangled.",
+          "options": [
+            "liberate",
+            "observe",
+            "approach",
+            "photograph"
+          ],
+          "correct_index": 0,
+          "explanation": "Liberate means to set free or release, which is what rescue workers would do for a trapped animal."
+        },
+        {
+          "type": "synonym",
+          "word": "Inhale",
+          "stem": "Inhale most nearly means",
+          "options": [
+            "breathe in",
+            "swallow",
+            "absorb",
+            "inspire"
+          ],
+          "correct_index": 0,
+          "explanation": "Inhale specifically means to breathe in air through the nose or mouth, while swallow involves the throat, absorb means to soak up, and inspire means to motivate (though it shares a root with inhale)."
+        },
+        {
+          "type": "synonym",
+          "word": "Diagram",
+          "stem": "Diagram most nearly means",
+          "options": [
+            "chart",
+            "picture",
+            "description",
+            "model"
+          ],
+          "correct_index": 0,
+          "explanation": "A diagram is a drawing that explains something, making 'chart' the best synonym, while picture is too general, description uses words not drawings, and model is a three-dimensional representation."
+        },
+        {
+          "type": "sentence",
+          "word": "Decay",
+          "stem": "Without proper care, the old wooden barn began to ______ as rain leaked through the roof and insects ate away at the boards.",
+          "options": [
+            "decay",
+            "expand",
+            "sparkle",
+            "improve"
+          ],
+          "correct_index": 0,
+          "explanation": "Decay means to rot or break down over time, which fits the description of rain damage and insect damage to the barn."
+        },
+        {
+          "type": "sentence",
+          "word": "Awe",
+          "stem": "The young children stared in ______ at the enormous dinosaur skeleton that towered three stories high in the museum's main hall.",
+          "options": [
+            "awe",
+            "boredom",
+            "anger",
+            "confusion"
+          ],
+          "correct_index": 0,
+          "explanation": "Awe means a feeling of wonder and amazement, which is the natural response to seeing something as impressive as a giant dinosaur skeleton."
+        },
+        {
+          "type": "synonym",
+          "word": "Expanse",
+          "stem": "Expanse most nearly means",
+          "options": [
+            "stretch",
+            "expansion",
+            "space",
+            "landscape"
+          ],
+          "correct_index": 0,
+          "explanation": "An expanse is a wide, continuous stretch or area, making 'stretch' the best synonym, while expansion is the process of growing, space is more general, and landscape refers specifically to visible scenery."
+        },
+        {
+          "type": "synonym",
+          "word": "Legislation",
+          "stem": "Legislation most nearly means",
+          "options": [
+            "laws",
+            "government",
+            "regulations",
+            "bills"
+          ],
+          "correct_index": 0,
+          "explanation": "Legislation refers to laws that have been made or enacted, making 'laws' the direct synonym, while government is the body that creates laws, regulations are specific rules, and bills are proposed laws not yet passed."
+        },
+        {
+          "type": "synonym",
+          "word": "Contaminate",
+          "stem": "Contaminate most nearly means",
+          "options": [
+            "pollute",
+            "infect",
+            "spoil",
+            "dirty"
+          ],
+          "correct_index": 0,
+          "explanation": "Contaminate means to make impure by adding harmful substances or to pollute, while infect specifically involves disease, spoil means to ruin, and dirty is less precise about harmful substances."
+        },
+        {
+          "type": "synonym",
+          "word": "Priority",
+          "stem": "Priority most nearly means",
+          "options": [
+            "preference",
+            "necessity",
+            "urgency",
+            "advantage"
+          ],
+          "correct_index": 0,
+          "explanation": "Priority means something that is regarded as more important than others or given preference, while necessity is something required, urgency relates to time pressure, and advantage is a favorable position."
+        },
+        {
+          "type": "synonym",
+          "word": "Royal",
+          "stem": "Royal most nearly means",
+          "options": [
+            "regal",
+            "noble",
+            "elegant",
+            "wealthy"
+          ],
+          "correct_index": 0,
+          "explanation": "Royal means relating to a king or queen, and 'regal' is the closest synonym meaning majestic or kingly, while noble refers to high social rank, elegant means graceful, and wealthy means rich."
+        },
+        {
+          "type": "synonym",
+          "word": "Historian",
+          "stem": "Historian most nearly means",
+          "options": [
+            "scholar",
+            "archaeologist",
+            "researcher",
+            "professor"
+          ],
+          "correct_index": 0,
+          "explanation": "A historian is a scholar who studies and writes about history, making 'scholar' the best match, while archaeologist studies physical remains, researcher is too general, and professor is a teaching position."
+        },
+        {
+          "type": "sentence",
+          "word": "Memoir",
+          "stem": "The famous astronaut published a ______ describing her childhood dreams of space travel and her experiences living aboard the international space station.",
+          "options": [
+            "memoir",
+            "laboratory",
+            "telescope",
+            "diagram"
+          ],
+          "correct_index": 0,
+          "explanation": "Memoir is a written account of one's personal experiences and memories, which fits the description of a book about the astronaut's life story."
+        },
+        {
+          "type": "synonym",
+          "word": "Dissolve",
+          "stem": "Dissolve most nearly means",
+          "options": [
+            "melt",
+            "evaporate",
+            "disappear",
+            "crumble"
+          ],
+          "correct_index": 0,
+          "explanation": "Dissolve means to mix into a liquid and melt away, making 'melt' the closest synonym, while evaporate refers to liquid turning to gas, disappear is too general, and crumble means to break into pieces."
+        },
+        {
+          "type": "synonym",
+          "word": "Informal",
+          "stem": "Informal most nearly means",
+          "options": [
+            "casual",
+            "unofficial",
+            "relaxed",
+            "irregular"
+          ],
+          "correct_index": 0,
+          "explanation": "Informal means not formal or casual in style or manner, while unofficial means not authorized, relaxed describes a mood, and irregular means not following a pattern."
+        },
+        {
+          "type": "sentence",
+          "word": "Identical",
+          "stem": "The two snowflakes looked ______ at first glance, but under the microscope we could see that each had a slightly different pattern.",
+          "options": [
+            "identical",
+            "enormous",
+            "transparent",
+            "delicate"
+          ],
+          "correct_index": 0,
+          "explanation": "Identical means exactly alike, which contrasts with the second part showing they were actually different upon closer inspection."
+        },
+        {
+          "type": "sentence",
+          "word": "Verge",
+          "stem": "After practicing her speech dozens of times, Maya was on the ______ of finally feeling confident enough to present in front of the entire class.",
+          "options": [
+            "verge",
+            "bottom",
+            "opposite",
+            "memory"
+          ],
+          "correct_index": 0,
+          "explanation": "Verge means the edge or point where something is about to happen, which fits Maya being close to feeling confident."
+        },
+        {
+          "type": "synonym",
+          "word": "Dose",
+          "stem": "Dose most nearly means",
+          "options": [
+            "portion",
+            "prescription",
+            "injection",
+            "remedy"
+          ],
+          "correct_index": 0,
+          "explanation": "A dose is a measured portion or amount of medicine, making 'portion' correct, while prescription is the doctor's order, injection is a method of delivery, and remedy is the cure itself."
+        },
+        {
+          "type": "synonym",
+          "word": "Trance",
+          "stem": "Trance most nearly means",
+          "options": [
+            "daze",
+            "dream",
+            "sleep",
+            "coma"
+          ],
+          "correct_index": 0,
+          "explanation": "A trance is a half-conscious state or daze where someone is unaware of surroundings, while dream occurs during sleep, sleep is full unconsciousness, and coma is a medical condition."
+        },
+        {
+          "type": "synonym",
+          "word": "Disability",
+          "stem": "Disability most nearly means",
+          "options": [
+            "impairment",
+            "inability",
+            "weakness",
+            "sickness"
+          ],
+          "correct_index": 0,
+          "explanation": "A disability is a physical or mental impairment that limits activities, making 'impairment' correct, while inability is too general, weakness suggests lack of strength, and sickness is temporary illness."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_164104_288904",
+      "set_number": 33,
+      "created_at": "2026-07-14T16:41:04.288949",
+      "words_used": [
+        "Deluge",
+        "Commentary",
+        "Revolution",
+        "Treacherous",
+        "Illegible",
+        "Primitive",
+        "Trace",
+        "Germinate",
+        "Exposition",
+        "Prosecute",
+        "Verify",
+        "Hemisphere",
+        "Esteem",
+        "Era",
+        "Parody",
+        "Constitution",
+        "Antagonist",
+        "Investor",
+        "Evoke",
+        "Proof"
+      ],
+      "questions": [
+        {
+          "type": "synonym",
+          "word": "Treacherous",
+          "stem": "Treacherous most nearly means",
+          "options": [
+            "dangerous",
+            "tricky",
+            "mysterious",
+            "courageous"
+          ],
+          "correct_index": 0,
+          "explanation": "Treacherous means hazardous or dangerous, especially in a deceptive way, making 'dangerous' the best synonym."
+        },
+        {
+          "type": "synonym",
+          "word": "Primitive",
+          "stem": "Primitive most nearly means",
+          "options": [
+            "ancient",
+            "primary",
+            "private",
+            "delicate"
+          ],
+          "correct_index": 0,
+          "explanation": "Primitive means belonging to an early stage of development or ancient times, making 'ancient' the best synonym."
+        },
+        {
+          "type": "synonym",
+          "word": "Revolution",
+          "stem": "Revolution most nearly means",
+          "options": [
+            "uprising",
+            "evolution",
+            "rotation",
+            "solution"
+          ],
+          "correct_index": 0,
+          "explanation": "Revolution means a dramatic overthrow or uprising against authority, making 'uprising' the correct synonym in this political context."
+        },
+        {
+          "type": "synonym",
+          "word": "Verify",
+          "stem": "Verify most nearly means",
+          "options": [
+            "confirm",
+            "clarify",
+            "identify",
+            "testify"
+          ],
+          "correct_index": 0,
+          "explanation": "Verify means to confirm the truth or accuracy of something, making 'confirm' the best synonym."
+        },
+        {
+          "type": "synonym",
+          "word": "Illegible",
+          "stem": "Illegible most nearly means",
+          "options": [
+            "unreadable",
+            "illegal",
+            "invisible",
+            "incorrect"
+          ],
+          "correct_index": 0,
+          "explanation": "Illegible means impossible to read or decipher, making 'unreadable' the correct synonym."
+        },
+        {
+          "type": "synonym",
+          "word": "Germinate",
+          "stem": "Germinate most nearly means",
+          "options": [
+            "sprout",
+            "terminate",
+            "grow",
+            "plant"
+          ],
+          "correct_index": 0,
+          "explanation": "Germinate means to begin to sprout or develop from a seed, making 'sprout' the most precise synonym."
+        },
+        {
+          "type": "synonym",
+          "word": "Deluge",
+          "stem": "Deluge most nearly means",
+          "options": [
+            "flood",
+            "storm",
+            "drought",
+            "sprinkle"
+          ],
+          "correct_index": 0,
+          "explanation": "Deluge means an overwhelming flood or downpour of water, making 'flood' the correct synonym."
+        },
+        {
+          "type": "sentence",
+          "word": "Proof",
+          "stem": "The scientist demanded ______ that the experiment had succeeded, so she carefully examined all the data collected during the tests.",
+          "options": [
+            "proof",
+            "permission",
+            "assistance",
+            "funding"
+          ],
+          "correct_index": 0,
+          "explanation": "Proof is evidence that establishes something is true, which fits the context of a scientist examining data to verify that an experiment succeeded."
+        },
+        {
+          "type": "synonym",
+          "word": "Hemisphere",
+          "stem": "Hemisphere most nearly means",
+          "options": [
+            "half-sphere",
+            "atmosphere",
+            "semicircle",
+            "hemisphere"
+          ],
+          "correct_index": 0,
+          "explanation": "Hemisphere means half of a sphere, particularly half of the Earth, making 'half-sphere' the most accurate synonym."
+        },
+        {
+          "type": "synonym",
+          "word": "Trace",
+          "stem": "Trace most nearly means",
+          "options": [
+            "track",
+            "erase",
+            "race",
+            "space"
+          ],
+          "correct_index": 0,
+          "explanation": "Trace as a verb means to track or follow the course of something, making 'track' the correct synonym."
+        },
+        {
+          "type": "synonym",
+          "word": "Commentary",
+          "stem": "Commentary most nearly means",
+          "options": [
+            "analysis",
+            "story",
+            "summary",
+            "comedy"
+          ],
+          "correct_index": 0,
+          "explanation": "Commentary means explanatory notes or analysis about an event or text, making 'analysis' the best synonym."
+        },
+        {
+          "type": "sentence",
+          "word": "Parody",
+          "stem": "The comedy show created a humorous ______ of the famous movie, exaggerating all the characters' traits to make the audience laugh.",
+          "options": [
+            "parody",
+            "tribute",
+            "documentary",
+            "sequel"
+          ],
+          "correct_index": 0,
+          "explanation": "A parody is a humorous imitation that exaggerates features for comic effect, which matches the context of exaggerating characters' traits to create humor."
+        },
+        {
+          "type": "synonym",
+          "word": "Prosecute",
+          "stem": "Prosecute most nearly means",
+          "options": [
+            "charge",
+            "protect",
+            "execute",
+            "pursue"
+          ],
+          "correct_index": 0,
+          "explanation": "Prosecute means to charge someone with a crime in a legal proceeding, making 'charge' the correct synonym."
+        },
+        {
+          "type": "synonym",
+          "word": "Era",
+          "stem": "Era most nearly means",
+          "options": [
+            "period",
+            "error",
+            "area",
+            "year"
+          ],
+          "correct_index": 0,
+          "explanation": "Era means a long and distinct period of history, making 'period' the best synonym."
+        },
+        {
+          "type": "sentence",
+          "word": "Antagonist",
+          "stem": "In the novel, the ______ constantly created problems for the hero by stealing important documents and spreading false rumors about her.",
+          "options": [
+            "antagonist",
+            "narrator",
+            "bystander",
+            "mentor"
+          ],
+          "correct_index": 0,
+          "explanation": "An antagonist is a character who opposes or creates conflict for the main character, which matches the description of someone creating problems for the hero."
+        },
+        {
+          "type": "synonym",
+          "word": "Esteem",
+          "stem": "Esteem most nearly means",
+          "options": [
+            "respect",
+            "estimate",
+            "steam",
+            "value"
+          ],
+          "correct_index": 0,
+          "explanation": "Esteem means high regard or respect for someone or something, making 'respect' the correct synonym."
+        },
+        {
+          "type": "sentence",
+          "word": "Constitution",
+          "stem": "The club members wrote a ______ that outlined all the rules and described how leaders would be elected each year.",
+          "options": [
+            "constitution",
+            "newsletter",
+            "petition",
+            "schedule"
+          ],
+          "correct_index": 0,
+          "explanation": "A constitution is a document that establishes the fundamental rules and procedures for an organization, which fits the context of outlining rules and election procedures."
+        },
+        {
+          "type": "sentence",
+          "word": "Investor",
+          "stem": "The young ______ carefully researched different companies before deciding where to put her money, hoping it would grow over time.",
+          "options": [
+            "investor",
+            "employee",
+            "customer",
+            "manager"
+          ],
+          "correct_index": 0,
+          "explanation": "An investor is someone who puts money into something with the expectation of financial return, which fits the context of researching companies and expecting money to grow."
+        },
+        {
+          "type": "synonym",
+          "word": "Exposition",
+          "stem": "Exposition most nearly means",
+          "options": [
+            "explanation",
+            "exhibition",
+            "position",
+            "composition"
+          ],
+          "correct_index": 0,
+          "explanation": "Exposition means a comprehensive explanation or description of an idea or theory, making 'explanation' the best synonym."
+        },
+        {
+          "type": "sentence",
+          "word": "Evoke",
+          "stem": "The old photograph of her grandmother's kitchen began to ______ warm memories of baking cookies together on winter afternoons.",
+          "options": [
+            "evoke",
+            "prevent",
+            "erase",
+            "conceal"
+          ],
+          "correct_index": 0,
+          "explanation": "To evoke means to bring forth or call up feelings or memories, which matches the context of a photograph bringing back warm memories."
+        }
+      ]
+    },
+    {
+      "id": "set_20260714_164133_129789",
+      "set_number": 34,
+      "created_at": "2026-07-14T16:41:33.129829",
+      "words_used": [
+        "Glacier",
+        "Boycott",
+        "Solar",
+        "Continental",
+        "Mimic",
+        "Leeway",
+        "Patriotism",
+        "Hazardous",
+        "Persecute",
+        "Dominate",
+        "Coincidence",
+        "Barrier",
+        "Meager",
+        "Citizenship",
+        "Metaphor",
+        "Solitude",
+        "Manual",
+        "Destination",
+        "Hoist",
+        "Dimension"
+      ],
+      "questions": [
+        {
+          "type": "sentence",
+          "word": "Dimension",
+          "stem": "The architect measured each ______ of the room, including its length, width, and height, to create accurate building plans.",
+          "options": [
+            "dimension",
+            "purpose",
+            "occupant",
+            "color"
+          ],
+          "correct_index": 0,
+          "explanation": "A dimension is a measurement in a particular direction, and length, width, and height are all examples of dimensions."
+        },
+        {
+          "type": "synonym",
+          "word": "Barrier",
+          "stem": "Barrier most nearly means",
+          "options": [
+            "obstacle",
+            "boundary",
+            "wall",
+            "challenge"
+          ],
+          "correct_index": 0,
+          "explanation": "A barrier is an obstacle or obstruction that prevents movement, access, or progress from one place to another."
+        },
+        {
+          "type": "synonym",
+          "word": "Glacier",
+          "stem": "Glacier most nearly means",
+          "options": [
+            "ice mass",
+            "mountain",
+            "snowstorm",
+            "frozen lake"
+          ],
+          "correct_index": 0,
+          "explanation": "A glacier is a large, slow-moving mass of ice formed from compacted snow over many years."
+        },
+        {
+          "type": "sentence",
+          "word": "Metaphor",
+          "stem": "When the poet wrote that her grandmother's hands were weathered maps, she was using a ______ to describe them.",
+          "options": [
+            "metaphor",
+            "photograph",
+            "measurement",
+            "memory"
+          ],
+          "correct_index": 0,
+          "explanation": "A metaphor is a figure of speech that compares two things by saying one thing is another, like calling hands 'weathered maps.'"
+        },
+        {
+          "type": "synonym",
+          "word": "Patriotism",
+          "stem": "Patriotism most nearly means",
+          "options": [
+            "love of country",
+            "loyalty to family",
+            "respect for authority",
+            "pride in achievement"
+          ],
+          "correct_index": 0,
+          "explanation": "Patriotism is devotion to and love for one's country, often shown through support and service."
+        },
+        {
+          "type": "synonym",
+          "word": "Hazardous",
+          "stem": "Hazardous most nearly means",
+          "options": [
+            "dangerous",
+            "difficult",
+            "uncertain",
+            "careless"
+          ],
+          "correct_index": 0,
+          "explanation": "Hazardous means involving risk or danger, such as hazardous materials or hazardous conditions."
+        },
+        {
+          "type": "sentence",
+          "word": "Destination",
+          "stem": "After driving for six hours through three different states, the family finally arrived at their vacation ______ near the beach.",
+          "options": [
+            "destination",
+            "vehicle",
+            "opinion",
+            "tradition"
+          ],
+          "correct_index": 0,
+          "explanation": "A destination is the place someone is traveling to, and the family reached theirs after a long drive."
+        },
+        {
+          "type": "sentence",
+          "word": "Hoist",
+          "stem": "The sailors worked together to ______ the heavy anchor from the ocean floor back onto the ship's deck.",
+          "options": [
+            "hoist",
+            "discover",
+            "examine",
+            "polish"
+          ],
+          "correct_index": 0,
+          "explanation": "To hoist means to lift or raise something heavy, which is what the sailors needed to do with the anchor."
+        },
+        {
+          "type": "synonym",
+          "word": "Solar",
+          "stem": "Solar most nearly means",
+          "options": [
+            "related to the sun",
+            "related to the moon",
+            "related to space",
+            "related to stars"
+          ],
+          "correct_index": 0,
+          "explanation": "Solar means relating to or derived from the sun, such as solar energy or solar system."
+        },
+        {
+          "type": "synonym",
+          "word": "Dominate",
+          "stem": "Dominate most nearly means",
+          "options": [
+            "control",
+            "defeat",
+            "influence",
+            "lead"
+          ],
+          "correct_index": 0,
+          "explanation": "To dominate means to have control or power over something or someone, or to be the most important element."
+        },
+        {
+          "type": "synonym",
+          "word": "Boycott",
+          "stem": "Boycott most nearly means",
+          "options": [
+            "refuse",
+            "protest",
+            "complain",
+            "argue"
+          ],
+          "correct_index": 0,
+          "explanation": "To boycott means to refuse to buy, use, or participate in something as a form of protest."
+        },
+        {
+          "type": "sentence",
+          "word": "Manual",
+          "stem": "Because the new camera had many complicated features, Derek carefully read the instruction ______ before taking his first photograph.",
+          "options": [
+            "manual",
+            "lesson",
+            "story",
+            "schedule"
+          ],
+          "correct_index": 0,
+          "explanation": "A manual is an instruction book that explains how to use something, which would help Derek learn the camera's complicated features."
+        },
+        {
+          "type": "synonym",
+          "word": "Mimic",
+          "stem": "Mimic most nearly means",
+          "options": [
+            "imitate",
+            "mock",
+            "perform",
+            "observe"
+          ],
+          "correct_index": 0,
+          "explanation": "To mimic means to imitate or copy someone's speech, movements, or mannerisms, often for entertainment."
+        },
+        {
+          "type": "synonym",
+          "word": "Coincidence",
+          "stem": "Coincidence most nearly means",
+          "options": [
+            "chance occurrence",
+            "planned event",
+            "similar happening",
+            "repeated pattern"
+          ],
+          "correct_index": 0,
+          "explanation": "A coincidence is when two or more events happen at the same time by chance, without being planned."
+        },
+        {
+          "type": "synonym",
+          "word": "Leeway",
+          "stem": "Leeway most nearly means",
+          "options": [
+            "flexibility",
+            "permission",
+            "distance",
+            "advantage"
+          ],
+          "correct_index": 0,
+          "explanation": "Leeway means the amount of freedom or flexibility one has to take action or make decisions."
+        },
+        {
+          "type": "sentence",
+          "word": "Solitude",
+          "stem": "After spending a noisy week at summer camp with fifty other children, Maya enjoyed the peaceful ______ of her bedroom.",
+          "options": [
+            "solitude",
+            "celebration",
+            "confusion",
+            "warmth"
+          ],
+          "correct_index": 0,
+          "explanation": "Solitude means being alone peacefully, which contrasts with the noisy week spent with many other children."
+        },
+        {
+          "type": "synonym",
+          "word": "Citizenship",
+          "stem": "Citizenship most nearly means",
+          "options": [
+            "membership in a nation",
+            "residency in a place",
+            "loyalty to a government",
+            "nationality by birth"
+          ],
+          "correct_index": 0,
+          "explanation": "Citizenship is the status of being a legal member of a particular country with specific rights and responsibilities."
+        },
+        {
+          "type": "synonym",
+          "word": "Meager",
+          "stem": "Meager most nearly means",
+          "options": [
+            "scarce",
+            "small",
+            "poor",
+            "weak"
+          ],
+          "correct_index": 0,
+          "explanation": "Meager means lacking in quantity or quality; inadequate or insufficient in amount."
+        },
+        {
+          "type": "synonym",
+          "word": "Continental",
+          "stem": "Continental most nearly means",
+          "options": [
+            "relating to a landmass",
+            "overseas",
+            "international",
+            "coastal"
+          ],
+          "correct_index": 0,
+          "explanation": "Continental means relating to a continent or large continuous landmass, such as continental United States."
+        },
+        {
+          "type": "synonym",
+          "word": "Persecute",
+          "stem": "Persecute most nearly means",
+          "options": [
+            "harass",
+            "punish",
+            "criticize",
+            "exclude"
+          ],
+          "correct_index": 0,
+          "explanation": "To persecute means to persistently harass or mistreat someone, especially because of their beliefs or identity."
+        }
+      ]
     }
   ],
-  "last_updated": "2026-07-13T18:10:07.875608"
+  "last_updated": "2026-07-14T16:41:33.129842"
 }

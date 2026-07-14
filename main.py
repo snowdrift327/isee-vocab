@@ -23,7 +23,7 @@ from dotenv import load_dotenv
 load_dotenv()
 client = Anthropic()
 
-WORDS_FILE = Path("isee_lower_level_words.xlsx")
+WORDS_FILE = Path("isee_lower_level_words_v3.xlsx")
 QUIZ_SETS_FILE = Path("quiz-sets.json")
 INDEX_FILE = Path("index.html")
 HISTORY_PAGE = Path("history.html")
